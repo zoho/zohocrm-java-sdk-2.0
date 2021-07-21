@@ -1,31 +1,53 @@
 package com.zoho.crm.api.util;
 
 import java.io.File;
+
 import java.io.IOException;
+
 import java.lang.reflect.Constructor;
+
 import java.lang.reflect.Field;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.lang.reflect.Method;
+
 import java.lang.reflect.Modifier;
+
 import java.util.ArrayList;
+
 import java.util.Arrays;
+
 import java.util.HashMap;
+
 import java.util.List;
+
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
+
 import org.apache.http.HttpResponse;
+
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+
 import org.apache.http.entity.StringEntity;
+
 import org.apache.http.protocol.HTTP;
+
 import org.apache.http.util.EntityUtils;
+
 import org.json.JSONArray;
+
 import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import com.zoho.crm.api.Initializer;
+
 import com.zoho.crm.api.exception.SDKException;
+
 import com.zoho.crm.api.record.FileDetails;
+
 import com.zoho.crm.api.record.Record;
 
 /**
@@ -174,7 +196,12 @@ public class JSONConverter extends Converter
 
 					if (requestInstance instanceof FileDetails)
 					{
-						requestJSON.put(keyName.toLowerCase(), (fieldValue != null ? fieldValue : JSONObject.NULL));
+						if (fieldValue == null || (fieldValue instanceof String && fieldValue.toString().equalsIgnoreCase("null"))){
+							requestJSON.put(keyName.toLowerCase(),JSONObject.NULL);
+						}
+						else{
+							requestJSON.put(keyName.toLowerCase(),fieldValue);
+						}
 					}
 					else
 					{
@@ -695,6 +722,7 @@ public class JSONConverter extends Converter
 		return instance;
 	}
 
+	@SuppressWarnings("deprecation")
 	private Object isRecordResponse(JSONObject responseJson, JSONObject classDetail, String pack) throws JSONException, Exception
 	{
 		Object recordInstance = Class.forName(pack).newInstance();
@@ -1056,9 +1084,9 @@ public class JSONConverter extends Converter
 		return matches / totalPoints;
 	}
 
-	public String buildName(String memberName)
+	public String buildName(String keyName)
 	{
-		List<String> name = Arrays.asList(memberName.split("_"));
+		List<String> name = Arrays.asList(keyName.toLowerCase().split("_"));
 
 		String sdkName = new String();
 

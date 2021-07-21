@@ -1,38 +1,67 @@
 package com.zoho.crm.api.util;
 
 import java.io.File;
+
 import java.io.FileWriter;
+
 import java.io.IOException;
+
 import java.io.UnsupportedEncodingException;
+
 import java.time.Instant;
+
 import java.time.OffsetDateTime;
+
 import java.time.ZoneId;
+
 import java.util.ArrayList;
+
 import java.util.Arrays;
+
 import java.util.HashMap;
+
 import java.util.Iterator;
+
 import java.util.List;
+
 import java.util.logging.Level;
+
 import java.util.logging.Logger;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+
 import org.json.JSONArray;
+
 import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import com.zoho.api.logger.SDKLogger;
+
 import com.zoho.crm.api.HeaderMap;
+
 import com.zoho.crm.api.Initializer;
+
 import com.zoho.crm.api.ParameterMap;
+
 import com.zoho.crm.api.exception.SDKException;
+
 import com.zoho.crm.api.fields.Field;
+
 import com.zoho.crm.api.fields.FieldsOperations;
+
 import com.zoho.crm.api.fields.ResponseHandler;
+
 import com.zoho.crm.api.fields.ResponseWrapper;
+
 import com.zoho.crm.api.modules.Module;
+
 import com.zoho.crm.api.modules.ModulesOperations;
+
 import com.zoho.crm.api.modules.ModulesOperations.GetModulesHeader;
+
 import com.zoho.crm.api.relatedlists.RelatedList;
+
 import com.zoho.crm.api.relatedlists.RelatedListsOperations;
 
 /**
@@ -40,7 +69,7 @@ import com.zoho.crm.api.relatedlists.RelatedListsOperations;
  */
 public class Utility
 {
-	private static HashMap<String, String> apiTypeVsdataType = new HashMap<>();
+	private static HashMap<String, String> apiTypeVsDataType = new HashMap<>();
 
 	private static HashMap<String, String> apiTypeVsStructureName = new HashMap<>();
 
@@ -54,24 +83,153 @@ public class Utility
 	
 	private static Boolean forceRefresh = false;
 	
-	public static HashMap<String, String> apiSupportedModule = new HashMap<>();
+	public static JSONObject apiSupportedModule = new JSONObject();
 
 	private static String moduleAPIName;
+
+	public static void assertNotNull(Object value, String errorCode, String errorMessage) throws SDKException
+	{
+		if(value == null)
+		{
+			throw new SDKException(errorCode, errorMessage);
+		}
+	}
+
+	private static synchronized void fileExistsFlow(String moduleAPIName, String recordFieldDetailsPath, String lastModifiedTime) throws IOException, SDKException 
+	{
+		JSONObject recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
+
+		if (Initializer.getInitializer().getSDKConfig().getAutoRefreshFields() && !newFile && !getModifiedModules && (recordFieldDetailsJson.optString(Constants.FIELDS_LAST_MODIFIED_TIME).isEmpty() || forceRefresh || (System.currentTimeMillis() - Long.valueOf(recordFieldDetailsJson.getString(Constants.FIELDS_LAST_MODIFIED_TIME))) > 3600000))
+		{
+			getModifiedModules = true;
+
+			lastModifiedTime = !forceRefresh && recordFieldDetailsJson.has(Constants.FIELDS_LAST_MODIFIED_TIME) ? recordFieldDetailsJson.getString(Constants.FIELDS_LAST_MODIFIED_TIME) : null;
+
+			modifyFields(recordFieldDetailsPath, lastModifiedTime);
+
+			getModifiedModules = false;
+			
+		}
+		else if(!Initializer.getInitializer().getSDKConfig().getAutoRefreshFields() && forceRefresh && !getModifiedModules)
+		{
+			getModifiedModules = true;
+			
+			modifyFields(recordFieldDetailsPath, lastModifiedTime);
+			
+			getModifiedModules = false;
+		}
+		
+		recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
+		
+		if (moduleAPIName == null || recordFieldDetailsJson.has(moduleAPIName.toLowerCase()))
+		{
+			return;
+		}
+		else
+		{
+			fillDataType();
+
+			recordFieldDetailsJson.put(moduleAPIName.toLowerCase(), new JSONObject());
+
+			FileWriter file = new FileWriter(recordFieldDetailsPath);
+
+			file.flush();
+
+			file.write(recordFieldDetailsJson.toString());// write existing data + dummy
+
+			file.flush();
+
+			file.close();
+
+			JSONObject fieldDetails = (JSONObject) getFieldsDetails(moduleAPIName);
+
+			recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
+
+			recordFieldDetailsJson.put(moduleAPIName.toLowerCase(), fieldDetails);
+
+			file = new FileWriter(recordFieldDetailsPath);
+
+			file.flush();
+
+			file.write(recordFieldDetailsJson.toString());// overwrting the dummy +existing data
+
+			file.flush();
+
+			file.close();
+		}
+	}
+	
+	private static String verifyModuleAPIName(String moduleName) throws IOException
+	{
+		if(moduleName != null && Constants.DEFAULT_MODULENAME_VS_APINAME.get(moduleName.toLowerCase()) != null) 
+		{
+			return Constants.DEFAULT_MODULENAME_VS_APINAME.get(moduleName.toLowerCase());
+		}
+		
+		String recordFieldDetailsPath = getFileName();
+
+		File recordFieldDetails = new File(recordFieldDetailsPath);
+		
+		if(recordFieldDetails.exists())
+		{
+			JSONObject fieldsJSON = Initializer.getJSON(recordFieldDetailsPath);
+			
+			if(fieldsJSON.has(Constants.SDK_MODULE_METADATA) && fieldsJSON.getJSONObject(Constants.SDK_MODULE_METADATA).has(moduleName.toLowerCase()))
+			{
+				return fieldsJSON.getJSONObject(Constants.SDK_MODULE_METADATA).getJSONObject(moduleName.toLowerCase()).getString(Constants.API_NAME);
+			}
+		}
+		
+		return moduleName;
+		
+	}
+	
+	private static void setHandlerAPIPath(String moduleAPIName, CommonAPIHandler handlerInstance)
+	{
+		if(handlerInstance == null)
+		{
+			return;
+		}
+		
+		String apiPath = handlerInstance.getAPIPath();
+		
+		if(apiPath.toLowerCase().contains(moduleAPIName.toLowerCase()))
+		{
+			String[] apiPathSplit = apiPath.split("/");
+			
+			for(int i=0; i< apiPathSplit.length ; i++)
+			{
+				if(apiPathSplit[i].equalsIgnoreCase(moduleAPIName))
+				{
+					apiPathSplit[i] = moduleAPIName;
+				}
+				else if(Constants.DEFAULT_MODULENAME_VS_APINAME.containsKey(apiPathSplit[i].toLowerCase()) && Constants.DEFAULT_MODULENAME_VS_APINAME.get(apiPathSplit[i].toLowerCase()) != null)
+				{
+					apiPathSplit[i] = Constants.DEFAULT_MODULENAME_VS_APINAME.get(apiPathSplit[i].toLowerCase());
+				}
+			}
+			
+			apiPath = String.join("/", apiPathSplit);
+			
+			handlerInstance.setAPIPath(apiPath);
+		}
+	}
 
 	/**
 	 * This method to fetch field details of the current module for the current user and store the result in a JSON file.
 	 * 
 	 * @param moduleAPIName A String containing the CRM module API name.
+	 * @param handlerInstance A CommonAPIHandler Instance
 	 * @throws SDKException 
 	 */
-	public static synchronized void getFields(String moduleAPIName) throws SDKException
+	public static synchronized void getFields(String moduleAPIName, CommonAPIHandler handlerInstance) throws SDKException
 	{
 		Utility.moduleAPIName = moduleAPIName;
 
-		getFieldsInfo(Utility.moduleAPIName);
+		getFieldsInfo(moduleAPIName, handlerInstance);
 	}
 
-	public static synchronized void getFieldsInfo(String moduleAPIName) throws SDKException
+	public static synchronized void getFieldsInfo(String moduleAPIName, CommonAPIHandler handlerInstance) throws SDKException
 	{
 		String recordFieldDetailsPath = null;
 
@@ -91,72 +249,22 @@ public class Utility
 				resourcesPath.mkdirs();
 			}
 
+			moduleAPIName = verifyModuleAPIName(moduleAPIName);
+			
+			setHandlerAPIPath(moduleAPIName, handlerInstance);
+
+			if(handlerInstance != null && handlerInstance.getModuleAPIName() == null && ! Constants.SKIP_MODULES.contains(moduleAPIName.toLowerCase())) 
+			{
+                return;
+            }
+
 			recordFieldDetailsPath = getFileName();
 
 			File recordFieldDetails = new File(recordFieldDetailsPath);
 
 			if (recordFieldDetails.exists())
 			{
-				JSONObject recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
-
-				if (Initializer.getInitializer().getSDKConfig().getAutoRefreshFields() && !newFile && !getModifiedModules && (recordFieldDetailsJson.optString(Constants.FIELDS_LAST_MODIFIED_TIME).isEmpty() || forceRefresh || (System.currentTimeMillis() - Long.valueOf(recordFieldDetailsJson.getString(Constants.FIELDS_LAST_MODIFIED_TIME))) > 3600000))
-				{
-					getModifiedModules = true;
-
-					lastModifiedTime = recordFieldDetailsJson.has(Constants.FIELDS_LAST_MODIFIED_TIME) ? recordFieldDetailsJson.getString(Constants.FIELDS_LAST_MODIFIED_TIME) : null;
-
-					modifyFields(recordFieldDetailsPath, lastModifiedTime);
-
-					getModifiedModules = false;
-					
-				}
-				else if(!Initializer.getInitializer().getSDKConfig().getAutoRefreshFields() && forceRefresh && !getModifiedModules)
-				{
-					getModifiedModules = true;
-					
-					modifyFields(recordFieldDetailsPath, lastModifiedTime);
-					
-					getModifiedModules = false;
-				}
-				
-				recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
-				
-				if (moduleAPIName == null || recordFieldDetailsJson.has(moduleAPIName.toLowerCase()))
-				{
-					return;
-				}
-				else
-				{
-					fillDataType();
-
-					recordFieldDetailsJson.put(moduleAPIName.toLowerCase(), new JSONObject());
-
-					FileWriter file = new FileWriter(recordFieldDetailsPath);
-
-					file.flush();
-
-					file.write(recordFieldDetailsJson.toString());// write existing data + dummy
-
-					file.flush();
-
-					file.close();
-
-					JSONObject fieldDetails = (JSONObject) getFieldsDetails(moduleAPIName);
-
-					recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
-
-					recordFieldDetailsJson.put(moduleAPIName.toLowerCase(), fieldDetails);
-
-					file = new FileWriter(recordFieldDetailsPath);
-
-					file.flush();
-
-					file.write(recordFieldDetailsJson.toString());// overwrting the dummy +existing data
-
-					file.flush();
-
-					file.close();
-				}
+				fileExistsFlow(moduleAPIName, recordFieldDetailsPath, lastModifiedTime);
 			}
 			else if (Initializer.getInitializer().getSDKConfig().getAutoRefreshFields())
 			{
@@ -164,41 +272,46 @@ public class Utility
 
 				fillDataType();
 				
-				apiSupportedModule = apiSupportedModule.size() > 0 ? apiSupportedModule : getModules(null);
+				apiSupportedModule = apiSupportedModule.length() > 0 ? apiSupportedModule : getModules(null);
 
-				JSONObject recordFieldDetailsJson = new JSONObject();
+				JSONObject recordFieldDetailsJson = recordFieldDetails.exists() ? Initializer.getJSON(recordFieldDetailsPath) : new JSONObject();
 
 				recordFieldDetailsJson.put(Constants.FIELDS_LAST_MODIFIED_TIME, String.valueOf(System.currentTimeMillis()));
-
-				for (String module : apiSupportedModule.keySet())
+				
+				if (apiSupportedModule.length() > 0)
 				{
-					if (!recordFieldDetailsJson.has(module))
+					for (String module : apiSupportedModule.keySet())
 					{
-						recordFieldDetailsJson.put(module, new JSONObject());
+						if (!recordFieldDetailsJson.has(module))
+						{
+							JSONObject moduleData = apiSupportedModule.getJSONObject(module);
+							
+							recordFieldDetailsJson.put(module, new JSONObject());
 
-						FileWriter file = new FileWriter(recordFieldDetailsPath);
+							FileWriter file = new FileWriter(recordFieldDetailsPath);
 
-						file.write(recordFieldDetailsJson.toString());
+							file.write(recordFieldDetailsJson.toString());
 
-						file.flush();
+							file.flush();
 
-						file.close();// file created with only dummy
+							file.close();// file created with only dummy
 
-						JSONObject fieldDetails = (JSONObject) getFieldsDetails(module);
+							JSONObject fieldDetails = (JSONObject) getFieldsDetails(moduleData.getString(Constants.API_NAME));
 
-						recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
+							recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
 
-						recordFieldDetailsJson.put(module, fieldDetails);
+							recordFieldDetailsJson.put(module, fieldDetails);
 
-						file = new FileWriter(recordFieldDetailsPath);
+							file = new FileWriter(recordFieldDetailsPath);
 
-						file.flush();
+							file.flush();
 
-						file.write(recordFieldDetailsJson.toString());// overwrting the dummy +existing data
+							file.write(recordFieldDetailsJson.toString());// overwrting the dummy +existing data
 
-						file.flush();
+							file.flush();
 
-						file.close();
+							file.close();
+						}
 					}
 				}
 
@@ -325,7 +438,7 @@ public class Utility
 	{
 		FileWriter file = null;
 
-		HashMap<String, String> modifiedModules = getModules(modifiedTime);
+		JSONObject modifiedModules = getModules(modifiedTime);
 
 		JSONObject recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
 
@@ -341,13 +454,13 @@ public class Utility
 
 		file.close();
 
-		if (modifiedModules.size() > 0)
+		if (modifiedModules.length() > 0)
 		{
 			for (String module : modifiedModules.keySet())
 			{
-				if (recordFieldDetailsJson.has(module))
+				if (recordFieldDetailsJson.has(module.toLowerCase()))
 				{
-					deleteFields(recordFieldDetailsJson, module);
+					deleteFields(recordFieldDetailsJson, module.toLowerCase());
 				}
 			}
 
@@ -363,7 +476,9 @@ public class Utility
 
 			for (String module : modifiedModules.keySet())
 			{
-				Utility.getFieldsInfo(module);
+				JSONObject moduleData = modifiedModules.getJSONObject(module);
+				
+				Utility.getFieldsInfo(moduleData.getString(Constants.API_NAME),null);
 			}
 		}
 	}
@@ -401,29 +516,24 @@ public class Utility
 			@Override
 			public Object getWrappedResponse(Object response, String pack) throws Exception
 			{
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public Object getResponse(Object response, String pack) throws Exception
 			{
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public Object formRequest(Object requestObject, String pack, Integer instanceNumber, JSONObject memberDetail) throws Exception
 			{
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public void appendToRequest(HttpEntityEnclosingRequestBase requestBase, Object requestObject) throws Exception
 			{
-				// TODO Auto-generated method stub
-
 			}
 		};
 
@@ -452,6 +562,8 @@ public class Utility
 			if (!recordFieldDetails.exists() || (recordFieldDetails.exists() && Initializer.getJSON(recordFieldDetailsPath).optJSONArray(key) == null))
 			{
 				isNewData = true;
+
+				moduleAPIName = verifyModuleAPIName(moduleAPIName);
 
 				JSONArray relatedListValues = getRelatedListDetails(moduleAPIName);
 
@@ -520,7 +632,7 @@ public class Utility
 				{
 					commonAPIHandler.setModuleAPIName(relatedListJO.getString(Constants.MODULE));
 					
-					Utility.getFieldsInfo(relatedListJO.getString(Constants.MODULE));
+					Utility.getFieldsInfo(relatedListJO.getString(Constants.MODULE), commonAPIHandler);
 				}
 
 				return true;
@@ -687,12 +799,14 @@ public class Utility
 
 					errorResponse.put(Constants.MESSAGE, exception.getMessage().getValue());
 
+					SDKException exception1  = new SDKException(Constants.API_EXCEPTION, errorResponse);
+
 					if(Utility.moduleAPIName.equalsIgnoreCase(moduleAPIName))
 					{
-						throw new SDKException(Constants.API_EXCEPTION, errorResponse);
+						throw exception1;
 					}
 					
-					LOGGER.log(Level.SEVERE, Constants.API_EXCEPTION, new Exception(errorResponse.toString()));
+					LOGGER.log(Level.SEVERE, Constants.API_EXCEPTION, exception1);
 				}
 			}
 			else
@@ -712,7 +826,7 @@ public class Utility
 	{
 		key = Constants.PACKAGE_NAMESPACE + ".record." + key;
 
-		Iterator<String> iter = JSONDETAILS.keySet().iterator();
+		Iterator<String> iter = Initializer.jsonDetails.keySet().iterator();
 
 		while (iter.hasNext())
 		{
@@ -733,14 +847,100 @@ public class Utility
 		return null;
 	}
 
-	public static synchronized void verifyPhotoSupport(String moduleAPIName) throws SDKException
+	public static synchronized boolean verifyPhotoSupport(String moduleAPIName) throws SDKException
 	{
-		return;
+		try
+		{
+			moduleAPIName = verifyModuleAPIName(moduleAPIName);
+			
+			if(Constants.PHOTO_SUPPORTED_MODULES.contains(moduleAPIName.toLowerCase()))
+			{
+				return true;
+			}
+			
+			JSONObject modules = getModuleNames();
+			
+			if(modules.optJSONObject(moduleAPIName.toLowerCase()) != null)
+			{
+				JSONObject moduleMetaData = modules.getJSONObject(moduleAPIName.toLowerCase());
+				
+				if(moduleMetaData.has(Constants.GENERATED_TYPE)&&!moduleMetaData.getString(Constants.GENERATED_TYPE).equals(Constants.GENERATED_TYPE_CUSTOM))
+				{
+					throw new SDKException(Constants.UPLOAD_PHOTO_UNSUPPORTED_ERROR, Constants.UPLOAD_PHOTO_UNSUPPORTED_MESSAGE + moduleAPIName);
+				}
+			}
+		}
+		catch(SDKException e)
+		{
+			throw e;
+		}
+		catch(Exception e)
+		{
+			SDKException exception = new SDKException(Constants.EXCEPTION, e);
+			
+			throw exception;
+		}
+		
+		return true;
 	}
 
-	private static HashMap<String, String> getModules(String header) throws SDKException
+	private static JSONObject getModuleNames() throws Exception
 	{
-		HashMap<String, String> apiNames = new HashMap<>();
+		JSONObject moduleData = new JSONObject();
+		
+		File resourcesPath = new File(Initializer.getInitializer().getResourcePath() + File.separator + Constants.FIELD_DETAILS_DIRECTORY);
+
+		if (!resourcesPath.exists())
+		{
+			resourcesPath.mkdirs();
+		}
+
+		String recordFieldDetailsPath = getFileName();
+
+		File recordFieldDetails = new File(recordFieldDetailsPath);
+		
+		if(!recordFieldDetails.exists() || (recordFieldDetails.exists() &&( Initializer.getJSON(recordFieldDetailsPath).optJSONObject(Constants.SDK_MODULE_METADATA) == null ||Initializer.getJSON(recordFieldDetailsPath).optJSONObject(Constants.SDK_MODULE_METADATA).length()==0)))
+		{
+			moduleData = getModules(null);
+			
+			writeModuleMetaData(recordFieldDetailsPath, moduleData);
+			
+			return moduleData;
+		}
+		
+		JSONObject recordFieldDetailsJson = Initializer.getJSON(recordFieldDetailsPath);
+		
+		moduleData = recordFieldDetailsJson.getJSONObject(Constants.SDK_MODULE_METADATA);
+		
+		return moduleData;
+	}
+
+	private static void writeModuleMetaData(String recordFieldDetailsPath, JSONObject moduleData) throws IOException
+	{
+		JSONObject moduleDataJSON = new JSONObject();
+		
+		moduleData.keySet().forEach(key->{
+			moduleDataJSON.put(key, moduleData.get(key));
+		});
+		
+		File recordFieldDetails = new File(recordFieldDetailsPath);
+		
+		JSONObject fieldDetailsJSON = recordFieldDetails.exists() ? Initializer.getJSON(recordFieldDetailsPath) : new JSONObject();
+		
+		fieldDetailsJSON.put(Constants.SDK_MODULE_METADATA, moduleDataJSON);
+		
+		FileWriter file = new FileWriter(recordFieldDetailsPath);
+
+		file.write(fieldDetailsJSON.toString());
+
+		file.flush();
+
+		file.close();
+	}
+
+	private static JSONObject getModules(String header) throws SDKException
+	{
+		JSONObject apiNames = new JSONObject();
 
 		HeaderMap headerMap = new HeaderMap();
 
@@ -773,7 +973,13 @@ public class Utility
 					{
 						if (module.getAPISupported())
 						{
-							apiNames.put(module.getAPIName().toLowerCase(), module.getGeneratedType().getValue());
+							JSONObject moduleDetails = new JSONObject();
+							
+							moduleDetails.put(Constants.API_NAME, module.getAPIName());
+							
+							moduleDetails.put(Constants.GENERATED_TYPE, module.getGeneratedType().getValue());
+							
+							apiNames.put(module.getAPIName().toLowerCase(), moduleDetails);
 						}
 					}
 				}
@@ -794,6 +1000,24 @@ public class Utility
 			}
 		}
 
+		if(header == null)
+		{
+			try
+			{
+				File resourcesPath = new File(Initializer.getInitializer().getResourcePath() + File.separator + Constants.FIELD_DETAILS_DIRECTORY);
+				if (!resourcesPath.exists())
+				{
+					resourcesPath.mkdirs();
+				}
+
+				writeModuleMetaData(getFileName(), apiNames);
+			}
+			catch (IOException e)
+			{
+				throw new SDKException(Constants.EXCEPTION, e);
+			}
+		}
+
 		return apiNames;
 	}
 	
@@ -801,7 +1025,7 @@ public class Utility
 	{
 		forceRefresh = true;
 		
-		getFieldsInfo(null);
+		getFieldsInfo(null, null);
 		
 		forceRefresh = false;
 	}
@@ -896,9 +1120,9 @@ public class Utility
 
 			return;
 		}
-		else if (apiTypeVsdataType.containsKey(apiType))
+		else if (apiTypeVsDataType.containsKey(apiType))
 		{
-			fieldDetail.put(Constants.TYPE, apiTypeVsdataType.get(apiType));
+			fieldDetail.put(Constants.TYPE, apiTypeVsDataType.get(apiType));
 		}
 		else if(apiType.equalsIgnoreCase(Constants.FORMULA))
 		{
@@ -906,9 +1130,9 @@ public class Utility
 			{
 				String returnType = field.getFormula().getReturnType();
 				
-				if(apiTypeVsdataType.get(returnType) != null)
+				if(apiTypeVsDataType.get(returnType) != null)
 				{
-					fieldDetail.put(Constants.TYPE, apiTypeVsdataType.get(returnType));
+					fieldDetail.put(Constants.TYPE, apiTypeVsDataType.get(returnType));
 				}
 			}
 			
@@ -982,7 +1206,7 @@ public class Utility
 
 		if (module.length() > 0)
 		{
-			Utility.getFieldsInfo(module);
+			Utility.getFieldsInfo(module, null);
 		}
 
 		fieldDetail.put(Constants.NAME, keyName);
@@ -991,7 +1215,7 @@ public class Utility
 
 	private static void fillDataType()
 	{
-		if(!apiTypeVsdataType.isEmpty())
+		if(!apiTypeVsDataType.isEmpty())
 		{
 			return;
 		}
@@ -1038,122 +1262,122 @@ public class Utility
 
 		for (String fieldAPIName : fieldAPINamesString)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.STRING_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.STRING_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesInteger)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.INTEGER_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.INTEGER_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesBoolean)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.BOOLEAN_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.BOOLEAN_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesLong)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LONG_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LONG_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesDouble)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.DOUBLE_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.DOUBLE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesFile)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.FILE_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.FILE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesDateTime)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.DATETIME_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.DATETIME_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesDate)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.DATE_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.DATE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesLookup)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.RECORD_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.RECORD_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.RECORD_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesPickList)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.CHOICE_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.CHOICE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesMultiSelectPickList)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.CHOICE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesSubForm)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.RECORD_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesOwnerLookUp)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.USER_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.USER_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.USER_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesMultiUserLookUp)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.USER_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesMultiModuleLookUp)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.MODULE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINamesFieldFile)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.FIELD_FILE_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINameTaskRemindAt)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.REMINDAT_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.REMINDAT_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.REMINDAT_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINameRecurringActivity)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.RECURRING_ACTIVITY_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.RECURRING_ACTIVITY_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.RECURRING_ACTIVITY_NAMESPACE);
 		}
 
 		for (String fieldAPIName : fieldAPINameReminder)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.LIST_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.REMINDER_NAMESPACE);
 		}
 		
 		for(String fieldAPIName : fieldAPINameConsentLookUp)
 		{
-			apiTypeVsdataType.put(fieldAPIName, Constants.CONSENT_NAMESPACE);
+			apiTypeVsDataType.put(fieldAPIName, Constants.CONSENT_NAMESPACE);
 
 			apiTypeVsStructureName.put(fieldAPIName, Constants.CONSENT_NAMESPACE);
 		}

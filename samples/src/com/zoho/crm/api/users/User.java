@@ -33,9 +33,7 @@ import com.zoho.crm.api.users.BodyWrapper;
 import com.zoho.crm.api.users.CustomizeInfo;
 
 import com.zoho.crm.api.users.Info;
-
 import com.zoho.crm.api.users.RequestWrapper;
-
 import com.zoho.crm.api.users.ResponseHandler;
 
 import com.zoho.crm.api.users.ResponseWrapper;

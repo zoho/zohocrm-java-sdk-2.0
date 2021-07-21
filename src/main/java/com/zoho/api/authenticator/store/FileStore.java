@@ -1,29 +1,34 @@
 package com.zoho.api.authenticator.store;
 
 import java.io.File;
+
 import java.io.FileReader;
+
 import java.io.FileWriter;
+
 import java.util.ArrayList;
+
 import java.util.List;
 
 import com.opencsv.CSVReader;
+
 import com.opencsv.CSVWriter;
 
 import com.zoho.api.authenticator.OAuthToken;
+
 import com.zoho.api.authenticator.Token;
-import com.zoho.api.authenticator.OAuthToken.TokenType;
+
 import com.zoho.crm.api.UserSignature;
+
 import com.zoho.crm.api.exception.SDKException;
+
 import com.zoho.crm.api.util.Constants;
 
-/**
- * This class stores the user token details to the file.
- */
 public class FileStore implements TokenStore
 {
 	private String filePath;
 	
-	private String[] headers = new String[] { Constants.USER_MAIL, Constants.CLIENT_ID, Constants.REFRESH_TOKEN, Constants.ACCESS_TOKEN, Constants.GRANT_TOKEN, Constants.EXPIRY_TIME };
+	private String[] headers = new String[] { Constants.ID, Constants.USER_MAIL, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.REFRESH_TOKEN, Constants.ACCESS_TOKEN, Constants.GRANT_TOKEN, Constants.EXPIRY_TIME, Constants.REDIRECT_URL };
 	
 	/**
 	 * Creates an FileStore class instance with the specified parameters.
@@ -67,11 +72,27 @@ public class FileStore implements TokenStore
 					
 					if (checkTokenExists(user.getEmail(), oauthToken, nextRecord))
 					{
-						oauthToken.setAccessToken(nextRecord[3]);
+						String grantToken = (nextRecord[6] != null && !nextRecord[6].isEmpty())? nextRecord[6] : null;
 						
-						oauthToken.setExpiresIn(nextRecord[5]);
+						String redirectURL = (nextRecord[8] != null && !nextRecord[8].isEmpty())? nextRecord[8] : null;
 						
-						oauthToken.setRefreshToken(nextRecord[2]);
+						oauthToken.setId(nextRecord[0]);
+						
+						oauthToken.setUserMail(nextRecord[1]);
+						
+						oauthToken.setClientId(nextRecord[2]);
+						
+						oauthToken.setClientSecret(nextRecord[3]);
+						
+						oauthToken.setRefreshToken(nextRecord[4]);
+						
+						oauthToken.setAccessToken(nextRecord[5]);
+						
+						oauthToken.setGrantToken(grantToken);
+						
+						oauthToken.setExpiresIn(String.valueOf(nextRecord[7]));
+						
+						oauthToken.setRedirectURL(redirectURL);
 						
 						return oauthToken;
 					}
@@ -91,7 +112,7 @@ public class FileStore implements TokenStore
 	{
 		try
 		{
-			String[] data = new String[6];
+			String[] data = new String[9];
 			
 			if(token instanceof OAuthToken)
 			{
@@ -101,17 +122,23 @@ public class FileStore implements TokenStore
 				
 				this.deleteToken(oauthToken);
 				
-				data[0] = user.getEmail();
+				data[0] = oauthToken.getId();
 				
-				data[1] = oauthToken.getClientID();
+				data[1] = user.getEmail();
 				
-				data[2] = oauthToken.getRefreshToken();
+				data[2] = oauthToken.getClientId();
 				
-				data[3] = oauthToken.getAccessToken();
+				data[3] = oauthToken.getClientSecret();
 				
-				data[4] = oauthToken.getGrantToken();
+				data[4] = oauthToken.getRefreshToken();
 				
-				data[5] = oauthToken.getExpiresIn();
+				data[5] = oauthToken.getAccessToken();
+				
+				data[6] = oauthToken.getGrantToken();
+				
+				data[7] = oauthToken.getExpiresIn();
+				
+				data[8] = oauthToken.getRedirectURL();
 			}
 			
 			try(CSVWriter csvWriter = new CSVWriter(new FileWriter(new File(this.filePath), true));)
@@ -166,7 +193,7 @@ public class FileStore implements TokenStore
 			throw new SDKException(Constants.TOKEN_STORE, Constants.DELETE_TOKEN_FILE_ERROR, ex);
 		}
 	}
-	
+
 	@Override
 	public List<Token> getTokens() throws SDKException
 	{
@@ -180,21 +207,24 @@ public class FileStore implements TokenStore
 			{
 				String[] nextRecord = allContents.get(index);
 				
-				TokenType tokenType = (nextRecord[4] != null && !nextRecord[4].isEmpty()) ? TokenType.GRANT : TokenType.REFRESH;
+				String grantToken = (nextRecord[6] != null && !nextRecord[6].isEmpty())? nextRecord[6] : null;
 				
-				String tokenValue = tokenType.equals(TokenType.REFRESH) ? nextRecord[2] : nextRecord[4];
+				String redirectURL = (nextRecord[8] != null && !nextRecord[8].isEmpty())? nextRecord[8] : null;
 				
-				OAuthToken token = new OAuthToken(nextRecord[1], null, tokenValue, tokenType);
+				OAuthToken oauthToken = new OAuthToken.Builder().clientID(nextRecord[2]).clientSecret(nextRecord[3])
+						.refreshToken(nextRecord[4]).grantToken(grantToken).build();
 				
-				token.setUserMail(nextRecord[0]);
+				oauthToken.setId(nextRecord[0]);
 				
-				token.setRefreshToken(nextRecord[2]);
+				oauthToken.setUserMail(nextRecord[1]);
+																
+				oauthToken.setAccessToken(nextRecord[5]);
 				
-				token.setAccessToken(nextRecord[3]);
+				oauthToken.setExpiresIn(String.valueOf(nextRecord[7]));
 				
-				token.setExpiresIn(String.valueOf(nextRecord[5]));
+				oauthToken.setRedirectURL(redirectURL);
 				
-				tokens.add(token);
+				tokens.add(oauthToken);
 			}
 		}
 		catch (Exception ex)
@@ -204,7 +234,7 @@ public class FileStore implements TokenStore
 
 		return tokens;
 	}
-	
+
 	@Override
 	public void deleteTokens() throws SDKException
 	{
@@ -218,8 +248,9 @@ public class FileStore implements TokenStore
 		{
 			throw new SDKException(Constants.TOKEN_STORE, Constants.DELETE_TOKENS_FILE_ERROR, ex);
 		}
+		
 	}
-
+	
 	private Boolean checkTokenExists(String email, OAuthToken oauthToken, String[] row) throws SDKException
 	{
 		if(email == null)
@@ -227,19 +258,85 @@ public class FileStore implements TokenStore
 			throw new SDKException(Constants.USER_MAIL_NULL_ERROR, Constants.USER_MAIL_NULL_ERROR_MESSAGE);
 		}
 		
-		String clientId = oauthToken.getClientID();
+		String clientId = oauthToken.getClientId();
 		
 		String grantToken = oauthToken.getGrantToken();
 		
 		String refreshToken = oauthToken.getRefreshToken();
 
-		boolean tokenCheck = grantToken != null ? grantToken.equals(row[4]) : refreshToken.equals(row[2]);
+		boolean tokenCheck = grantToken != null ? grantToken.equals(row[6]) : refreshToken.equals(row[4]);
 		
-		if(row[0].equals(email) && row[1].equals(clientId) && tokenCheck)
+		if(row[1].equals(email) && row[2].equals(clientId) && tokenCheck)
 		{
 			return true;
 		}
 
 		return false;
 	}
+
+	@Override
+	public Token getTokenById(String id, Token token) throws SDKException
+	{
+		try (CSVReader csvReader = new CSVReader(new FileReader(this.filePath)))
+		{
+			if(token instanceof OAuthToken)
+			{
+				OAuthToken oauthToken = (OAuthToken) token;
+				
+				List<String[]> allContents = csvReader.readAll();
+				
+				boolean isRowPresent = false;
+	
+				for (int index = 1; index < allContents.size(); index++)
+				{
+					String[] nextRecord = allContents.get(index);
+					
+					if (nextRecord[0].equals(id))
+					{
+						isRowPresent = true;
+						
+						String grantToken = (nextRecord[6] != null && !nextRecord[6].isEmpty())? nextRecord[6] : null;
+						
+						String redirectURL = (nextRecord[8] != null && !nextRecord[8].isEmpty())? nextRecord[8] : null;
+						
+						oauthToken.setId(nextRecord[0]);
+						
+						oauthToken.setUserMail(nextRecord[1]);
+						
+						oauthToken.setClientId(nextRecord[2]);
+						
+						oauthToken.setClientSecret(nextRecord[3]);
+						
+						oauthToken.setRefreshToken(nextRecord[4]);
+						
+						oauthToken.setAccessToken(nextRecord[5]);
+						
+						oauthToken.setGrantToken(grantToken);
+						
+						oauthToken.setExpiresIn(String.valueOf(nextRecord[7]));
+						
+						oauthToken.setRedirectURL(redirectURL);
+
+						return oauthToken;
+					}
+				}
+				
+				if(!isRowPresent)
+				{
+					throw new SDKException(Constants.TOKEN_STORE, Constants.GET_TOKEN_BY_ID_FILE_ERROR);
+				}
+			}
+		}
+		catch(SDKException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			throw new SDKException(Constants.TOKEN_STORE, Constants.GET_TOKEN_BY_ID_FILE_ERROR, ex);
+		}
+
+		return null;
+	}
+
 }

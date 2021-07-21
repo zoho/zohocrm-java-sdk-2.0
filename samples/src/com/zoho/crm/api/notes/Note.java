@@ -76,7 +76,7 @@ public class Note
 		
 		OffsetDateTime startdatetime = OffsetDateTime.of(2021, 06, 01, 10, 00, 01, 00, ZoneOffset.of("+05:30"));
 		
-//		headerInstance.add(GetNotesHeader.IF_MODIFIED_SINCE, startdatetime);
+		headerInstance.add(GetNotesHeader.IF_MODIFIED_SINCE, startdatetime);
 		
 		//Call getNotes method that takes paramInstance and headerInstance as parameters
 		APIResponse<ResponseHandler> response = notesOperations.getNotes(paramInstance, headerInstance);
@@ -423,7 +423,7 @@ public class Note
 			Record parentRecord = new Record();
 			
 			//Set ID of the Record
-			parentRecord.setId(34770617250001l);
+			parentRecord.setId(347706110780177l);
 			
 			//Set ParentId of the Note
 			note.setParentId(parentRecord);
@@ -577,7 +577,7 @@ public class Note
 		//Get instance of Note Class
 		com.zoho.crm.api.notes.Note note = new com.zoho.crm.api.notes.Note();
 		
-		note.setId(34770617376026l);
+		note.setId(347706110791012l);
 		
 		//Set Note_Title of the Note
 		note.setNoteTitle("Contacted12");
@@ -590,7 +590,7 @@ public class Note
 		
 		note = new com.zoho.crm.api.notes.Note();
 		
-		note.setId(34770617376025l);
+		note.setId(347706110791013l);
 		
 		//Set Note_Title of the Note
 		note.setNoteTitle("Contacted13");

@@ -42,6 +42,12 @@ public class AUDataCenter extends DataCenter
 		{
 			return AU.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "au_prd";
+		}
 	};
 
 	/**
@@ -75,6 +81,12 @@ public class AUDataCenter extends DataCenter
 		{
 			return AU.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "au_sdb";
+		}
 	};
 
 	/**
@@ -107,6 +119,12 @@ public class AUDataCenter extends DataCenter
 		public String getFileUploadUrl()
 		{
 			return AU.getFileUploadUrl();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "au_dev";
 		}
 	};
 

@@ -1,6 +1,5 @@
 package com.zoho.crm.api;
 
-
 /**
  * The class to configure the SDK.
  */
@@ -30,7 +29,7 @@ public class SDKConfig
 		 * @param autoRefreshFields A boolean
 		 * @return An instance of Builder
 		 */
-		public Builder setAutoRefreshFields(boolean autoRefreshFields)
+		public Builder autoRefreshFields(boolean autoRefreshFields)
 		{
 			this.autoRefreshFields = autoRefreshFields;
 			
@@ -42,7 +41,7 @@ public class SDKConfig
 		 * @param pickListValidation A boolean
 		 * @return An instance of Builder
 		 */
-		public Builder setPickListValidation(boolean pickListValidation)
+		public Builder pickListValidation(boolean pickListValidation)
 		{
 			this.pickListValidation = pickListValidation;
 			
@@ -113,7 +112,7 @@ public class SDKConfig
 	 * @param requestTimeout A long representing requestTimeout
 	 * @param socketTimeout A long representing socketTimeout
 	 */
-	SDKConfig(boolean autoRefreshFields, boolean pickListValidation, int connectionTimeout, int requestTimeout, int socketTimeout)
+	private SDKConfig(boolean autoRefreshFields, boolean pickListValidation, int connectionTimeout, int requestTimeout, int socketTimeout)
 	{
 		this.autoRefreshFields = autoRefreshFields;
 		
@@ -148,7 +147,7 @@ public class SDKConfig
 	 * This is a getter method to get connectionTimeout.
 	 * @return A int representing connectionTimeout
 	 */
-	public int connectionTimeout()
+	public int getConnectionTimeout()
 	{
 		return connectionTimeout;
 	}
@@ -157,7 +156,7 @@ public class SDKConfig
 	 * This is a getter method to get requestTimeout.
 	 * @return A int representing requestTimeout
 	 */
-	public int requestTimeout()
+	public int getRequestTimeout()
 	{
 		return requestTimeout;
 	}
@@ -166,7 +165,7 @@ public class SDKConfig
 	 * This is a getter method to get socketTimeout.
 	 * @return A int representing socketTimeout
 	 */
-	public int socketTimeout()
+	public int getSocketTimeout()
 	{
 		return socketTimeout;
 	}

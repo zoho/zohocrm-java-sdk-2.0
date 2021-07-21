@@ -1,14 +1,23 @@
 package com.zoho.api.logger;
 
 import java.io.PrintWriter;
+
 import java.io.StringWriter;
+
 import java.util.Date;
+
 import java.util.logging.FileHandler;
+
 import java.util.logging.Level;
+
 import java.util.logging.LogRecord;
+
 import java.util.logging.Logger;
 
+import com.zoho.api.logger.Logger.Levels;
+
 import com.zoho.crm.api.exception.SDKException;
+
 import com.zoho.crm.api.util.Constants;
 
 /**
@@ -28,13 +37,13 @@ public class SDKLogger
 		new SDKLogger(logger);
 	}
 	
-	SDKLogger(com.zoho.api.logger.Logger logger) throws SDKException
+	private SDKLogger(com.zoho.api.logger.Logger logger) throws SDKException
 	{
 		try
 		{
 			FileHandler fileHandler;
 			
-			if (logger.getFilePath() != null && logger.getFilePath() != "")
+			if (!logger.getLevel().equalsIgnoreCase(Levels.OFF.name()) && logger.getFilePath() != null && logger.getFilePath() != "")
 			{
 				fileHandler = new FileHandler(logger.getFilePath(), true);
 				
@@ -52,7 +61,7 @@ public class SDKLogger
 		}
 		catch (Exception e)
 		{
-			throw new SDKException(Constants.SDK_LOGGER_INITIALIZE, e);
+			throw new SDKException(Constants.LOGGER_INITIALIZATION_ERROR, e);
 		}
 	}
 

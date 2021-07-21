@@ -1,21 +1,14 @@
 package samples.src.com.zoho.crm.api.relatedlist;
 
 import java.util.Arrays;
-
 import java.util.List;
-
 import java.util.Map;
 
 import com.zoho.crm.api.relatedlists.APIException;
-
 import com.zoho.crm.api.relatedlists.RelatedListsOperations;
-
 import com.zoho.crm.api.relatedlists.ResponseHandler;
-
 import com.zoho.crm.api.relatedlists.ResponseWrapper;
-
 import com.zoho.crm.api.util.APIResponse;
-
 import com.zoho.crm.api.util.Model;
 
 public class RelatedList

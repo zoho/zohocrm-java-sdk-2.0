@@ -56,7 +56,7 @@ public class CustomView
 		
 		paramInstance.add(GetCustomViewsParam.PAGE, 1);
 		
-		paramInstance.add(new Param<String>("module", null), "Contacts");
+		paramInstance.add(new Param<String>("module", null), "Quotes");
 
 		//Call getCustomViews method
 		APIResponse<ResponseHandler> response = customViewsOperations.getCustomViews(paramInstance);

@@ -6,7 +6,6 @@ package com.zoho.crm.api;
  */
 public class Header<T>
 {
-	
 	private String name;
 	
 	private String className;

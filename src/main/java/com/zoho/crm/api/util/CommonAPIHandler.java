@@ -281,7 +281,7 @@ public class CommonAPIHandler
 
 		Converter convertInstance = null;
 
-		if (this.contentType != null && Constants.IS_GENERATE_REQUEST_BODY.contains(httpMethod.toUpperCase()))
+		if (this.contentType != null && Constants.GENERATE_REQUEST_BODY.contains(httpMethod.toUpperCase()))
 		{
 			Object request = null;
 

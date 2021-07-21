@@ -42,6 +42,12 @@ public class USDataCenter extends DataCenter
 		{
 			return US.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "us_prd";
+		}
 	};
 
 	/**
@@ -75,6 +81,12 @@ public class USDataCenter extends DataCenter
 		{
 			return US.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "us_sdb";
+		}
 	};
 
 	/**
@@ -107,6 +119,12 @@ public class USDataCenter extends DataCenter
 		public String getFileUploadUrl()
 		{
 			return US.getFileUploadUrl();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "us_dev";
 		}
 	};
 

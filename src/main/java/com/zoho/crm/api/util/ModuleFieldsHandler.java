@@ -213,7 +213,7 @@ public class ModuleFieldsHandler
 		{
 			deleteFields(module);
 			
-			Utility.getFields(module);
+			Utility.getFieldsInfo(module,null);
 		}
 		catch (SDKException e)
 		{
@@ -225,7 +225,7 @@ public class ModuleFieldsHandler
 		{
 			SDKException exception = new SDKException(e);
 
-			LOGGER.log(Level.SEVERE, Constants.REFRESH_SINGLE_MODULE_FIELDS_ERROR + module, exception);
+			LOGGER.log(Level.SEVERE, Constants.REFRESH_SINGLE_MODULE_FIELDS_ERROR.concat(module), exception);
 
 			throw exception;
 		}

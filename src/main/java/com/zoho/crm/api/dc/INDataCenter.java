@@ -42,6 +42,12 @@ public class INDataCenter extends DataCenter
 		{
 			return IN.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "in_prd";
+		}
 	};
 
 	/**
@@ -75,6 +81,12 @@ public class INDataCenter extends DataCenter
 		{
 			return IN.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "in_sdb";
+		}
 	};
 
 	/**
@@ -107,6 +119,12 @@ public class INDataCenter extends DataCenter
 		public String getFileUploadUrl()
 		{
 			return IN.getFileUploadUrl();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "in_dev";
 		}
 	};
 

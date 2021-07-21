@@ -3,14 +3,19 @@ package com.zoho.crm.api.util;
 import java.io.InputStream;
 
 import java.lang.reflect.Constructor;
+
 import java.lang.reflect.Field;
 
 import org.apache.http.Header;
+
 import org.apache.http.HttpEntity;
+
 import org.apache.http.HttpResponse;
+
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
 import org.json.JSONArray;
+
 import org.json.JSONObject;
 
 import com.zoho.crm.api.Initializer;
@@ -45,6 +50,7 @@ public class Downloader extends Converter
 		return getResponse(response, pack);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public Object getResponse(Object response, String pack) throws Exception
 	{

@@ -1,23 +1,29 @@
 package com.zoho.api.authenticator.store;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
+
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
+
 import java.sql.Statement;
+
 import java.util.ArrayList;
+
 import java.util.List;
 
 import com.zoho.api.authenticator.OAuthToken;
+
 import com.zoho.api.authenticator.Token;
-import com.zoho.api.authenticator.OAuthToken.TokenType;
+
 import com.zoho.crm.api.UserSignature;
+
 import com.zoho.crm.api.exception.SDKException;
+
 import com.zoho.crm.api.util.Constants;
 
-/**
- * This class stores the user token details to the MySQL DataBase.
- */
 public class DBStore implements TokenStore
 {
 	private String userName;
@@ -32,19 +38,8 @@ public class DBStore implements TokenStore
 	
 	private String connectionString;
 	
-	/**
-	 * Create a DBStore class instance with the following default values
-	 * host -> localhost
-	 * databaseName -> zohooauth
-	 * userName -> root
-	 * password -> ""
-	 * portNumber -> 3306
-	 */
-	public DBStore()
-	{
-		this(null, null, null, null, null);
-	}
-
+	private String tableName;
+	
 	/**
 	 * Creates a DBStore class instance with the specified parameters.
 	 * @param host A String containing the DataBase host name.
@@ -53,20 +48,86 @@ public class DBStore implements TokenStore
 	 * @param password A String containing the DataBase password.
 	 * @param portNumber A String containing the DataBase port number.
 	 */
-	public DBStore(String host, String databaseName, String userName, String password, String portNumber)
+	private DBStore(String host, String databaseName, String tableName, String userName, String password, String portNumber)
 	{
-		this.host = host != null ? host : Constants.MYSQL_HOST;
+		this.host = host;
 		
-		this.databaseName = databaseName != null ? databaseName : Constants.MYSQL_DATABASE_NAME;
+		this.databaseName = databaseName;
 		
-		this.userName = userName != null ? userName : Constants.MYSQL_USER_NAME;
+		this.tableName = tableName;
 		
-		this.password = password != null ? password : "";
+		this.userName = userName;
 		
-		this.portNumber = portNumber != null ? portNumber : Constants.MYSQL_PORT_NUMBER;
+		this.password = password;
+		
+		this.portNumber = portNumber;
 		
 		this.connectionString = Constants.MYSQL_DRIVER + this.host + ":" + this.portNumber + "/" + this.databaseName + "?allowPublicKeyRetrieval=true&useSSL=false";
 	}
+	
+	
+	public static class Builder
+	{
+		private String userName = Constants.MYSQL_USER_NAME;
+		
+		private String portNumber = Constants.MYSQL_PORT_NUMBER;
+		
+		private String password = "";
+		
+		private String host = Constants.MYSQL_HOST;
+		
+		private String databaseName = Constants.MYSQL_DATABASE_NAME;
+		
+		private String tableName = Constants.MYSQL_TABLE_NAME;
+		
+		public Builder userName(String userName)
+		{
+			this.userName = userName;
+			
+			return this;
+		}
+		
+		public Builder portNumber(String portNumber)
+		{
+			this.portNumber = portNumber;
+			
+			return this;
+		}
+		
+		public Builder password(String password)
+		{
+			this.password = password;
+			
+			return this;
+		}
+		
+		public Builder host(String host)
+		{
+			this.host = host;
+			
+			return this;
+		}
+		
+		public Builder databaseName(String databaseName)
+		{
+			this.databaseName = databaseName;
+			
+			return this;
+		}
+		
+		public Builder tableName(String tableName)
+		{
+			this.tableName = tableName;
+			
+			return this;
+		}
+		
+		public DBStore build()
+		{
+			return new DBStore(this.host, this.databaseName, this.tableName, this.userName, this.password, this.portNumber);
+		}
+	}
+
 
 	@Override
 	public Token getToken(UserSignature user, Token token) throws SDKException
@@ -79,21 +140,34 @@ public class DBStore implements TokenStore
 			{
 				if(token instanceof OAuthToken)
 				{
-					OAuthToken oauthToken = (OAuthToken) token;
 					
 					try(Statement statement = connection.createStatement();)
 					{
-						String query = constructDBQuery(user.getEmail(), oauthToken, false);
+						OAuthToken oauthToken = (OAuthToken) token;
+								
+						String query = constructDBQuery(user.getEmail(),oauthToken, false);
 						
 						try(ResultSet result = statement.executeQuery(query);)
 						{
 							while (result.next())
-							{
-								oauthToken.setAccessToken(result.getString(5));
+							{								
+								oauthToken.setId(result.getString(1));
 								
-								oauthToken.setExpiresIn(String.valueOf(result.getString(7)));
+								oauthToken.setUserMail(result.getString(2));
 								
-								oauthToken.setRefreshToken(result.getString(4));
+								oauthToken.setClientId(result.getString(3));
+								
+								oauthToken.setClientSecret(result.getString(4));
+								
+								oauthToken.setRefreshToken(result.getString(5));
+								
+								oauthToken.setAccessToken(result.getString(6));
+								
+								oauthToken.setGrantToken(result.getString(7));
+								
+								oauthToken.setExpiresIn(String.valueOf(result.getString(8)));
+								
+								oauthToken.setRedirectURL(result.getString(9));
 								
 								return oauthToken;
 							}
@@ -109,6 +183,7 @@ public class DBStore implements TokenStore
 
 		return null;
 	}
+
 
 	@Override
 	public void saveToken(UserSignature user, Token token) throws SDKException
@@ -127,19 +202,25 @@ public class DBStore implements TokenStore
 					
 					this.deleteToken(oauthToken);
 					
-					try(PreparedStatement statement = connection.prepareStatement("insert into oauthtoken(user_mail, client_id, refresh_token, access_token, grant_token, expiry_time) values(?,?,?,?,?,?)");)
+					try(PreparedStatement statement = connection.prepareStatement("insert into " + this.tableName + "(id,user_mail,client_id,client_secret,refresh_token,access_token,grant_token,expiry_time,redirect_url) values(?,?,?,?,?,?,?,?,?)");)
 					{
-						statement.setString(1, user.getEmail());
+						statement.setString(1, oauthToken.getId());
+						
+						statement.setString(2, user.getEmail());
 				
-						statement.setString(2, oauthToken.getClientID());
+						statement.setString(3, oauthToken.getClientId());
 						
-						statement.setString(3, oauthToken.getRefreshToken());
+						statement.setString(4, oauthToken.getClientSecret());
 						
-						statement.setString(4, oauthToken.getAccessToken());
+						statement.setString(5, oauthToken.getRefreshToken());
 						
-						statement.setString(5, oauthToken.getGrantToken());
+						statement.setString(6, oauthToken.getAccessToken());
 						
-						statement.setString(6, oauthToken.getExpiresIn());
+						statement.setString(7, oauthToken.getGrantToken());
+						
+						statement.setString(8, oauthToken.getExpiresIn());
+						
+						statement.setString(9, oauthToken.getRedirectURL());
 						
 						statement.executeUpdate();
 					}
@@ -151,6 +232,7 @@ public class DBStore implements TokenStore
 			throw new SDKException(Constants.TOKEN_STORE, Constants.SAVE_TOKEN_DB_ERROR, ex);
 		}
 	}
+
 
 	@Override
 	public void deleteToken(Token token) throws SDKException
@@ -181,7 +263,8 @@ public class DBStore implements TokenStore
 			throw new SDKException(Constants.TOKEN_STORE, Constants.DELETE_TOKEN_DB_ERROR, ex);
 		}
 	}
-	
+
+
 	@Override
 	public List<Token> getTokens() throws SDKException
 	{
@@ -195,29 +278,26 @@ public class DBStore implements TokenStore
 			{
 				try(Statement statement = connection.createStatement();)
 				{
-					String query = "select * from oauthtoken;";
+					String query = "select * from " + this.tableName + ";";
 					
 					try(ResultSet result = statement.executeQuery(query);)
 					{
 						while (result.next())
 						{
-							TokenType tokenType = (result.getString(6) != null && !result.getString(6).equalsIgnoreCase(Constants.NULL_VALUE) && !result.getString(6).isEmpty()) ? TokenType.GRANT : TokenType.REFRESH;
 							
-							String tokenValue = tokenType.equals(TokenType.REFRESH) ? result.getString(4) : result.getString(6);
+							OAuthToken oauthToken = new OAuthToken.Builder().clientID(result.getString(3)).clientSecret(result.getString(4)).grantToken(result.getString(7)).refreshToken(result.getString(5)).build() ;
 							
-							OAuthToken token = new OAuthToken(result.getString(3), null, tokenValue, tokenType);
+							oauthToken.setId(result.getString(1));
 							
-							token.setId(result.getString(1));
+							oauthToken.setUserMail(result.getString(2));
+																												
+							oauthToken.setAccessToken(result.getString(6));
+														
+							oauthToken.setExpiresIn(String.valueOf(result.getString(8)));
 							
-							token.setUserMail(result.getString(2));
+							oauthToken.setRedirectURL(result.getString(9));
 							
-							token.setRefreshToken(result.getString(4));
-							
-							token.setAccessToken(result.getString(5));
-							
-							token.setExpiresIn(String.valueOf(result.getString(7)));
-							
-							tokens.add(token);
+							tokens.add(oauthToken);
 						}
 					}
 				}
@@ -230,7 +310,8 @@ public class DBStore implements TokenStore
 
 		return tokens;
 	}
-	
+
+
 	@Override
 	public void deleteTokens() throws SDKException
 	{
@@ -240,7 +321,7 @@ public class DBStore implements TokenStore
 			
 			try(Connection connection = DriverManager.getConnection(this.connectionString, this.userName, this.password);)
 			{
-				String query = "delete from oauthtoken";
+				String query = "delete from " + this.tableName;
 				
 				try(PreparedStatement statement = connection.prepareStatement(query);)
 				{
@@ -252,8 +333,9 @@ public class DBStore implements TokenStore
 		{
 			throw new SDKException(Constants.TOKEN_STORE, Constants.DELETE_TOKENS_DB_ERROR, ex);
 		}
+		
 	}
-
+	
 	private String constructDBQuery(String email, OAuthToken token, boolean isDelete) throws SDKException
 	{
 		if(email == null)
@@ -261,19 +343,87 @@ public class DBStore implements TokenStore
 			throw new SDKException(Constants.USER_MAIL_NULL_ERROR, Constants.USER_MAIL_NULL_ERROR_MESSAGE);
 		}
 		
-		String query = isDelete ? "delete from " : "select * from ";
+		StringBuilder queryBuilder = new StringBuilder();
 		
-		query += "oauthtoken where user_mail='" + email + "' and client_id='" + token.getClientID() + "' and ";
+		queryBuilder.append(isDelete ? "delete from " : "select * from ");
+		
+		queryBuilder.append(this.tableName).append(" where user_mail='").append(email);
+		
+		queryBuilder.append("' and client_id='").append(token.getClientId()).append("' and ");
 
 		if (token.getGrantToken() != null)
 		{
-			query += "grant_token='" + token.getGrantToken() + "'";
+			queryBuilder.append("grant_token='").append(token.getGrantToken()).append("'");
 		}
 		else
 		{
-			query += "refresh_token='" + token.getRefreshToken() + "'";
+			queryBuilder.append("refresh_token='").append(token.getRefreshToken()).append("'");
 		}
 
-		return query;
+		return queryBuilder.toString();
+	}
+
+
+	@Override
+	public Token getTokenById(String id, Token token) throws SDKException
+	{
+		try
+		{
+			Class.forName(Constants.JDBC_DRIVER_NAME);
+			
+			try(Connection connection = DriverManager.getConnection(connectionString, userName, password);)
+			{
+				if(token instanceof OAuthToken)
+				{
+					OAuthToken oauthToken = (OAuthToken) token;
+					
+					try(Statement statement = connection.createStatement();)
+					{
+						String query = "select * from " + this.tableName + " where id='" + id + "'";
+						
+						try(ResultSet result = statement.executeQuery(query);)
+						{
+							if(result.next() == false)
+							{
+								throw new SDKException(Constants.TOKEN_STORE, Constants.GET_TOKEN_BY_ID_DB_ERROR);
+							}
+							
+							do
+							{
+								oauthToken.setId(result.getString(1));
+								
+								oauthToken.setUserMail(result.getString(2));
+								
+								oauthToken.setClientId(result.getString(3));
+								
+								oauthToken.setClientSecret(result.getString(4));
+								
+								oauthToken.setRefreshToken(result.getString(5));
+								
+								oauthToken.setAccessToken(result.getString(6));
+								
+								oauthToken.setGrantToken(result.getString(7));
+								
+								oauthToken.setExpiresIn(String.valueOf(result.getString(8)));
+								
+								oauthToken.setRedirectURL(result.getString(9));
+								
+								return oauthToken;
+							} while(result.next());
+						}
+					}
+				}
+			}
+		}
+		catch(SDKException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			throw new SDKException(Constants.TOKEN_STORE, Constants.GET_TOKEN_BY_ID_DB_ERROR, ex);
+		}
+
+		return null;
 	}
 }

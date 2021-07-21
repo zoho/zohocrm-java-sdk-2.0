@@ -42,6 +42,12 @@ public class EUDataCenter extends DataCenter
 		{
 			return EU.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "eu_prd";
+		}
 	};
 
 	/**
@@ -75,6 +81,12 @@ public class EUDataCenter extends DataCenter
 		{
 			return EU.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "eu_sdb";
+		}
 	};
 
 	/**
@@ -107,6 +119,12 @@ public class EUDataCenter extends DataCenter
 		public String getFileUploadUrl()
 		{
 			return EU.getFileUploadUrl();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "eu_dev";
 		}
 	};
 

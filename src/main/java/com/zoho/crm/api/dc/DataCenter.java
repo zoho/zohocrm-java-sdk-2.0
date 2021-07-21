@@ -41,5 +41,7 @@ public abstract class DataCenter
 		 * @return A String representing the File Upload URL.
 		 */
 		public abstract String getFileUploadUrl();
+		
+		public abstract String getName();
 	}
 }

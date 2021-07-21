@@ -122,11 +122,11 @@ public class BulkRead
 		
 		Criteria group111 = new Criteria();
 		
-		group111.setAPIName("All_day");
+		group111.setAPIName("Company");
 		
 		group111.setComparator(new Choice<String>("equal"));
 		
-		group111.setValue(false);
+		group111.setValue("Zoho");
 		
 		groupList11.add(group111);
 		
@@ -154,11 +154,11 @@ public class BulkRead
 		
 		Criteria group121 = new Criteria();
 		
-		group121.setAPIName("Event_Title");
+		group121.setAPIName("Paid");
 		
 		group121.setComparator(new Choice<String>("equal"));
 		
-		group121.setValue("New Automated Event");
+		group121.setValue(true);
 		
 		groupList12.add(group121);
 		

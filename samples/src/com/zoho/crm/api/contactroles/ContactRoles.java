@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import java.util.Arrays;
 
+import java.util.HashMap;
+
 import java.util.List;
 
 import java.util.Map;
@@ -24,15 +26,35 @@ import com.zoho.crm.api.contactroles.BodyWrapper;
 
 import com.zoho.crm.api.contactroles.ContactRole;
 
+import com.zoho.crm.api.contactroles.ContactRoleWrapper;
+
 import com.zoho.crm.api.contactroles.ContactRolesOperations;
 
 import com.zoho.crm.api.contactroles.ContactRolesOperations.DeleteContactRolesParam;
+
+import com.zoho.crm.api.contactroles.ContactRolesOperations.GetAllContactRolesOfDealParam;
+
+import com.zoho.crm.api.contactroles.RecordActionHandler;
+
+import com.zoho.crm.api.contactroles.RecordActionWrapper;
+
+import com.zoho.crm.api.contactroles.RecordBodyWrapper;
+
+import com.zoho.crm.api.contactroles.RecordResponseHandler;
+
+import com.zoho.crm.api.contactroles.RecordResponseWrapper;
 
 import com.zoho.crm.api.contactroles.ResponseHandler;
 
 import com.zoho.crm.api.contactroles.ResponseWrapper;
 
 import com.zoho.crm.api.contactroles.SuccessResponse;
+
+import com.zoho.crm.api.exception.SDKException;
+
+import com.zoho.crm.api.record.Info;
+
+import com.zoho.crm.api.users.User;
 
 import com.zoho.crm.api.util.APIResponse;
 
@@ -312,7 +334,7 @@ public class ContactRoles
 		ContactRole cr1 = new ContactRole();
 		
 		//Set ID to the ContactRole instance
-		cr1.setId(34770617343021l);
+		cr1.setId(347706110803003l);
 		
 		//Set name to the ContactRole instance
 		cr1.setName("Edited1");
@@ -324,12 +346,12 @@ public class ContactRoles
 		ContactRole cr2 = new ContactRole();
 		
 		//Set ID to the ContactRole instance
-		cr2.setId(34770617343024l);
+		cr2.setId(347706110803001l);
 		
 		cr2.setSequenceNumber(1);
 		
 		//Set name to the ContactRole instance
-		cr2.setName("Edited12");
+		cr2.setName("Edited2");
 		
 		//Add ContactRole instance to the list
 		contactRolesList.add(cr2);
@@ -463,10 +485,10 @@ public class ContactRoles
 	 * @param contactRoleIds - The List of ContactRole IDs to be deleted.
 	 * @throws Exception
 	 */
-	public static void deleteContactRoles(List<Long> contactRoleIds) throws Exception
+	public static void deleteContactRoles(List<String> contactRoleIds) throws Exception
 	{
 		//example
-//		ArrayList<Long> contactRoleIds = new ArrayList<Long>(Arrays.asList(34770615208001l,34770615208002l));
+		//ArrayList<Long> contactRoleIds = new ArrayList<Long>(Arrays.asList(34770615208001l,34770615208002l));
 		
 		//Get instance of ContactRolesOperations Class
 		ContactRolesOperations contactRolesOperations = new ContactRolesOperations();
@@ -474,7 +496,7 @@ public class ContactRoles
 		//Get instance of ParameterMap Class
 		ParameterMap paramInstance = new ParameterMap();
 		
-		for( Long id : contactRoleIds)
+		for( String id : contactRoleIds)
 		{
 			paramInstance.add(DeleteContactRolesParam.IDS, id);
 		}
@@ -986,5 +1008,628 @@ public class ContactRoles
 				}
 			}
 		}
+	}
+
+	/**
+	 * <h3> Get All ContactRoles Of Deal </h3>
+	 * @param dealId ID of the Deals
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 * @throws SDKException 
+	 * @throws Exception
+	 */
+    @SuppressWarnings("unchecked")
+	public static void getAllContactRolesOfDeal(long dealId) throws IllegalArgumentException, IllegalAccessException, SDKException
+	{
+		//Get instance of ContactRolesOperations Class
+		ContactRolesOperations contactRolesOperations = new ContactRolesOperations();
+		
+		//Get instance of ParameterMap Class
+		ParameterMap paramInstance = new ParameterMap();
+
+//        paramInstance.add(GetAllContactRolesOfDealParam.IDS, "");
+		
+		//Call getAllContactRolesOfDeal method that takes Param instance as parameter 
+		APIResponse<RecordResponseHandler> response = contactRolesOperations.getAllContactRolesOfDeal(dealId, paramInstance);
+		
+		if(response != null)
+		{
+            //Get the status code from response
+			System.out.println("Status Code: " + response.getStatusCode());
+			
+			if(Arrays.asList(204,304).contains(response.getStatusCode()))
+			{
+				System.out.println(response.getStatusCode() == 204? "No Content" : "Not Modified");
+				return;
+			}
+			
+			//Check if expected response is received
+			if(response.isExpected())
+			{
+				//Get the object from response
+				RecordResponseHandler responseHandler = response.getObject();
+				
+				if(responseHandler instanceof RecordResponseWrapper)
+				{
+					//Get the received RecordResponseWrapper instance
+					RecordResponseWrapper responseWrapper = (RecordResponseWrapper) responseHandler;
+					
+					//Get the obtained Record instances
+					List<com.zoho.crm.api.record.Record> records = responseWrapper.getData();
+					
+					for(com.zoho.crm.api.record.Record record : records)
+					{					
+						//Get the ID of each Record
+						System.out.println("Record ID: " + record.getId());
+						
+						//Get the createdBy User instance of each Record
+						User createdBy = record.getCreatedBy();
+						
+						//Check if createdBy is not null
+						if(createdBy != null)
+						{
+							//Get the ID of the createdBy User
+							System.out.println("Record Created By User-ID: " + createdBy.getId());
+							
+							//Get the name of the createdBy User
+							System.out.println("Record Created By User-Name: " + createdBy.getName());
+							
+							//Get the Email of the createdBy User
+							System.out.println("Record Created By User-Email: " + createdBy.getEmail());
+						}
+						
+						//Get the CreatedTime of each Record
+						System.out.println("Record CreatedTime: " + record.getCreatedTime());
+						
+						//Get the modifiedBy User instance of each Record
+						User modifiedBy = record.getModifiedBy();
+						
+						//Check if modifiedBy is not null
+						if(modifiedBy != null)
+						{
+							//Get the ID of the modifiedBy User
+							System.out.println("Record Modified By User-ID: " + modifiedBy.getId());
+							
+							//Get the name of the modifiedBy User
+							System.out.println("Record Modified By User-Name: " + modifiedBy.getName());
+							
+							//Get the Email of the modifiedBy User
+							System.out.println("Record Modified By User-Email: " + modifiedBy.getEmail());
+						}
+						
+						//Get the ModifiedTime of each Record
+                        System.out.println("Record CreatedTime: " + record.getModifiedTime());
+						
+						//To get particular field value 
+						System.out.println("Record Field Value: " + record.getKeyValue("Last_Name"));// FieldApiName
+						
+						System.out.println("Record KeyValues:");
+						
+						//Get the KeyValue map
+						for(Map.Entry<String, Object> entry : record.getKeyValues().entrySet())
+						{
+							String keyName = entry.getKey();
+							
+							Object value = entry.getValue();
+							
+							if(value instanceof List)
+							{
+								System.out.println("Record KeyName : " + keyName);
+								
+								List<?> dataList = (List<?>) value;
+								
+								for(Object data : dataList)
+								{
+									if(data instanceof Map)
+									{
+										System.out.println("Record KeyName : " + keyName  + " - Value : ");
+										
+										for(Map.Entry<String, Object> mapValue : ((HashMap<String,Object>) data).entrySet())
+										{
+											System.out.println(mapValue.getKey()  + " : " + mapValue.getValue());
+										}
+									}
+									else
+									{
+										System.out.println(data);
+									}
+								}
+							}
+							else if (value instanceof Map)
+							{
+								System.out.println("Record KeyName : " + keyName  + " - Value : ");
+								
+								for(Map.Entry<String, Object> mapValue : ((HashMap<String,Object>) value).entrySet())
+								{
+									System.out.println(mapValue.getKey()  + " : " + mapValue.getValue());
+								}
+							}
+							else
+							{
+								System.out.println("Record KeyName : " + keyName  + " - Value : " + value);
+							}
+						}
+                    }
+
+					//Get the Object obtained Info instance
+					Info info = responseWrapper.getInfo();
+					
+					//Check if info is not null
+					if(info != null)
+					{
+						if(info.getCount() != null)
+						{
+							//Get the Count of the Info
+							System.out.println("Record Info Count: " + info.getCount().toString());
+						}
+	
+						if(info.getMoreRecords() != null)
+						{
+							//Get the MoreRecords of the Info
+							System.out.println("Record Info MoreRecords: " + info.getMoreRecords().toString());
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if(responseHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					APIException exception = (APIException) responseHandler;
+					
+					//Get the Status
+					System.out.println("Status: " + exception.getStatus().getValue());
+					
+					//Get the Code
+					System.out.println("Code: " + exception.getCode().getValue());
+					
+					System.out.println("Details: " );
+					
+					//Get the details map
+					for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+					{
+						//Get each value in the map
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+					}
+					
+					//Get the Message
+					System.out.println("Message: " + exception.getMessage().getValue());
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				//Get model object from response
+				Model responseObject = response.getModel();
+				
+				//Get the response object's class
+				Class<? extends Model> clas = responseObject.getClass();
+				
+				//Get all declared fields of the response class
+				Field[] fields = clas.getDeclaredFields();
+				
+				for(Field field : fields)
+				{
+					//Get each value
+					System.out.println(field.getName() + ":" + field.get(responseObject));
+				}
+			}
+		}
+	}
+
+    @SuppressWarnings("unchecked")
+	public static void getContactRoleOfDeal(long contactId, long dealId) throws IllegalArgumentException, IllegalAccessException, SDKException
+	{
+		//Get instance of ContactRolesOperations Class
+		ContactRolesOperations contactRolesOperations = new ContactRolesOperations();
+		
+		//Call getContactRoleOfDeal method that takes Param instance as parameter 
+		APIResponse<RecordResponseHandler> response = contactRolesOperations.getContactRoleOfDeal(contactId, dealId);
+		
+		if(response != null)
+		{
+            //Get the status code from response
+			System.out.println("Status Code: " + response.getStatusCode());
+			
+			if(Arrays.asList(204,304).contains(response.getStatusCode()))
+			{
+				System.out.println(response.getStatusCode() == 204? "No Content" : "Not Modified");
+				return;
+			}
+			
+			//Check if expected response is received
+			if(response.isExpected())
+			{
+				//Get the object from response
+				RecordResponseHandler responseHandler = response.getObject();
+				
+				if(responseHandler instanceof RecordResponseWrapper)
+				{
+					//Get the received RecordResponseWrapper instance
+					RecordResponseWrapper responseWrapper = (RecordResponseWrapper) responseHandler;
+					
+					//Get the obtained Record instances
+					List<com.zoho.crm.api.record.Record> records = responseWrapper.getData();
+					
+					for(com.zoho.crm.api.record.Record record : records)
+					{					
+						//Get the ID of each Record
+						System.out.println("Record ID: " + record.getId());
+						
+						//Get the createdBy User instance of each Record
+						User createdBy = record.getCreatedBy();
+						
+						//Check if createdBy is not null
+						if(createdBy != null)
+						{
+							//Get the ID of the createdBy User
+							System.out.println("Record Created By User-ID: " + createdBy.getId());
+							
+							//Get the name of the createdBy User
+							System.out.println("Record Created By User-Name: " + createdBy.getName());
+							
+							//Get the Email of the createdBy User
+							System.out.println("Record Created By User-Email: " + createdBy.getEmail());
+						}
+						
+						//Get the CreatedTime of each Record
+						System.out.println("Record CreatedTime: " + record.getCreatedTime());
+						
+						//Get the modifiedBy User instance of each Record
+						User modifiedBy = record.getModifiedBy();
+						
+						//Check if modifiedBy is not null
+						if(modifiedBy != null)
+						{
+							//Get the ID of the modifiedBy User
+							System.out.println("Record Modified By User-ID: " + modifiedBy.getId());
+							
+							//Get the name of the modifiedBy User
+							System.out.println("Record Modified By User-Name: " + modifiedBy.getName());
+							
+							//Get the Email of the modifiedBy User
+							System.out.println("Record Modified By User-Email: " + modifiedBy.getEmail());
+						}
+						
+						//Get the ModifiedTime of each Record
+                        System.out.println("Record CreatedTime: " + record.getModifiedTime());
+						
+						//To get particular field value 
+						System.out.println("Record Field Value: " + record.getKeyValue("Last_Name"));// FieldApiName
+						
+						System.out.println("Record KeyValues:");
+						
+						//Get the KeyValue map
+						for(Map.Entry<String, Object> entry : record.getKeyValues().entrySet())
+						{
+							String keyName = entry.getKey();
+							
+							Object value = entry.getValue();
+							
+							if(value instanceof List)
+							{
+								System.out.println("Record KeyName : " + keyName);
+								
+								List<?> dataList = (List<?>) value;
+								
+								for(Object data : dataList)
+								{
+									if(data instanceof Map)
+									{
+										System.out.println("Record KeyName : " + keyName  + " - Value : ");
+										
+										for(Map.Entry<String, Object> mapValue : ((HashMap<String,Object>) data).entrySet())
+										{
+											System.out.println(mapValue.getKey()  + " : " + mapValue.getValue());
+										}
+									}
+									else
+									{
+										System.out.println(data);
+									}
+								}
+							}
+							else if (value instanceof Map)
+							{
+								System.out.println("Record KeyName : " + keyName  + " - Value : ");
+								
+								for(Map.Entry<String, Object> mapValue : ((HashMap<String,Object>) value).entrySet())
+								{
+									System.out.println(mapValue.getKey()  + " : " + mapValue.getValue());
+								}
+							}
+							else
+							{
+								System.out.println("Record KeyName : " + keyName  + " - Value : " + value);
+							}
+						}
+                    }
+
+					//Get the Object obtained Info instance
+					Info info = responseWrapper.getInfo();
+					
+					//Check if info is not null
+					if(info != null)
+					{
+						if(info.getCount() != null)
+						{
+							//Get the Count of the Info
+							System.out.println("Record Info Count: " + info.getCount().toString());
+						}
+	
+						if(info.getMoreRecords() != null)
+						{
+							//Get the MoreRecords of the Info
+							System.out.println("Record Info MoreRecords: " + info.getMoreRecords().toString());
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if(responseHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					APIException exception = (APIException) responseHandler;
+					
+					//Get the Status
+					System.out.println("Status: " + exception.getStatus().getValue());
+					
+					//Get the Code
+					System.out.println("Code: " + exception.getCode().getValue());
+					
+					System.out.println("Details: " );
+					
+					//Get the details map
+					for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+					{
+						//Get each value in the map
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+					}
+					
+					//Get the Message
+					System.out.println("Message: " + exception.getMessage().getValue());
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				//Get model object from response
+				Model responseObject = response.getModel();
+				
+				//Get the response object's class
+				Class<? extends Model> clas = responseObject.getClass();
+				
+				//Get all declared fields of the response class
+				Field[] fields = clas.getDeclaredFields();
+				
+				for(Field field : fields)
+				{
+					//Get each value
+					System.out.println(field.getName() + ":" + field.get(responseObject));
+				}
+			}
+		}
+	}
+
+    public static void addContactRoleToDeal(long contactId, long dealId) throws SDKException
+	{
+		//Get instance of ContactRolesOperations Class
+		ContactRolesOperations contactRolesOperations = new ContactRolesOperations();
+
+		//Get instance of BodyWrapper Class that will contain the request body
+		RecordBodyWrapper bodyWrapper = new RecordBodyWrapper();
+
+		//Get instance of ContactRole Class
+        ContactRoleWrapper contactRole = new ContactRoleWrapper();
+
+        //Set name of the Contact Role
+        contactRole.setContactRole("contactRole1");
+
+		//Set the list to contactRoles in BodyWrapper instance
+		bodyWrapper.setData(new ArrayList<ContactRoleWrapper>(Arrays.asList(contactRole)));
+
+		//Call createContactRoles method that takes BodyWrapper instance as parameter
+		APIResponse<RecordActionHandler> response = contactRolesOperations.addContactRoleToDeal(contactId, dealId, bodyWrapper);
+
+        if(response != null)
+        {
+            //Get the status code from response
+            System.out.println("Status code" + response.getStatusCode());
+
+            //Get object from response
+            RecordActionHandler actionHandler = response.getObject();
+
+            if(actionHandler instanceof RecordActionWrapper)
+            {
+                //Get the received ActionWrapper instance
+            	RecordActionWrapper actionWrapper = (RecordActionWrapper) actionHandler;
+
+                //Get the list of obtained action responses
+                List<ActionResponse> actionResponses = actionWrapper.getData();
+
+                for(ActionResponse actionResponse : actionResponses)
+                {
+                    //Check if the request is successful
+                    if(actionResponse instanceof SuccessResponse)
+                    {
+                        //Get the received SuccessResponse instance
+                    	SuccessResponse successResponse = (SuccessResponse) actionResponse;
+
+                        //Get the Status
+                        System.out.println("Status: " + successResponse.getStatus().getValue());
+
+                        //Get the Code
+                        System.out.println("Code: " + successResponse.getCode().getValue());
+
+                        System.out.println("Details: " );
+
+                        if(successResponse.getDetails() != null)
+                        {
+                        	//Get the details map
+							for(Map.Entry<String, Object> entry : successResponse.getDetails().entrySet())
+							{
+								//Get each value in the map
+								System.out.println(entry.getKey() + ": " + entry.getValue());
+							}
+                        }
+
+                        //Get the Message
+                        System.out.println("Message: " + successResponse.getMessage().getValue());
+                    }
+                    //Check if the request returned an exception
+					else if(actionResponse instanceof APIException)
+					{
+						//Get the received APIException instance
+						APIException exception = (APIException) actionResponse;
+						
+						//Get the Status
+						System.out.println("Status: " + exception.getStatus().getValue());
+						
+						//Get the Code
+						System.out.println("Code: " + exception.getCode().getValue());
+						
+						System.out.println("Details: " );
+						
+						//Get the details map
+						for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+						{
+							//Get each value in the map
+							System.out.println(entry.getKey() + ": " + entry.getValue());
+						}
+						
+						//Get the Message
+						System.out.println("Message: " + exception.getMessage().getValue());
+					}
+                }
+            }
+            //Check if the request returned an exception
+			else if(actionHandler instanceof APIException)
+			{
+				//Get the received APIException instance
+				APIException exception = (APIException) actionHandler;
+				
+				//Get the Status
+				System.out.println("Status: " + exception.getStatus().getValue());
+				
+				//Get the Code
+				System.out.println("Code: " + exception.getCode().getValue());
+				
+				System.out.println("Details: " );
+				
+				//Get the details map
+				for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+				{
+					//Get each value in the map
+					System.out.println(entry.getKey() + ": " + entry.getValue());
+				}
+				
+				//Get the Message
+				System.out.println("Message: " + exception.getMessage().getValue());
+			}
+        }
+	}
+
+    public static void removeContactRoleFromDeal(long contactId, long dealId) throws SDKException
+	{
+		//Get instance of ContactRolesOperations Class
+    	ContactRolesOperations contactRolesOperations = new ContactRolesOperations();
+
+		//Call createContactRoles method that takes BodyWrapper instance as parameter
+    	APIResponse<RecordActionHandler> response = contactRolesOperations.removeContactRoleFromDeal(contactId, dealId);
+
+        if(response != null)
+        {
+            //Get the status code from response
+            System.out.println("Status code" + response.getStatusCode());
+
+            //Get object from response
+            RecordActionHandler actionHandler = response.getObject();
+
+            if(actionHandler instanceof RecordActionWrapper)
+            {
+                //Get the received ActionWrapper instance
+            	RecordActionWrapper actionWrapper = (RecordActionWrapper) actionHandler;
+
+                //Get the list of obtained action responses
+            	List<ActionResponse> actionResponses = actionWrapper.getData();
+
+                for(ActionResponse actionResponse : actionResponses)
+                {
+                    //Check if the request is successful
+                    if(actionResponse instanceof SuccessResponse)
+                    {
+                        //Get the received SuccessResponse instance
+                    	SuccessResponse successResponse = (SuccessResponse) actionResponse;
+
+                        //Get the Status
+                        System.out.println("Status: " + successResponse.getStatus().getValue());
+
+                        //Get the Code
+                        System.out.println("Code: " + successResponse.getCode().getValue());
+
+                        System.out.println("Details: " );
+
+                        if(successResponse.getDetails() != null)
+                        {
+                        	//Get the details map
+							for(Map.Entry<String, Object> entry : successResponse.getDetails().entrySet())
+							{
+								//Get each value in the map
+								System.out.println(entry.getKey() + ": " + entry.getValue());
+							}
+                        }
+
+                        //Get the Message
+                        System.out.println("Message: " + successResponse.getMessage().getValue());
+                    }
+                    //Check if the request returned an exception
+					else if(actionResponse instanceof APIException)
+					{
+						//Get the received APIException instance
+						APIException exception = (APIException) actionResponse;
+						
+						//Get the Status
+						System.out.println("Status: " + exception.getStatus().getValue());
+						
+						//Get the Code
+						System.out.println("Code: " + exception.getCode().getValue());
+						
+						System.out.println("Details: " );
+						
+						//Get the details map
+						for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+						{
+							//Get each value in the map
+							System.out.println(entry.getKey() + ": " + entry.getValue());
+						}
+						
+						//Get the Message
+						System.out.println("Message: " + exception.getMessage().getValue());
+					}
+                }
+            }
+            //Check if the request returned an exception
+			else if(actionHandler instanceof APIException)
+			{
+				//Get the received APIException instance
+				APIException exception = (APIException) actionHandler;
+				
+				//Get the Status
+				System.out.println("Status: " + exception.getStatus().getValue());
+				
+				//Get the Code
+				System.out.println("Code: " + exception.getCode().getValue());
+				
+				System.out.println("Details: " );
+				
+				//Get the details map
+				for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+				{
+					//Get each value in the map
+					System.out.println(entry.getKey() + ": " + entry.getValue());
+				}
+				
+				//Get the Message
+				System.out.println("Message: " + exception.getMessage().getValue());
+			}
+        }
 	}
 }

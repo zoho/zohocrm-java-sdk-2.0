@@ -5,28 +5,47 @@ package com.zoho.api.logger;
  */
 public class Logger
 {
+	public static class Builder
+	{
+		private Levels level;
+		
+		private String filePath;
+		
+		public Builder()
+		{
+		}
+		
+		public Builder level(Levels level)
+		{
+			this.level = level;
+			
+			return this;
+		}
+		
+		public Builder filePath(String filePath)
+		{
+			this.filePath = filePath;
+			
+			return this;
+		}
+		
+		public Logger build()
+		{
+			return new Logger(level, filePath);
+		}
+	}
+	
 	private String level;
 	
 	private String filePath;
 
-	Logger(Levels level, String filePath)
+	private Logger(Levels level, String filePath)
 	{
 		this.level = level.name();
 		
 		this.filePath = filePath;
 	}
 	
-	/**
-	 * Creates an Logger class instance with the specified log level and file path.
-	 * @param level A enum containing the log level.
-	 * @param filePath A String containing the log file path.
-	 * @return A Logger class instance.
-	 */
-	public static com.zoho.api.logger.Logger getInstance(Levels level, String filePath)
-	{
-		return new Logger(level, filePath);
-	}
-
 	/**
 	 * This is a getter method to get logger level.
 	 * @return A String representing the logger level.

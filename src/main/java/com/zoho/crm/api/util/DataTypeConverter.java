@@ -1,16 +1,25 @@
 package com.zoho.crm.api.util;
 
 import java.time.Instant;
+
 import java.time.LocalDate;
+
 import java.time.OffsetDateTime;
+
 import java.time.ZoneId;
+
 import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
+
 import java.util.HashMap;
+
 import java.util.List;
+
 import java.util.Map;
 
 import org.json.JSONArray;
+
 import org.json.JSONObject;
 
 /**
@@ -210,7 +219,12 @@ public class DataTypeConverter
 	{
 		init();
 		
-		return (R) PRE_CONVERTER_MAP.get(type).convert(obj);
+		if(PRE_CONVERTER_MAP.containsKey(type))
+		{
+			return (R) PRE_CONVERTER_MAP.get(type).convert(obj);
+		}
+		
+		return (R) obj; 
 	}
 
 	/**
@@ -225,8 +239,13 @@ public class DataTypeConverter
 	public static <R> Object postConvert(R obj, String type) throws Exception
 	{
 		init();
+
+		if(POST_CONVERTER_MAP.containsKey(type))
+		{
+			return ((PostConverter<R>) POST_CONVERTER_MAP.get(type)).convert(obj);
+		}
 		
-		return ((PostConverter<R>) POST_CONVERTER_MAP.get(type)).convert(obj);
+		return obj; 
 	}
 	
 	/**

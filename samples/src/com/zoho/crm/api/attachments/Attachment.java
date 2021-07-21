@@ -29,9 +29,7 @@ import com.zoho.crm.api.attachments.ActionWrapper;
 import com.zoho.crm.api.attachments.AttachmentsOperations;
 
 import com.zoho.crm.api.attachments.AttachmentsOperations.DeleteAttachmentsParam;
-
 import com.zoho.crm.api.attachments.AttachmentsOperations.GetAttachmentsParam;
-
 import com.zoho.crm.api.attachments.AttachmentsOperations.UploadLinkAttachmentParam;
 
 import com.zoho.crm.api.attachments.FileBodyWrapper;
@@ -77,7 +75,7 @@ public class Attachment
 		//Possible parameters of Get Attachments operation
 		paramInstance.add(GetAttachmentsParam.PAGE, 1);
 		
-		paramInstance.add(GetAttachmentsParam.PER_PAGE, 100);
+		paramInstance.add(GetAttachmentsParam.PER_PAGE, 10);
 		
 //		paramInstance.add(GetAttachmentsParam.FIELDS, "id");
 		
