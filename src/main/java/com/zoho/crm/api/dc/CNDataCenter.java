@@ -42,6 +42,12 @@ public class CNDataCenter extends DataCenter
 		{
 			return CN.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "cn_prd";
+		}
 	};
 
 	/**
@@ -75,6 +81,12 @@ public class CNDataCenter extends DataCenter
 		{
 			return CN.getFileUploadUrl();
 		}
+
+		@Override
+		public String getName()
+		{
+			return "cn_sdb";
+		}
 	};
 
 	/**
@@ -107,6 +119,12 @@ public class CNDataCenter extends DataCenter
 		public String getFileUploadUrl()
 		{
 			return CN.getFileUploadUrl();
+		}
+
+		@Override
+		public String getName()
+		{
+			return "cn_dev";
 		}
 	};
 

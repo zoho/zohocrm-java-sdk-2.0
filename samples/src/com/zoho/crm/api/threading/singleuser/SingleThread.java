@@ -4,13 +4,13 @@ import com.zoho.api.authenticator.OAuthToken;
 
 import com.zoho.api.authenticator.Token;
 
-import com.zoho.api.authenticator.OAuthToken.TokenType;
-
 import com.zoho.api.authenticator.store.DBStore;
 
 import com.zoho.api.authenticator.store.TokenStore;
 
 import com.zoho.api.logger.Logger;
+
+import com.zoho.api.logger.Logger.Levels;
 
 import com.zoho.crm.api.Initializer;
 
@@ -60,25 +60,57 @@ public class SingleThread extends Thread
     } 
 	
 	public static void main(String[] args) throws SDKException
-	{
+	{	
+		Logger logger = new Logger.Builder()
+        .level(Levels.INFO)
+        .filePath("/Users/user_name/Documents/java_sdk_log.log")
+        .build();
 		
-		Logger loggerInstance = Logger.getInstance(Logger.Levels.ALL, "/Users/user_name/Documents/java_sdk_log.log");
-		
-		Environment env = USDataCenter.PRODUCTION;
+		Environment environment = USDataCenter.PRODUCTION;
 		
 		UserSignature user = new UserSignature("abc@zoho.com");
 		
-		TokenStore tokenstore = new DBStore();
+		TokenStore tokenstore = new DBStore.Builder()
+        .host("hostName")
+        .databaseName("databaseName")
+        .tableName("tableName")
+        .userName("userName")
+        .password("password")
+        .portNumber("portNumber")
+        .build();
 		
-		Token token1 = new OAuthToken("clientId", "clientSecret", "REFRESH/GRANT token", TokenType.REFRESH/GRANT, "https://crm.zoho.com");
+		Token token = new OAuthToken.Builder()
+        .clientId("clientId")
+        .clientSecret("clientSecret")
+        .grantToken("grantToken")
+        .redirectURL("redirectURL")
+        .build();
+
 		
 		String resourcePath = "/Users/user_name/Documents/javasdk-application";
 		
-		RequestProxy userProxy = new RequestProxy("proxyHost", 80, "proxyUser", "password", "userDomain");
+//		RequestProxy proxy = new RequestProxy.Builder()
+//				.host("proxyHost")
+//				.port(80)
+//				.user("proxyUser")
+//				.password("password")
+//				.userDomain("userDomain")
+//				.build();
 		
-		SDKConfig sdkConfig = new SDKConfig.Builder().setAutoRefreshFields(false).setPickListValidation(true).build();
+		SDKConfig sdkConfig = new SDKConfig.Builder()
+		.autoRefreshFields(false)
+		.pickListValidation(true)
+		.build();
 		
-		Initializer.initialize(user, env, token1, tokenstore, sdkConfig, resourcePath, loggerInstance, userProxy);
+		new Initializer.Builder()
+		.user(user)
+		.environment(environment)
+		.token(token)
+		.store(tokenstore)
+		.SDKConfig(sdkConfig)
+		.resourcePath(resourcePath)
+		.logger(logger)
+		.initialize();
 		
 		SingleThread stsu = new SingleThread("Leads");
 		

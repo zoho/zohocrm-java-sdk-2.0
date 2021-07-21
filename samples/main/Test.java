@@ -40,17 +40,13 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import org.apache.http.util.EntityUtils;
 
-import com.zoho.crm.api.util.ModuleFieldsHandler;
-
-import samples.src.com.zoho.crm.api.initializer.Initialize;
+import com.zoho.crm.sample.initializer.Initialize;
 
 public class Test
 {
 	public static void main(String[] args) throws Exception 
 	{
 		Initialize.initialize();
-
-		moduleFieldsHandler();
 		
 		Attachment();
 		
@@ -105,493 +101,809 @@ public class Test
 		VariableGroup();
 		
 		Variable();
-	}
-
-	public static moduleFieldsHandler() throws Exception
-	{
-		// Refresh Fields of a single module
-		ModuleFieldsHandler.refreshFields("Leads");
-
-		// Refresh Fields of all the modules
-		ModuleFieldsHandler.refreshAllModules();
-
-		// Delete the fields JSON file of the current user
-		ModuleFieldsHandler.deleteFieldsFile();
-
-		// Delete the fields JSON file of the all the users
-		ModuleFieldsHandler.deleteAllFieldFiles();
+		
+		TestUpload();
 	}
 	
-	public static void Attachment() throws Exception
+	public static void Attachment()
 	{
-		String moduleAPIName = "Leads";
-		
-		Long recordId = 34770617271071l;
-		
-		Long attachmentId = 34770617935005l;
-		
-		String absoluteFilePath = "/Users/abc-XXX/Desktop/py.html";
-		
-		String destinationFolder = "/Users/abc-XXX/Desktop";
-		
-		String attachmentURL = "https://5.imimg.com/data5/KJ/UP/MY-8655440/zoho-crm-500x500.png";
-		
-		List<Long> attachmentIds = new ArrayList<Long>(Arrays.asList(34770617323003l, 34770617338001l, 34770617119061l));
-		
-		samples.src.com.zoho.crm.api.attachments.Attachment.uploadAttachments(moduleAPIName, recordId, absoluteFilePath);
-		
-		samples.src.com.zoho.crm.api.attachments.Attachment.getAttachments(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.attachments.Attachment.deleteAttachments(moduleAPIName, recordId, attachmentIds);
-		
-		samples.src.com.zoho.crm.api.attachments.Attachment.downloadAttachment(moduleAPIName, recordId, attachmentId, destinationFolder);
-		
-		samples.src.com.zoho.crm.api.attachments.Attachment.deleteAttachment(moduleAPIName, recordId, attachmentId);
-		
-		samples.src.com.zoho.crm.api.attachments.Attachment.uploadLinkAttachments(moduleAPIName, recordId, attachmentURL);
-	}
-	
-	public static void BluePrint() throws Exception 
-	{
-		String moduleAPIName = "Leads";
-
-		Long recordId = 34770614381002l;
-		
-		Long transitionId = 34770610173093l;
-		
-		samples.src.com.zoho.crm.api.blueprint.BluePrint.getBlueprint(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.blueprint.BluePrint.updateBlueprint(moduleAPIName, recordId, transitionId);
-	}
-	
-	public static void BulkRead() throws Exception 
-	{
-		String moduleAPIName = "Events";
-		
-		Long jobId = 34770617346001l;
-		
-		String destinationFolder = "/Users/abc-XXX/Desktop";
-		
-		samples.src.com.zoho.crm.api.bulkread.BulkRead.createBulkReadJob(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.bulkread.BulkRead.getBulkReadJobDetails(jobId);
-		
-		samples.src.com.zoho.crm.api.bulkread.BulkRead.downloadResult(jobId, destinationFolder);
-	}
-	
-	public static void BulkWrite() throws Exception 
-	{
-		String absoluteFilePath = "/Users/abc-XXX/Desktop";
-		
-		String orgID = "673573045";
-		
-		String moduleAPIName = "Leads";
-		
-		String fileId  = "3770617359003";
-		
-		Long jobID = 34770617341009l;
-		
-		String downloadUrl = "https://download-accl.zoho.com/v2/crm/673573045/bulk-write/3477061739/347706173410.zip";
-		
-		String destinationFolder = "/Users/abc-XXX/Desktop";
-		
-		samples.src.com.zoho.crm.api.bulkwrite.BulkWrite.uploadFile(orgID, absoluteFilePath);
-		
-		samples.src.com.zoho.crm.api.bulkwrite.BulkWrite.createBulkWriteJob(moduleAPIName, fileId);
-		
-		samples.src.com.zoho.crm.api.bulkwrite.BulkWrite.getBulkWriteJobDetails(jobID);
-		
-		samples.src.com.zoho.crm.api.bulkwrite.BulkWrite.downloadBulkWriteResult(downloadUrl, destinationFolder);
-	}
-
-	public static void ContactRoles() throws Exception 
-	{
-		Long contactRoleId = 34770617360003l;
-		
-		ArrayList<Long> contactRoleIds = new ArrayList<Long>(Arrays.asList(34770617368001l,34770617368002l,34770617368003l));
-		
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.getContactRoles();
-		
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.createContactRoles();
+		try
+		{
+			String moduleAPIName = "leads";
 			
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.updateContactRoles();
+			Long recordId = 3477066838056l;
 			
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.deleteContactRoles(contactRoleIds);
-		
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.getContactRole(contactRoleId);
+			Long attachmentId = 34770610792l;
 			
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.updateContactRole(contactRoleId);
+			String absoluteFilePath = "/Users/file/download.png";
 			
-		samples.src.com.zoho.crm.api.contactroles.ContactRoles.deleteContactRole(contactRoleId);
-	}
-	
-	public static void Currency() throws Exception 
-	{
-		Long currencyId = 34770617368016l;
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.getCurrencies();
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.addCurrencies();
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.updateCurrencies();
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.enableMultipleCurrencies();
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.updateBaseCurrency();
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.getCurrency(currencyId);
-		
-		samples.src.com.zoho.crm.api.currencies.Currency.updateCurrency(currencyId);
-	}
-	
-	public static void CustomView() throws Exception 
-	{
-		String moduleAPIName = "Contacts";
-		
-		Long customID = 34770615783235l;
-		
-		samples.src.com.zoho.crm.api.customview.CustomView.getCustomViews(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.customview.CustomView.getCustomView(moduleAPIName, customID);
-	}
-	
-	public static void Field() throws Exception 
-	{
-		String moduleAPIName = "Deals";
-		
-		Long fieldId = 34770610022011l;
-		
-		samples.src.com.zoho.crm.api.fields.Fields.getFields(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.fields.Fields.getField(moduleAPIName, fieldId);
-	}
-	
-	public static void File() throws Exception
-	{
-		String destinationFolder =  "/Users/abc-XXX/Desktop";
-		
-		String id = "ae9c7cefa418aec1d6a5cc2d9ab35c3272bb86455474b146ac457320f1c58919";
-		
-		samples.src.com.zoho.crm.api.file.File.uploadFiles();
-		
-		samples.src.com.zoho.crm.api.file.File.getFile(id, destinationFolder);
-	}
-	
-	public static void Layout() throws Exception
-	{
-		String moduleAPIName = "Calls";
-		
-		Long layoutId = 34770610091005l;
-		
-		samples.src.com.zoho.crm.api.layouts.Layout.getLayouts(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.layouts.Layout.getLayout(moduleAPIName, layoutId);
-	}
-	
-	public static void Module() throws Exception
-	{
-		String moduleAPIName = "CustomModule";
-		
-		Long moduleId = 34770610485367l;
-		
-		samples.src.com.zoho.crm.api.modules.Modules.getModules();
-		
-		samples.src.com.zoho.crm.api.modules.Modules.getModule(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.modules.Modules.updateModuleByAPIName(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.modules.Modules.updateModuleById(moduleId);
-	}
-	
-	public static void Note() throws Exception 
-	{
-		ArrayList<Long> notesId = new ArrayList<Long>(Arrays.asList(34770617376026l,34770617376025l));
-		
-		Long noteId = 34770617261027l;
-		
-		samples.src.com.zoho.crm.api.notes.Note.getNotes();
-		
-		samples.src.com.zoho.crm.api.notes.Note.createNotes();
-		
-		samples.src.com.zoho.crm.api.notes.Note.updateNotes();
-		
-		samples.src.com.zoho.crm.api.notes.Note.deleteNotes(notesId); 
-		
-		samples.src.com.zoho.crm.api.notes.Note.getNote(noteId);
-		
-		samples.src.com.zoho.crm.api.notes.Note.updateNote(noteId);
-		
-		samples.src.com.zoho.crm.api.notes.Note.deleteNote(noteId);
-	}
-	
-	public static void Notification() throws Exception 
-	{
-		ArrayList<Long> channelIds = new ArrayList<Long>(Arrays.asList(1006800212l));
-		
-		samples.src.com.zoho.crm.api.notification.Notification.enableNotifications();
-		
-		samples.src.com.zoho.crm.api.notification.Notification.getNotificationDetails();
-		
-		samples.src.com.zoho.crm.api.notification.Notification.updateNotifications();
-		
-		samples.src.com.zoho.crm.api.notification.Notification.updateNotification();
-		
-		samples.src.com.zoho.crm.api.notification.Notification.disableNotifications(channelIds);
-		
-		samples.src.com.zoho.crm.api.notification.Notification.disableNotification();
-	}
-	
-	public static void Organization() throws Exception 
-	{
-		String absoluteFilePath = "/Users/abc-XXX/Desktop";
-		
-		samples.src.com.zoho.crm.api.organization.Organization.getOrganization();
-		
-		samples.src.com.zoho.crm.api.organization.Organization.uploadOrganizationPhoto(absoluteFilePath);
-	}
-	
-	public static void Profile() throws Exception 
-	{
-		Long profileId = 34770610026011l;
-		
-		samples.src.com.zoho.crm.api.profile.Profile.getProfiles();
-		
-		samples.src.com.zoho.crm.api.profile.Profile.getProfile(profileId);
-	}
-	
-	public static void Query() throws Exception 
-	{
-		samples.src.com.zoho.crm.api.query.Query.getRecords();
-	}
-	
-	public static void Record() throws Exception 
-	{
-		String moduleAPIName = "Contacts";
-		
-		long recordId = 34770617427001l;
-		
-		String destinationFolder =  "/Users/abc-XXX/Desktop";
-		
-		String absoluteFilePath = "/Users/abc-XXX/Desktop";
-		
-		List<Long> recordIds = new ArrayList<Long>(Arrays.asList(34770617397002l,34770615908017l,34770615908001l));
-		
-		String jobId = "34770617416301";
-		
-		samples.src.com.zoho.crm.api.record.Record.getRecord(moduleAPIName, recordId, destinationFolder);
-		
-		samples.src.com.zoho.crm.api.record.Record.updateRecord(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.record.Record.deleteRecord(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.record.Record.getRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.createRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.updateRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.deleteRecords(moduleAPIName, recordIds);
-		
-		samples.src.com.zoho.crm.api.record.Record.upsertRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.getDeletedRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.searchRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.convertLead(recordId);
-		
-		samples.src.com.zoho.crm.api.record.Record.getPhoto(moduleAPIName, recordId, destinationFolder);
-		
-		samples.src.com.zoho.crm.api.record.Record.uploadPhoto(moduleAPIName, recordId, absoluteFilePath);
-		
-		samples.src.com.zoho.crm.api.record.Record.deletePhoto(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.record.Record.massUpdateRecords(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.record.Record.getMassUpdateStatus(moduleAPIName, jobId);
-	}
-	
-	public static void RelatedList() throws Exception 
-	{
-		String moduleAPIName = "Deals";
-		
-		Long relatedListId = 34770616819126l;
-		
-		samples.src.com.zoho.crm.api.relatedlist.RelatedList.getRelatedLists(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.relatedlist.RelatedList.getRelatedList(moduleAPIName, relatedListId);
-	}
-	
-	public static void RelatedRecords() throws Exception 
-	{
-		String moduleAPIName = "Products";
-		
-		Long recordId = 34770617247012l;
-		
-		String relatedListAPIName = "Price_Books";
-		
-		Long relatedRecordId = 34770617246019l;
-		
-		String destinationFolder =  "/Users/abc-XXX/Desktop";
-		
-		List<Long> relatedListIds = new ArrayList<Long>(Arrays.asList(34770617246019l, 34770615919001l));
-		
-		samples.src.com.zoho.crm.api.relatedrecords.RelatedRecords.getRelatedRecords(moduleAPIName, recordId, relatedListAPIName);
+			String destinationFolder = "/Users/file";
 			
-		samples.src.com.zoho.crm.api.relatedrecords.RelatedRecords.updateRelatedRecords(moduleAPIName, recordId, relatedListAPIName);
+			String attachmentURL = "https://5.imimg.com/data5/KJ/UP/MY-8655440/zoho-crm-500x500.png";
 			
-		samples.src.com.zoho.crm.api.relatedrecords.RelatedRecords.delinkRecords(moduleAPIName, recordId, relatedListAPIName, relatedListIds);
-		
-		samples.src.com.zoho.crm.api.relatedrecords.RelatedRecords.getRelatedRecord(moduleAPIName, recordId, relatedListAPIName, relatedRecordId, destinationFolder);
-		
-		samples.src.com.zoho.crm.api.relatedrecords.RelatedRecords.updateRelatedRecord(moduleAPIName, recordId, relatedListAPIName, relatedRecordId);
-		
-		samples.src.com.zoho.crm.api.relatedrecords.RelatedRecords.delinkRecord(moduleAPIName, recordId, relatedListAPIName, relatedRecordId);
+			List<Long> attachmentIds = new ArrayList<Long>(Arrays.asList(34770610697012l, 34770610705001l, 3477067119061l));
+			
+			com.zoho.crm.sample.attachments.Attachment.uploadAttachments(moduleAPIName, recordId, absoluteFilePath);
+			
+			com.zoho.crm.sample.attachments.Attachment.getAttachments(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.attachments.Attachment.deleteAttachments(moduleAPIName, recordId, attachmentIds);
+			
+			com.zoho.crm.sample.attachments.Attachment.downloadAttachment(moduleAPIName, recordId, attachmentId, destinationFolder);
+			
+			com.zoho.crm.sample.attachments.Attachment.deleteAttachment(moduleAPIName, recordId, attachmentId);
+			
+			com.zoho.crm.sample.attachments.Attachment.uploadLinkAttachments(moduleAPIName, recordId, attachmentURL);
+		}
+		catch(Exception ex)
+		{
+			
+		}
 	}
 	
-	public static void Role() throws Exception 
+	public static void BluePrint()
 	{
-		Long roleId = 34770610026008l;
-		
-		samples.src.com.zoho.crm.api.role.Role.getRoles();
-		
-		samples.src.com.zoho.crm.api.role.Role.getRole(roleId);
+		try
+		{
+			String moduleAPIName = "Leads";
+	
+			Long recordId = 3477064381002l;
+			
+			Long transitionId = 3477060173093l;
+			
+			com.zoho.crm.sample.blueprint.BluePrint.getBlueprint(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.blueprint.BluePrint.updateBlueprint(moduleAPIName, recordId, transitionId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
 	}
 	
-	public static void ShareRecords() throws Exception 
+	public static void BulkRead()
 	{
-		String moduleAPIName = "Leads";
-		
-		long recordId = 34770615623115L;
-		
-		samples.src.com.zoho.crm.api.sharerecords.ShareRecords.getSharedRecordDetails(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.sharerecords.ShareRecords.shareRecord(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.sharerecords.ShareRecords.updateSharePermissions(moduleAPIName, recordId);
-		
-		samples.src.com.zoho.crm.api.sharerecords.ShareRecords.revokeSharedRecord(moduleAPIName, recordId);
+		try
+		{
+			String moduleAPIName = "Leads";
+			
+			Long jobId = 34770610799001l;
+			
+			String destinationFolder = "/Users/file";
+			
+			com.zoho.crm.sample.bulkread.BulkRead.createBulkReadJob(moduleAPIName);
+			
+			com.zoho.crm.sample.bulkread.BulkRead.getBulkReadJobDetails(jobId);
+			
+			com.zoho.crm.sample.bulkread.BulkRead.downloadResult(jobId, destinationFolder);
+		}
+		catch(Exception ex)
+		{
+			
+		}
 	}
 	
-	public static void Tags() throws Exception 
+	public static void BulkWrite()
 	{
-		String moduleAPIName = "Leads";
-		
-		Long tagId = 34770617023001l;
-		
-		long recordId =  34770615623115L;
-				
-		ArrayList<String> tagNames = new ArrayList<String>(Arrays.asList("addtag1,addtag12"));
-		
-		ArrayList<Long> recordIds = new ArrayList<Long>(Arrays.asList(34770615623115l, 34770617421029l));
-		
-		String conflictId = "34770616947003";
-		
-		samples.src.com.zoho.crm.api.tags.Tag.getTags(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.createTags(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.updateTags(moduleAPIName);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.updateTag(moduleAPIName, tagId);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.deleteTag(tagId);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.mergeTags(tagId, conflictId);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.addTagsToRecord(moduleAPIName, recordId, tagNames);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.removeTagsFromRecord(moduleAPIName, recordId, tagNames);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.addTagsToMultipleRecords(moduleAPIName, recordIds, tagNames);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.removeTagsFromMultipleRecords(moduleAPIName, recordIds, tagNames);
-		
-		samples.src.com.zoho.crm.api.tags.Tag.getRecordCountForTag(moduleAPIName, tagId);
+		try
+		{
+			String absoluteFilePath = "/Users/Leads.zip";
+			
+			String orgID = "xxxxx";
+			
+			String moduleAPIName = "Leads";
+			
+			String fileId  = "34770610801001";
+			
+			Long jobID = 3477061083l;
+			
+			String downloadUrl = "https://download-accl.zoho.com/v2/crm/xxxx/bulk-write/3477061083/3477061083.zip";
+			
+			String destinationFolder = "/Users/file";
+			
+			com.zoho.crm.sample.bulkwrite.BulkWrite.uploadFile(orgID, absoluteFilePath);
+			
+			com.zoho.crm.sample.bulkwrite.BulkWrite.createBulkWriteJob(moduleAPIName, fileId);
+			
+			com.zoho.crm.sample.bulkwrite.BulkWrite.getBulkWriteJobDetails(jobID);
+			
+			com.zoho.crm.sample.bulkwrite.BulkWrite.downloadBulkWriteResult(downloadUrl, destinationFolder);
+		}
+		catch(Exception ex)
+		{
+			
+		}
 	}
-	
-	public static void Tax() throws Exception 
-	{
-		Long taxId = 34770617293001l;
-		
-		ArrayList<Long> taxIds = new ArrayList<Long>(Arrays.asList(34770616860010l,34770617074031l,34770617420081l,34770617420082l));
-		
-		samples.src.com.zoho.crm.api.taxes.Tax.getTaxes();
-		
-		samples.src.com.zoho.crm.api.taxes.Tax.createTaxes();
-		
-		samples.src.com.zoho.crm.api.taxes.Tax.updateTaxes();
-		
-		samples.src.com.zoho.crm.api.taxes.Tax.deleteTaxes(taxIds);
-		
-		samples.src.com.zoho.crm.api.taxes.Tax.getTax(taxId);
-		
-		samples.src.com.zoho.crm.api.taxes.Tax.deleteTax(taxId);
-	}
-	
-	public static void Territory() throws Exception 
-	{
-		Long territoryId = 34770613051397l;
-		
-		samples.src.com.zoho.crm.api.territories.Territory.getTerritories();
-		
-		samples.src.com.zoho.crm.api.territories.Territory.getTerritory(territoryId);
-	}
-	
-	public static void User() throws Exception 
-	{
-		Long userId = 34770617439001l;
-		
-		samples.src.com.zoho.crm.api.users.User.getUsers();
-		
-		samples.src.com.zoho.crm.api.users.User.createUser();
-		
-		samples.src.com.zoho.crm.api.users.User.updateUsers();
-		
-		samples.src.com.zoho.crm.api.users.User.getUser(34770617941006l);
-		
-		samples.src.com.zoho.crm.api.users.User.updateUser(userId);
-		
-		samples.src.com.zoho.crm.api.users.User.deleteUser(userId);
-	}
-	
-	public static void VariableGroup() throws Exception 
-	{
-		String variableGroupName = "General";
-		
-		Long variableGroupId = 34770613089001l;
-		
-		samples.src.com.zoho.crm.api.variablegroups.VariableGroup.getVariableGroups();
-		
-		samples.src.com.zoho.crm.api.variablegroups.VariableGroup.getVariableGroupById(variableGroupId);
-		
-		samples.src.com.zoho.crm.api.variablegroups.VariableGroup.getVariableGroupByAPIName(variableGroupName);
-	}
-	
-	public static void Variable() throws Exception 
-	{
-		ArrayList<Long> variableIds = new ArrayList<Long>(Arrays.asList(34770616211003l,34770616211001l));
-		
-		Long variableId = 34770617284005l;
-		
-		String variableName = "Variable55";
-				
-		samples.src.com.zoho.crm.api.variables.Variable.getVariables();
-		
-		samples.src.com.zoho.crm.api.variables.Variable.createVariables();
-		
-		samples.src.com.zoho.crm.api.variables.Variable.updateVariables();
-		
-		samples.src.com.zoho.crm.api.variables.Variable.deleteVariables(variableIds);
 
-		samples.src.com.zoho.crm.api.variables.Variable.getVariableById(variableId);
+	public static void ContactRoles() 
+	{
+		try
+		{
+			Long contactRoleId = 34770610803001l;
+			
+			ArrayList<String> contactRoleIds = new ArrayList<String>(Arrays.asList("34770610704010","34770610704006","34770610704004"));
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.getContactRoles();
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.createContactRoles();
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.updateContactRoles();
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.deleteContactRoles(contactRoleIds);
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.getContactRole(contactRoleId);
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.updateContactRole(contactRoleId);
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.deleteContactRole(contactRoleId);
+			
+			com.zoho.crm.sample.contactroles.ContactRoles.getAllContactRolesOfDeal(3477060207275l);
+
+			com.zoho.crm.sample.contactroles.ContactRoles.getContactRoleOfDeal(3477060208072l, 3477060207275l);
+
+			com.zoho.crm.sample.contactroles.ContactRoles.addContactRoleToDeal(3477060208072l, 3477060207275l);
+
+			com.zoho.crm.sample.contactroles.ContactRoles.removeContactRoleFromDeal(3477060208072l, 3477060207275l);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Currency() 
+	{
+		try
+		{
+			Long currencyId = 3477067368016l;
+			
+			com.zoho.crm.sample.currencies.Currency.getCurrencies();
+			
+			com.zoho.crm.sample.currencies.Currency.addCurrencies();
+			
+			com.zoho.crm.sample.currencies.Currency.updateCurrencies();
+			
+			com.zoho.crm.sample.currencies.Currency.enableMultipleCurrencies();
+			
+			com.zoho.crm.sample.currencies.Currency.updateBaseCurrency();
+			
+			com.zoho.crm.sample.currencies.Currency.getCurrency(currencyId);
+			
+			com.zoho.crm.sample.currencies.Currency.updateCurrency(currencyId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void CustomView() 
+	{
+		try
+		{
+			String moduleAPIName = "Leads";
+			
+			Long customID = 3477060089007l;
+			
+//			List<String> names = new ArrayList<String>(Arrays.asList("Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes"));
+//			
+//			for(String name :names)
+//			{
+//				com.zoho.crm.sample.customview.CustomView.getCustomViews(name);
+//			}
+			
+			com.zoho.crm.sample.customview.CustomView.getCustomViews(moduleAPIName);
+			
+			com.zoho.crm.sample.customview.CustomView.getCustomView(moduleAPIName, customID);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Field() 
+	{
+		try
+		{
+			String moduleAPIName = "Deals";
+			
+			Long fieldId = 3477060022011l;
+			
+//			List<String> names = new ArrayList<String>(Arrays.asList("Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes"));
+//			
+//			for(String name :names)
+//			{
+//				com.zoho.crm.sample.fields.Fields.getFields(name);
+//			}
+			
+			com.zoho.crm.sample.fields.Fields.getFields(moduleAPIName);
+			
+			com.zoho.crm.sample.fields.Fields.getField(moduleAPIName, fieldId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void File() 
+	{
+		try
+		{
+			String destinationFolder =  "/Users/file";
+			
+			String id = "ae9c7cefa418125ad161ce416136";
+			
+			com.zoho.crm.sample.file.File.uploadFiles();
+			
+			com.zoho.crm.sample.file.File.getFile(id, destinationFolder);
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
+	public static void Layout() 
+	{
+		try
+		{
+			String moduleAPIName = "Tasks";
+			
+			Long layoutId = 3477060091055l;
+			
+//			List<String> names = new ArrayList<String>(Arrays.asList("Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes"));
+//			
+//			for(String name : names)
+//			{
+//				com.zoho.crm.sample.layouts.Layout.getLayouts(name);
+//			}
+			
+			com.zoho.crm.sample.layouts.Layout.getLayouts(moduleAPIName);
+			
+			com.zoho.crm.sample.layouts.Layout.getLayout(moduleAPIName, layoutId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Module() 
+	{
+		try
+		{
+			String moduleAPIName = "apiName1";
+			
+			Long moduleId = 3477063905003L;
+			
+			com.zoho.crm.sample.modules.Modules.getModules();
+			
+			com.zoho.crm.sample.modules.Modules.getModule(moduleAPIName);
+			
+			com.zoho.crm.sample.modules.Modules.updateModuleByAPIName(moduleAPIName);
+			
+			com.zoho.crm.sample.modules.Modules.updateModuleById(moduleId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Note() 
+	{
+		try
+		{
+			ArrayList<Long> notesId = new ArrayList<Long>(Arrays.asList(34770610696011l,34770610696010l));
+			
+			Long noteId = 34770610696009l;
+			
+			com.zoho.crm.sample.notes.Note.getNotes();
+			
+			com.zoho.crm.sample.notes.Note.createNotes();
+			
+			com.zoho.crm.sample.notes.Note.updateNotes();
+			
+			com.zoho.crm.sample.notes.Note.deleteNotes(notesId); 
+			
+			com.zoho.crm.sample.notes.Note.getNote(noteId);
+			
+			com.zoho.crm.sample.notes.Note.updateNote(noteId);
+			
+			com.zoho.crm.sample.notes.Note.deleteNote(noteId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Notification() 
+	{
+		try
+		{
+			
+			ArrayList<Long> channelIds = new ArrayList<Long>(Arrays.asList(006800211l));
+			
+			com.zoho.crm.sample.notification.Notification.enableNotifications();
+			
+			com.zoho.crm.sample.notification.Notification.getNotificationDetails();
+			
+			com.zoho.crm.sample.notification.Notification.updateNotifications();
+			
+			com.zoho.crm.sample.notification.Notification.updateNotification();
+			
+			com.zoho.crm.sample.notification.Notification.disableNotifications(channelIds);
+			
+			com.zoho.crm.sample.notification.Notification.disableNotification();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	
+	public static void Organization() 
+	{
+		try
+		{
+			String absoluteFilePath = "/Users/file/download.png";
+			
+			com.zoho.crm.sample.organization.Organization.getOrganization();
+			
+			com.zoho.crm.sample.organization.Organization.uploadOrganizationPhoto(absoluteFilePath);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Profile() 
+	{
+		try
+		{
+			Long profileId = 3477060026011l;
+			
+			com.zoho.crm.sample.profile.Profile.getProfiles();
+			
+			com.zoho.crm.sample.profile.Profile.getProfile(profileId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Query()
+	{
+		try
+		{
+			com.zoho.crm.sample.query.Query.getRecords();
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Record() 
+	{
+		try
+		{
+			String moduleAPIName = "leads";
+			
+			long recordId = 34770610820043l;//34770610783139l;
+			
+			String externalFieldValue = "TestExternalLead1";
+			
+			String destinationFolder =  "/Users/file";
+			
+			String absoluteFilePath = "/Users/file/download.png";
+			
+			List<String> recordIds = new ArrayList<String>(Arrays.asList("Value", "3477065908017", "3477065908001"));
+			
+			String jobId = "3477067416301";
+			
+			List<String> names = new ArrayList<String>(Arrays.asList("Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases", "Notes"));
+			
+			for(String name :names)
+			{
+				 com.zoho.crm.sample.record.Record.getRecords(name);
+			}
+			
+			com.zoho.crm.sample.record.Record.getRecord(moduleAPIName, recordId, destinationFolder);
+			
+			com.zoho.crm.sample.record.Record.updateRecord(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.record.Record.deleteRecord(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.record.Record.getRecordUsingExternalId(moduleAPIName, externalFieldValue, destinationFolder);
+
+			com.zoho.crm.sample.record.Record.updateRecordUsingExternalId(moduleAPIName, externalFieldValue);
+			
+			com.zoho.crm.sample.record.Record.deleteRecordUsingExternalId(moduleAPIName, externalFieldValue);
+			
+			com.zoho.crm.sample.record.Record.getRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.createRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.updateRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.deleteRecords(moduleAPIName, recordIds);
+			
+			com.zoho.crm.sample.record.Record.upsertRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.getDeletedRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.searchRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.convertLead(recordId);
+			
+			com.zoho.crm.sample.record.Record.getPhoto(moduleAPIName, recordId, destinationFolder);
+			
+			com.zoho.crm.sample.record.Record.uploadPhoto(moduleAPIName, recordId, absoluteFilePath);
+			
+			com.zoho.crm.sample.record.Record.deletePhoto(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.record.Record.massUpdateRecords(moduleAPIName);
+			
+			com.zoho.crm.sample.record.Record.getMassUpdateStatus(moduleAPIName, jobId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void RelatedList() 
+	{
+		try
+		{
+			String moduleAPIName = "Leads";
+			
+			Long relatedListId = 3477066819126l;
+			
+//			List<String> names = new ArrayList<String>(Arrays.asList("Products", "Tasks", "Vendors", "Calls", "Leads", "Deals", "Campaigns", "Quotes", "Invoices", "Attachments", "Price_Books", "Sales_Orders", "Contacts", "Solutions", "Events", "Purchase_Orders", "Accounts", "Cases"));
+//			
+//			for(String name :names)
+//			{
+//				com.zoho.crm.sample.relatedlist.RelatedList.getRelatedLists(name);
+//			}
+			
+			com.zoho.crm.sample.relatedlist.RelatedList.getRelatedLists(moduleAPIName);
+			
+			com.zoho.crm.sample.relatedlist.RelatedList.getRelatedList(moduleAPIName, relatedListId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void RelatedRecords() 
+	{
+		try
+		{
+			String moduleAPIName = "leads";
+			
+			Long recordId = 34770610780113l;
+			
+			String relatedListAPIName = "products";
+			
+			Long relatedRecordId = 3477067081077l;
+			
+			String destinationFolder =  "/Users/file";
+			
+			List<String> relatedListIds = new ArrayList<String>(Arrays.asList("TestExternalLead121", "3477065919001"));
+			
+			String externalValue = "TestExternalLead12";
+
+			String externalFieldValue = "TestExternal121";
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.getRelatedRecords(moduleAPIName, recordId, relatedListAPIName);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.updateRelatedRecords(moduleAPIName, recordId, relatedListAPIName);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.delinkRecords(moduleAPIName, recordId, relatedListAPIName, relatedListIds);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.getRelatedRecordsUsingExternalId(moduleAPIName, externalValue, relatedListAPIName);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.updateRelatedRecordsUsingExternalId(moduleAPIName, externalValue, relatedListAPIName);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.deleteRelatedRecordsUsingExternalId(moduleAPIName, externalValue, relatedListAPIName, relatedListIds);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.getRelatedRecord(moduleAPIName, recordId, relatedListAPIName, relatedRecordId, destinationFolder);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.updateRelatedRecord(moduleAPIName, recordId, relatedListAPIName, relatedRecordId);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.delinkRecord(moduleAPIName, recordId, relatedListAPIName, relatedRecordId);
+
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.getRelatedRecordUsingExternalId(moduleAPIName, externalValue, relatedListAPIName, externalFieldValue, destinationFolder);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.updateRelatedRecordUsingExternalId(moduleAPIName, externalValue, relatedListAPIName, externalFieldValue);
+			
+			com.zoho.crm.sample.relatedrecords.RelatedRecords.deleteRelatedRecordUsingExternalId(moduleAPIName, externalValue, relatedListAPIName, externalFieldValue);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Role()  
+	{
+		try
+		{
+			Long roleId = 3477060026008l;
+			
+			com.zoho.crm.sample.role.Role.getRoles();
+			
+			com.zoho.crm.sample.role.Role.getRole(roleId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void ShareRecords() 
+	{
+		try
+		{
+			String moduleAPIName = "Leads";
+			
+			long recordId = 3477065623115L;
+			
+			com.zoho.crm.sample.sharerecords.ShareRecords.getSharedRecordDetails(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.sharerecords.ShareRecords.shareRecord(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.sharerecords.ShareRecords.updateSharePermissions(moduleAPIName, recordId);
+			
+			com.zoho.crm.sample.sharerecords.ShareRecords.revokeSharedRecord(moduleAPIName, recordId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Tags() 
+	{
+		try
+		{
+			String moduleAPIName = "Leads";
+			
+			Long tagId = 3477069341003l;
+			
+			long recordId =  3477065623115L;
+					
+			ArrayList<String> tagNames = new ArrayList<String>(Arrays.asList("addtag1,addtag12"));
+			
+			ArrayList<Long> recordIds = new ArrayList<Long>(Arrays.asList(3477065623115L, 3477069341002l));
+			
+			String conflictId = "3477069341003";
+			
+			com.zoho.crm.sample.tags.Tag.getTags(moduleAPIName);
+			
+			com.zoho.crm.sample.tags.Tag.createTags(moduleAPIName);
+			
+			com.zoho.crm.sample.tags.Tag.updateTags(moduleAPIName);
+			
+			com.zoho.crm.sample.tags.Tag.updateTag(moduleAPIName, tagId);
+			
+			com.zoho.crm.sample.tags.Tag.deleteTag(tagId);
+			
+			com.zoho.crm.sample.tags.Tag.mergeTags(tagId, conflictId);
+			
+			com.zoho.crm.sample.tags.Tag.addTagsToRecord(moduleAPIName, recordId, tagNames);
+			
+			com.zoho.crm.sample.tags.Tag.removeTagsFromRecord(moduleAPIName, recordId, tagNames);
+			
+			com.zoho.crm.sample.tags.Tag.addTagsToMultipleRecords(moduleAPIName, recordIds, tagNames);
+			
+			com.zoho.crm.sample.tags.Tag.removeTagsFromMultipleRecords(moduleAPIName, recordIds, tagNames);
+			
+			com.zoho.crm.sample.tags.Tag.getRecordCountForTag(moduleAPIName, tagId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Tax() 
+	{
+		try
+		{
+			Long taxId = 3477067293001l;
+			
+			ArrayList<Long> taxIds = new ArrayList<Long>(Arrays.asList(3477066860010l,3477067074031l,3477067420081l,3477067420082l));
+			
+			com.zoho.crm.sample.taxes.Tax.getTaxes();
+			
+			com.zoho.crm.sample.taxes.Tax.createTaxes();
+			
+			com.zoho.crm.sample.taxes.Tax.updateTaxes();
+			
+			com.zoho.crm.sample.taxes.Tax.deleteTaxes(taxIds);
+			
+			com.zoho.crm.sample.taxes.Tax.getTax(taxId);
+			
+			com.zoho.crm.sample.taxes.Tax.deleteTax(taxId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Territory() 
+	{
+		try
+		{
+			Long territoryId = 3477063051397l;
+			
+			com.zoho.crm.sample.territories.Territory.getTerritories();
+			
+			com.zoho.crm.sample.territories.Territory.getTerritory(territoryId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void User() 
+	{
+		try
+		{
+			Long userId = 34770610831021l;
+			
+			com.zoho.crm.sample.users.User.getUsers();
+			
+			com.zoho.crm.sample.users.User.createUser();
+			
+			com.zoho.crm.sample.users.User.updateUsers();
+			
+			com.zoho.crm.sample.users.User.getUser(userId);
+			
+			com.zoho.crm.sample.users.User.updateUser(userId);
+			
+			com.zoho.crm.sample.users.User.deleteUser(userId);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void VariableGroup() 
+	{
+		try
+		{
+			String variableGroupName = "General";
+			
+			Long variableGroupId = 3477063089001l;
+			
+			com.zoho.crm.sample.variablegroups.VariableGroup.getVariableGroups();
+			
+			com.zoho.crm.sample.variablegroups.VariableGroup.getVariableGroupById(variableGroupId);
+			
+			com.zoho.crm.sample.variablegroups.VariableGroup.getVariableGroupByAPIName(variableGroupName);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void Variable() 
+	{
+		try
+		{
+			ArrayList<Long> variableIds = new ArrayList<Long>(Arrays.asList(3477066211003l,3477066211001l));
+			
+			Long variableId = 3477067284005l;
+			
+			String variableName = "Variable55";
+					
+			com.zoho.crm.sample.variables.Variable.getVariables();
+			
+			com.zoho.crm.sample.variables.Variable.createVariables();
+			
+			com.zoho.crm.sample.variables.Variable.updateVariables();
+			
+			com.zoho.crm.sample.variables.Variable.deleteVariables(variableIds);
+	
+			com.zoho.crm.sample.variables.Variable.getVariableById(variableId);
+			
+			com.zoho.crm.sample.variables.Variable.updateVariableById(variableId);
+			
+			com.zoho.crm.sample.variables.Variable.deleteVariable(variableId);
+			
+			com.zoho.crm.sample.variables.Variable.getVariableForAPIName(variableName);
+			
+			com.zoho.crm.sample.variables.Variable.updateVariableByAPIName(variableName);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public static void TestUpload()
+	{
+		try
+		{
+			HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+			
+			SSLContext sslContext = SSLContext.getDefault();
+			
+			SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+			
+			CloseableHttpClient httpclient = httpClientBuilder.setSSLSocketFactory(sslConnectionSocketFactory).build();
+			
+			URIBuilder uriBuilder = new URIBuilder("https://www.zohoapis.com/crm/v2/files");
+			
+			HttpUriRequest requestObj = new HttpPost(uriBuilder.build());
+			
+			HttpEntityEnclosingRequestBase requestBase = (HttpEntityEnclosingRequestBase) requestObj;
+			
+			// requestObj.addHeader("feature", "bulk-write");
+			
+			// requestObj.addHeader("X-CRM-ORG", "xxxxx");
+			
+			requestObj.addHeader("Authorization", "Zoho-oauthtoken 1.xxxxx.xxxx");
+			
+			MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
+			
+			java.io.File file = new java.io.File("/Users/Leads.zip");
+			
+			@SuppressWarnings("resource")
+			InputStream stream = new FileInputStream(file);
 		
-		samples.src.com.zoho.crm.api.variables.Variable.updateVariableById(variableId);
+			byte[] buffer = new byte[8192];
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			int bytesRead;
+			while ((bytesRead = stream.read(buffer)) != -1)
+			{
+			    output.write(buffer, 0, bytesRead);
+			}
+			
+			multipartEntity.addPart("file", new ByteArrayBody(output.toByteArray(), "Leads.zip"));
+			
+			@SuppressWarnings("resource")
+			FileInputStream stream1 = new FileInputStream(file);
 		
-		samples.src.com.zoho.crm.api.variables.Variable.deleteVariable(variableId);
-		
-		samples.src.com.zoho.crm.api.variables.Variable.getVariableForAPIName(variableName);
-		
-		samples.src.com.zoho.crm.api.variables.Variable.updateVariableByAPIName(variableName);
+			buffer = new byte[8192];
+			output = new ByteArrayOutputStream();
+			
+			while ((bytesRead = stream1.read(buffer)) != -1)
+			{
+			    output.write(buffer, 0, bytesRead);
+			}
+			
+			multipartEntity.addPart("file", new ByteArrayBody(output.toByteArray(), "Leads.zip"));
+			
+			requestBase.setEntity(multipartEntity.build());
+			
+			HttpResponse response = httpclient.execute(requestObj);
+			
+			HttpEntity responseEntity = response.getEntity();
+			
+			Object responseObject = EntityUtils.toString(responseEntity);
+			
+			String responseString = responseObject.toString();
+			
+			System.out.println(responseString);
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 }

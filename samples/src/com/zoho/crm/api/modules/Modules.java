@@ -1,11 +1,8 @@
 package samples.src.com.zoho.crm.api.modules;
 
 import java.lang.reflect.Field;
-
 import java.time.OffsetDateTime;
-
 import java.time.ZoneOffset;
-
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -70,7 +67,7 @@ public class Modules
 		
 		OffsetDateTime ifmodifiedsince = OffsetDateTime.of(2020, 05, 20, 10, 00, 00, 01, ZoneOffset.of("+05:30"));
 		
-//		headerInstance.add(GetModulesHeader.IF_MODIFIED_SINCE, ifmodifiedsince);
+		headerInstance.add(GetModulesHeader.IF_MODIFIED_SINCE, ifmodifiedsince);
 		
 		//Call getModules method that takes headerInstance as parameters
 		APIResponse<ResponseHandler> response = moduleOperations.getModules(headerInstance);
@@ -102,6 +99,7 @@ public class Modules
 				
 					for(Module module : modules)
 					{
+						com.zoho.crm.sample.modules.Modules.getModule(module.getAPIName());
 						//Get the Name of each Module
 						System.out.println("Module Name: " + module.getName());
 						

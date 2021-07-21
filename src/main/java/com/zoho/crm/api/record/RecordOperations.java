@@ -46,9 +46,9 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ResponseHandler.class, "application/json");
 
@@ -89,9 +89,9 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
@@ -130,6 +130,8 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
+		Utility.getFields(moduleAPIName, handlerInstance);
+
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
 	}
@@ -162,9 +164,9 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ResponseHandler.class, "application/json");
 
@@ -174,10 +176,11 @@ public class RecordOperations
 	 * The method to create records
 	 * @param moduleAPIName A String representing the moduleAPIName
 	 * @param request An instance of BodyWrapper
+	 * @param headerInstance An instance of HeaderMap
 	 * @return An instance of APIResponse<ActionHandler>
 	 * @throws SDKException
 	 */
-	public APIResponse<ActionHandler> createRecords(String moduleAPIName, BodyWrapper request) throws SDKException
+	public APIResponse<ActionHandler> createRecords(String moduleAPIName, BodyWrapper request, HeaderMap headerInstance) throws SDKException
 	{
 		CommonAPIHandler handlerInstance = new CommonAPIHandler();
 
@@ -199,9 +202,11 @@ public class RecordOperations
 
 		handlerInstance.setMandatoryChecker(true);
 
-		Utility.getFields(moduleAPIName);
+		handlerInstance.setHeader(headerInstance);
 
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
@@ -235,13 +240,11 @@ public class RecordOperations
 
 		handlerInstance.setRequest(request);
 
-		handlerInstance.setMandatoryChecker(true);
-
 		handlerInstance.setHeader(headerInstance);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
@@ -274,6 +277,8 @@ public class RecordOperations
 		handlerInstance.setParam(paramInstance);
 
 		handlerInstance.setHeader(headerInstance);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
@@ -311,9 +316,9 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
@@ -349,6 +354,8 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
+		Utility.getFields(moduleAPIName, handlerInstance);
+
 		return handlerInstance.apiCall(DeletedRecordsHandler.class, "application/json");
 
 	}
@@ -383,9 +390,9 @@ public class RecordOperations
 
 		handlerInstance.setHeader(headerInstance);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ResponseHandler.class, "application/json");
 
@@ -422,7 +429,7 @@ public class RecordOperations
 
 		handlerInstance.setMandatoryChecker(true);
 
-		Utility.getFields("Deals");
+		Utility.getFields("Deals", handlerInstance);
 
 		return handlerInstance.apiCall(ConvertActionHandler.class, "application/json");
 
@@ -456,6 +463,8 @@ public class RecordOperations
 		handlerInstance.setHttpMethod(Constants.REQUEST_METHOD_GET);
 
 		handlerInstance.setCategoryMethod(Constants.REQUEST_CATEGORY_READ);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(DownloadHandler.class, "application/x-download");
 
@@ -497,6 +506,8 @@ public class RecordOperations
 
 		handlerInstance.setMandatoryChecker(true);
 
+		Utility.getFields(moduleAPIName, handlerInstance);
+
 		Utility.verifyPhotoSupport(moduleAPIName);
 
 		return handlerInstance.apiCall(FileHandler.class, "application/json");
@@ -531,6 +542,8 @@ public class RecordOperations
 		handlerInstance.setHttpMethod(Constants.REQUEST_METHOD_DELETE);
 
 		handlerInstance.setCategoryMethod(Constants.REQUEST_METHOD_DELETE);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(FileHandler.class, "application/json");
 
@@ -567,9 +580,9 @@ public class RecordOperations
 
 		handlerInstance.setMandatoryChecker(true);
 
-		Utility.getFields(moduleAPIName);
-
 		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(MassUpdateActionHandler.class, "application/json");
 
@@ -602,7 +615,132 @@ public class RecordOperations
 
 		handlerInstance.setParam(paramInstance);
 
+		Utility.getFields(moduleAPIName, handlerInstance);
+
 		return handlerInstance.apiCall(MassUpdateResponseHandler.class, "application/json");
+
+	}
+
+	/**
+	 * The method to get record using external id
+	 * @param externalFieldValue A String representing the externalFieldValue
+	 * @param moduleAPIName A String representing the moduleAPIName
+	 * @param paramInstance An instance of ParameterMap
+	 * @param headerInstance An instance of HeaderMap
+	 * @return An instance of APIResponse<ResponseHandler>
+	 * @throws SDKException
+	 */
+	public APIResponse<ResponseHandler> getRecordUsingExternalId(String externalFieldValue, String moduleAPIName, ParameterMap paramInstance, HeaderMap headerInstance) throws SDKException
+	{
+		CommonAPIHandler handlerInstance = new CommonAPIHandler();
+
+		String apiPath = new String();
+
+		apiPath = apiPath.concat("/crm/v2/");
+
+		apiPath = apiPath.concat(moduleAPIName.toString());
+
+		apiPath = apiPath.concat("/");
+
+		apiPath = apiPath.concat(externalFieldValue.toString());
+
+		handlerInstance.setAPIPath(apiPath);
+
+		handlerInstance.setHttpMethod(Constants.REQUEST_METHOD_GET);
+
+		handlerInstance.setCategoryMethod(Constants.REQUEST_CATEGORY_READ);
+
+		handlerInstance.setParam(paramInstance);
+
+		handlerInstance.setHeader(headerInstance);
+
+		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
+
+		return handlerInstance.apiCall(ResponseHandler.class, "application/json");
+
+	}
+
+	/**
+	 * The method to update record using external id
+	 * @param externalFieldValue A String representing the externalFieldValue
+	 * @param moduleAPIName A String representing the moduleAPIName
+	 * @param request An instance of BodyWrapper
+	 * @param headerInstance An instance of HeaderMap
+	 * @return An instance of APIResponse<ActionHandler>
+	 * @throws SDKException
+	 */
+	public APIResponse<ActionHandler> updateRecordUsingExternalId(String externalFieldValue, String moduleAPIName, BodyWrapper request, HeaderMap headerInstance) throws SDKException
+	{
+		CommonAPIHandler handlerInstance = new CommonAPIHandler();
+
+		String apiPath = new String();
+
+		apiPath = apiPath.concat("/crm/v2/");
+
+		apiPath = apiPath.concat(moduleAPIName.toString());
+
+		apiPath = apiPath.concat("/");
+
+		apiPath = apiPath.concat(externalFieldValue.toString());
+
+		handlerInstance.setAPIPath(apiPath);
+
+		handlerInstance.setHttpMethod(Constants.REQUEST_METHOD_PUT);
+
+		handlerInstance.setCategoryMethod(Constants.REQUEST_CATEGORY_UPDATE);
+
+		handlerInstance.setContentType("application/json");
+
+		handlerInstance.setRequest(request);
+
+		handlerInstance.setHeader(headerInstance);
+
+		handlerInstance.setModuleAPIName(moduleAPIName);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
+
+		return handlerInstance.apiCall(ActionHandler.class, "application/json");
+
+	}
+
+	/**
+	 * The method to delete record using external id
+	 * @param externalFieldValue A String representing the externalFieldValue
+	 * @param moduleAPIName A String representing the moduleAPIName
+	 * @param paramInstance An instance of ParameterMap
+	 * @param headerInstance An instance of HeaderMap
+	 * @return An instance of APIResponse<ActionHandler>
+	 * @throws SDKException
+	 */
+	public APIResponse<ActionHandler> deleteRecordUsingExternalId(String externalFieldValue, String moduleAPIName, ParameterMap paramInstance, HeaderMap headerInstance) throws SDKException
+	{
+		CommonAPIHandler handlerInstance = new CommonAPIHandler();
+
+		String apiPath = new String();
+
+		apiPath = apiPath.concat("/crm/v2/");
+
+		apiPath = apiPath.concat(moduleAPIName.toString());
+
+		apiPath = apiPath.concat("/");
+
+		apiPath = apiPath.concat(externalFieldValue.toString());
+
+		handlerInstance.setAPIPath(apiPath);
+
+		handlerInstance.setHttpMethod(Constants.REQUEST_METHOD_DELETE);
+
+		handlerInstance.setCategoryMethod(Constants.REQUEST_METHOD_DELETE);
+
+		handlerInstance.setParam(paramInstance);
+
+		handlerInstance.setHeader(headerInstance);
+
+		Utility.getFields(moduleAPIName, handlerInstance);
+
+		return handlerInstance.apiCall(ActionHandler.class, "application/json");
 
 	}
 	public static class GetRecordParam
@@ -643,7 +781,7 @@ public class RecordOperations
 
 	public static class DeleteRecordParam
 	{
-		public static final Param<String> WF_TRIGGER = new Param<String>("wf_trigger", "com.zoho.crm.api.Record.DeleteRecordParam");
+		public static final Param<Boolean> WF_TRIGGER = new Param<Boolean>("wf_trigger", "com.zoho.crm.api.Record.DeleteRecordParam");
 
 	}
 
@@ -661,7 +799,7 @@ public class RecordOperations
 
 		public static final Param<String> CVID = new Param<String>("cvid", "com.zoho.crm.api.Record.GetRecordsParam");
 
-		public static final Param<Long> IDS = new Param<Long>("ids", "com.zoho.crm.api.Record.GetRecordsParam");
+		public static final Param<String> IDS = new Param<String>("ids", "com.zoho.crm.api.Record.GetRecordsParam");
 
 		public static final Param<String> UID = new Param<String>("uid", "com.zoho.crm.api.Record.GetRecordsParam");
 
@@ -693,6 +831,12 @@ public class RecordOperations
 
 	}
 
+	public static class CreateRecordsHeader
+	{
+		public static final Header<String> X_EXTERNAL = new Header<String>("X-EXTERNAL", "com.zoho.crm.api.Record.CreateRecordsHeader");
+
+	}
+
 	public static class UpdateRecordsHeader
 	{
 		public static final Header<String> X_EXTERNAL = new Header<String>("X-EXTERNAL", "com.zoho.crm.api.Record.UpdateRecordsHeader");
@@ -701,9 +845,9 @@ public class RecordOperations
 
 	public static class DeleteRecordsParam
 	{
-		public static final Param<Long> IDS = new Param<Long>("ids", "com.zoho.crm.api.Record.DeleteRecordsParam");
+		public static final Param<String> IDS = new Param<String>("ids", "com.zoho.crm.api.Record.DeleteRecordsParam");
 
-		public static final Param<String> WF_TRIGGER = new Param<String>("wf_trigger", "com.zoho.crm.api.Record.DeleteRecordsParam");
+		public static final Param<Boolean> WF_TRIGGER = new Param<Boolean>("wf_trigger", "com.zoho.crm.api.Record.DeleteRecordsParam");
 
 	}
 
@@ -753,6 +897,8 @@ public class RecordOperations
 
 		public static final Param<Integer> PER_PAGE = new Param<Integer>("per_page", "com.zoho.crm.api.Record.SearchRecordsParam");
 
+		public static final Param<String> FIELDS = new Param<String>("fields", "com.zoho.crm.api.Record.SearchRecordsParam");
+
 	}
 
 	public static class SearchRecordsHeader
@@ -764,6 +910,54 @@ public class RecordOperations
 	public static class GetMassUpdateStatusParam
 	{
 		public static final Param<String> JOB_ID = new Param<String>("job_id", "com.zoho.crm.api.Record.GetMassUpdateStatusParam");
+
+	}
+
+	public static class GetRecordUsingExternalIDParam
+	{
+		public static final Param<String> APPROVED = new Param<String>("approved", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<String> CONVERTED = new Param<String>("converted", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<String> CVID = new Param<String>("cvid", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<String> UID = new Param<String>("uid", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<String> FIELDS = new Param<String>("fields", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<OffsetDateTime> STARTDATETIME = new Param<OffsetDateTime>("startDateTime", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<OffsetDateTime> ENDDATETIME = new Param<OffsetDateTime>("endDateTime", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<String> TERRITORY_ID = new Param<String>("territory_id", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+		public static final Param<String> INCLUDE_CHILD = new Param<String>("include_child", "com.zoho.crm.api.Record.GetRecordUsingExternalIDParam");
+
+	}
+
+	public static class GetRecordUsingExternalIDHeader
+	{
+		public static final Header<OffsetDateTime> IF_MODIFIED_SINCE = new Header<OffsetDateTime>("If-Modified-Since", "com.zoho.crm.api.Record.GetRecordUsingExternalIDHeader");
+
+		public static final Header<String> X_EXTERNAL = new Header<String>("X-EXTERNAL", "com.zoho.crm.api.Record.GetRecordUsingExternalIDHeader");
+
+	}
+
+	public static class UpdateRecordUsingExternalIDHeader
+	{
+		public static final Header<String> X_EXTERNAL = new Header<String>("X-EXTERNAL", "com.zoho.crm.api.Record.UpdateRecordUsingExternalIDHeader");
+
+	}
+
+	public static class DeleteRecordUsingExternalIDParam
+	{
+		public static final Param<Boolean> WF_TRIGGER = new Param<Boolean>("wf_trigger", "com.zoho.crm.api.Record.DeleteRecordUsingExternalIDParam");
+
+	}
+
+	public static class DeleteRecordUsingExternalIDHeader
+	{
+		public static final Header<String> X_EXTERNAL = new Header<String>("X-EXTERNAL", "com.zoho.crm.api.Record.DeleteRecordUsingExternalIDHeader");
 
 	}
 }

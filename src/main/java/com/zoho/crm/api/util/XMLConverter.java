@@ -1,6 +1,7 @@
 package com.zoho.crm.api.util;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+
 import org.json.JSONObject;
 
 /**
@@ -8,7 +9,6 @@ import org.json.JSONObject;
  */
 public class XMLConverter extends Converter 
 {
-
 	public XMLConverter(CommonAPIHandler commonAPIHandler)
 	{
 		super(commonAPIHandler);
@@ -32,7 +32,7 @@ public class XMLConverter extends Converter
 	public Object getWrappedResponse(Object response, String pack) throws Exception
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return getResponse(response, pack);
 	}
 	
 	@Override

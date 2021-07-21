@@ -160,7 +160,7 @@ public class Role
 	public static void getRole(Long roleId) throws Exception
 	{
 		//example
-		//Long roleId = 34770610003881;
+		//Long roleId = 34770613881;
 		
 		//Get instance of RolesOperations Class
 		RolesOperations rolesOperations = new RolesOperations();

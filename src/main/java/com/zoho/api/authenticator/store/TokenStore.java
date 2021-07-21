@@ -3,7 +3,9 @@ package com.zoho.api.authenticator.store;
 import java.util.List;
 
 import com.zoho.api.authenticator.Token;
+
 import com.zoho.crm.api.UserSignature;
+
 import com.zoho.crm.api.exception.SDKException;
 
 /**
@@ -19,6 +21,15 @@ public interface TokenStore
 	 * @throws SDKException if any problem occurs.
 	 */
 	public Token getToken(UserSignature user, Token token) throws SDKException;
+	
+	/**
+	 * This method is used to get user token details by id.
+	 * @param id A String
+	 * @param token A Token class instance.
+	 * @return A Token class instance representing the user token details.
+	 * @throws SDKException if any problem occurs.
+	 */
+	public Token getTokenById(String id, Token token) throws SDKException;
 
 	/**
 	 * This method is used to store user token details.

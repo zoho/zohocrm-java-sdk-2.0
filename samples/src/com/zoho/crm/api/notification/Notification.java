@@ -1,11 +1,8 @@
 package samples.src.com.zoho.crm.api.notification;
 
 import java.lang.reflect.Field;
-
 import java.time.OffsetDateTime;
-
 import java.time.ZoneOffset;
-
 import java.util.ArrayList;
 
 import java.util.Arrays;
@@ -15,31 +12,18 @@ import java.util.List;
 import java.util.Map;
 
 import com.zoho.crm.api.ParameterMap;
-
 import com.zoho.crm.api.notification.APIException;
-
 import com.zoho.crm.api.notification.ActionHandler;
-
 import com.zoho.crm.api.notification.ActionResponse;
-
 import com.zoho.crm.api.notification.ActionWrapper;
-
 import com.zoho.crm.api.notification.BodyWrapper;
-
 import com.zoho.crm.api.notification.Info;
-
 import com.zoho.crm.api.notification.NotificationOperations;
-
 import com.zoho.crm.api.notification.NotificationOperations.DisableNotificationsParam;
-
 import com.zoho.crm.api.notification.NotificationOperations.GetNotificationDetailsParam;
-
 import com.zoho.crm.api.notification.ResponseHandler;
-
 import com.zoho.crm.api.notification.ResponseWrapper;
-
 import com.zoho.crm.api.notification.SuccessResponse;
-
 import com.zoho.crm.api.util.APIResponse;
 
 import com.zoho.crm.api.util.Model;
@@ -457,7 +441,7 @@ public class Notification
 		com.zoho.crm.api.notification.Notification notification = new com.zoho.crm.api.notification.Notification();
 		
 		//Set ChannelId to the Notification instance
-//		notification.setChannelId(1006800211l);
+		notification.setChannelId(1006800211l);
 		
         List<String> events = new ArrayList<String>();
 		

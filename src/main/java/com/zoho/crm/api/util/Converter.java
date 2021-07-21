@@ -3,20 +3,29 @@ package com.zoho.crm.api.util;
 import java.io.UnsupportedEncodingException;
 
 import java.util.ArrayList;
+
 import java.util.Base64;
+
 import java.util.HashMap;
+
 import java.util.List;
+
 import java.util.Map;
+
 import java.util.regex.Pattern;
+
 import java.util.stream.Collectors;
+
 import java.util.stream.IntStream;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 
 import org.json.JSONArray;
+
 import org.json.JSONObject;
 
 import com.zoho.crm.api.Initializer;
+
 import com.zoho.crm.api.exception.SDKException;
 
 /**
@@ -110,9 +119,30 @@ public abstract class Converter
 		
 		if(value != null)
 		{
-			varType = value.getClass().getCanonicalName();
-			
-			check = varType.equalsIgnoreCase(type);
+			if(keyDetails.has(Constants.INTERFACE) && keyDetails.getBoolean(Constants.INTERFACE))
+			{
+				JSONObject interfaceDetail = Initializer.jsonDetails.getJSONObject(keyDetails.getString(Constants.STRUCTURE_NAME));
+				
+				JSONArray classes = interfaceDetail.getJSONArray(Constants.CLASSES);
+				
+				check = false;
+				
+				for(Object eachClass : classes)
+				{
+					if(value.getClass().getCanonicalName().equalsIgnoreCase(eachClass.toString()))
+					{
+						check = true;
+						
+						break;
+					}
+				}
+			}
+			else
+			{
+				varType = value.getClass().getCanonicalName();
+				
+				check = varType.equalsIgnoreCase(type);
+			}
 		}
 
 		if (value instanceof List)

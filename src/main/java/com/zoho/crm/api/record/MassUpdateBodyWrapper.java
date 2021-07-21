@@ -10,7 +10,7 @@ public class MassUpdateBodyWrapper implements Model
 
 	private String cvid;
 
-	private List<Long> ids;
+	private List<String> ids;
 
 	private Territory territory;
 
@@ -67,9 +67,9 @@ public class MassUpdateBodyWrapper implements Model
 
 	/**
 	 * The method to get the value of ids
-	 * @return An instance of List<Long>
+	 * @return An instance of List<String>
 	 */
-	public List<Long> getIds()
+	public List<String> getIds()
 	{
 		return  this.ids;
 
@@ -77,9 +77,9 @@ public class MassUpdateBodyWrapper implements Model
 
 	/**
 	 * The method to set the value to ids
-	 * @param ids An instance of List<Long>
+	 * @param ids An instance of List<String>
 	 */
-	public void setIds(List<Long> ids)
+	public void setIds(List<String> ids)
 	{
 		 this.ids = ids;
 

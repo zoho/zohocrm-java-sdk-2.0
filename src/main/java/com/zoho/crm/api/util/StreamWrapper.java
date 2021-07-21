@@ -1,7 +1,9 @@
 package com.zoho.crm.api.util;
 
 import java.io.File;
+
 import java.io.FileInputStream;
+
 import java.io.InputStream;
 
 import com.zoho.crm.api.exception.SDKException;
@@ -11,7 +13,6 @@ import com.zoho.crm.api.exception.SDKException;
  */
 public class StreamWrapper implements Model
 {
-
 	private String name;
 	
 	private InputStream stream;
@@ -25,6 +26,11 @@ public class StreamWrapper implements Model
 	{
 		this.name = name;
 		
+		this.stream = stream;
+	}
+	
+	public StreamWrapper(InputStream stream)
+	{
 		this.stream = stream;
 	}
 

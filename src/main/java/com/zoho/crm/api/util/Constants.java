@@ -1,8 +1,11 @@
 package com.zoho.crm.api.util;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
+
 import java.util.HashMap;
+
 import java.util.logging.Level;
 
 /**
@@ -11,7 +14,9 @@ import java.util.logging.Level;
 public class Constants
 {
 	public static final HashMap<String, Level> LOGGER_LEVELS = new HashMap<>();
-
+	
+	public static final HashMap<String, String> DEFAULT_MODULENAME_VS_APINAME = new HashMap<String,String>();
+	
 	static
 	{
 		LOGGER_LEVELS.put("ALL", Level.ALL);
@@ -31,7 +36,54 @@ public class Constants
 		LOGGER_LEVELS.put("ERROR", Level.SEVERE);
 
 		LOGGER_LEVELS.put("OFF", Level.OFF);
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("leads", "Leads");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("contacts", "Contacts");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("accounts", "Accounts");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("deals", "Deals");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("tasks", "Tasks");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("events", "Events");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("activities", "Activities");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("calls", "Calls");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("products", "Products");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("quotes", "Quotes");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("sales_orders", "Sales_Orders");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("purchase_orders", "Purchase_Orders");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("invoices", "Invoices");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("campaigns", "Campaigns");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("vendors", "Vendors");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("price_books", "Price_Books");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("cases", "Cases");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("solutions", "Solutions");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("visits", "Visits");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("approvals", "Approvals");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("notes", "Notes");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("attachments", "Attachments");
+		
+		DEFAULT_MODULENAME_VS_APINAME.put("actions_performed", "Actions_Performed");
 	}
+	
 	public static final String MODULE = "module";
 
 	public static final String ACCESS_TOKEN = "access_token";
@@ -66,7 +118,7 @@ public class Constants
 
 	public static final String ZOHO_SDK = "X-ZOHO-SDK";
 
-	public static final String SDK_VERSION = "1.0.0";
+	public static final String SDK_VERSION = "2.0.0";
 
 	public static final String TOKEN_STORE = "TOKEN_STORE";
 
@@ -527,4 +579,46 @@ public class Constants
     public static final String INVALID_MODULE  = "INVALID_MODULE";
     
     public static final String RESOURCE_PATH_INVALID_ERROR_MESSAGE = "Resource Path MUST be a valid directory.";
+    
+    public static final String REDIRECT_URI = "redirect_uri";
+    
+    public static final String SDK_MODULE_METADATA = "SDK-MODULE-METADATA";
+    
+    public static final ArrayList<String> SKIP_MODULES = new ArrayList<String>(Arrays.asList("deals"));
+    
+    public static final String GENERATED_TYPE = "generated_type";
+    
+    public static final String GENERATED_TYPE_CUSTOM = "custom";
+    
+    public static final String UPLOAD_PHOTO_UNSUPPORTED_ERROR = "UPLOAD PHOTO UNSUPPORTED MODULE";
+	
+	public static final String UPLOAD_PHOTO_UNSUPPORTED_MESSAGE = "Photo Upload Operation is not supported by the module: ";
+	
+	public static final String INVALID_TOKEN_ERROR = "INVALID TOKEN ERROR" ;
+	
+	public static final String NO_ACCESS_TOKEN_ERROR = "ACCESS TOKEN IS NOT PRESENT IN RESPONSE" ;
+	
+	public static final String CLIENT_ID_NULL_ERROR_MESSAGE = "ClientID MUST NOT be null" ;
+	
+	public static final String TOKEN_ERROR = "TOKEN ERROR" ;
+	
+	public static final String CLIENT_SECRET_NULL_ERROR_MESSAGE = "ClientSecret MUST NOT be null" ;
+	
+	public static final String EXPECTED_TOKEN_TYPES = "Expecting Refresh or Grant token";
+
+	public static final String NULL_ERROR = "NULL ERROR";
+	
+	public static final String MYSQL_TABLE_NAME = "oauthtoken";
+	
+	public static final String GET_TOKEN_BY_ID_DB_ERROR = "Exception in getTokenById - DBStore : Given ID is invalid";
+	
+	public static final String GET_TOKEN_BY_ID_FILE_ERROR = "Exception in getTokenById - FileStore : Given ID is invalid";
+	
+	public static final String LOGGER_INITIALIZATION_ERROR = "Exception in Logger Initialization : ";
+	
+	public static final String USER_SIGNATURE_ERROR_MESSAGE = "UserSignature MUST NOT be null.";
+	
+	public static final ArrayList<String> SET_CONTENT_TYPE_HEADER = new ArrayList<String>(Arrays.asList("/crm/bulk/v2/read", "/crm/bulk/v2/write"));
+	
+	public static final ArrayList<String> GENERATE_REQUEST_BODY = new ArrayList<String>(Arrays.asList(Constants.REQUEST_METHOD_PATCH, Constants.REQUEST_METHOD_POST, Constants.REQUEST_METHOD_PUT));
 }

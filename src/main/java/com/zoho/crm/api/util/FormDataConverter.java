@@ -1,28 +1,43 @@
 package com.zoho.crm.api.util;
 
 import java.io.ByteArrayOutputStream;
+
 import java.io.IOException;
+
 import java.lang.reflect.Field;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
+
 import java.util.List;
+
 import java.util.Map;
+
 import java.util.Map.Entry;
 
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+
 import org.apache.http.entity.mime.HttpMultipartMode;
+
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+
 import org.apache.http.entity.mime.content.ByteArrayBody;
+
 import org.apache.http.entity.mime.content.ContentBody;
+
 import org.json.JSONArray;
+
 import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import com.zoho.crm.api.Initializer;
+
 import com.zoho.crm.api.exception.SDKException;
 
 /**
@@ -81,7 +96,7 @@ public class FormDataConverter extends Converter
 			
 			Object fieldValue = field.get(requestInstance);
 
-			if (modification != null && (Integer)modification != 0 && this.valueChecker(requestInstance.getClass().getSimpleName(), memberName, memberDetail, fieldValue, uniqueValuesMap, instanceNumber) == true)
+			if (modification != null && (Integer)modification != 0 && fieldValue != null && this.valueChecker(requestInstance.getClass().getSimpleName(), memberName, memberDetail, fieldValue, uniqueValuesMap, instanceNumber) == true)
 			{
 				String keyName = (String) memberDetail.get(Constants.NAME);
 				

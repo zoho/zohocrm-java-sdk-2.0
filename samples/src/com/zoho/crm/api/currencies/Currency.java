@@ -237,7 +237,7 @@ public class Currency
 		currency.setSymbol("DA");
 		
 		//To set the rate at which the currency has to be exchanged for home currency.
-		currency.setExchangeRate("20.0000");
+		currency.setExchangeRate("20.");
 		
 		//To set the status of the currency.
 		//true: The currency is active.

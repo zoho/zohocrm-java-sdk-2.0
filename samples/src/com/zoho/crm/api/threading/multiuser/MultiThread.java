@@ -4,8 +4,6 @@ import com.zoho.api.authenticator.OAuthToken;
 
 import com.zoho.api.authenticator.Token;
 
-import com.zoho.api.authenticator.OAuthToken.TokenType;
-
 import com.zoho.api.authenticator.store.DBStore;
 
 import com.zoho.api.authenticator.store.TokenStore;
@@ -21,8 +19,6 @@ import com.zoho.crm.api.SDKConfig;
 import com.zoho.crm.api.UserSignature;
 
 import com.zoho.crm.api.dc.USDataCenter;
-
-import com.zoho.crm.api.dc.EUDataCenter;
 
 import com.zoho.crm.api.dc.DataCenter.Environment;
 
@@ -65,7 +61,13 @@ public class MultiThread extends Thread
     { 
         try
         { 
-        	Initializer.switchUser(user, environment, token, sdkConfig, userProxy);
+        	new Initializer.Builder()
+        	.user(user)
+        	.environment(environment)
+        	.token(token)
+        	.SDKConfig(sdkConfig)
+        	.requestProxy(userProxy)
+        	.switchUser();
         	
         	System.out.println(Initializer.getInitializer().getUser().getEmail());
         	
@@ -87,37 +89,77 @@ public class MultiThread extends Thread
 	public static void main(String[] args) throws SDKException
 	{
 		
-		Logger loggerInstance = Logger.getInstance(Logger.Levels.ALL, "/Users/user_name/Documents/java_sdk_log.log");
+		Logger logger = new Logger.Builder()
+        .level(Levels.INFO)
+        .filePath("/Users/user_name/Documents/java_sdk_log.log")
+        .build();
 		
-		Environment env = USDataCenter.PRODUCTION;
+		Environment environment = USDataCenter.PRODUCTION;
 		
 		UserSignature user1 = new UserSignature("abc@zoho.com");
 		
-		TokenStore tokenstore = new DBStore();
+		TokenStore tokenstore = new DBStore.Builder()
+        .host("hostName")
+        .databaseName("databaseName")
+        .tableName("tableName")
+        .userName("userName")
+        .password("password")
+        .portNumber("portNumber")
+        .build();
 		
-		Token token1 = new OAuthToken("clientId1", "clientSecret1", "REFRESH/GRANT token", TokenType.REFRESH/GRANT);
+		Token token1 = new OAuthToken.Builder()
+        .clientId("clientId")
+        .clientSecret("clientSecret")
+        .grantToken("grantToken")
+        .redirectURL("redirectURL")
+        .build();
 		
 		String resourcePath = "/Users/user_name/Documents/javasdk-application";
 		
-		SDKConfig user1Config = new SDKConfig.Builder().setAutoRefreshFields(false).setPickListValidation(true).build();
-    	
-		Initializer.initialize(user1, env, token1, tokenstore, user1Config, resourcePath, loggerInstance);
+		SDKConfig user1Config = new SDKConfig.Builder()
+		.autoRefreshFields(false)
+		.pickListValidation(true)
+		.build();
 		
-		MultiThread multiThread = new MultiThread(user1, env, token1, "Students", user1Config, null);
+		new Initializer.Builder()
+		.user(user1)
+		.environment(environment)
+		.token(token1)
+		.store(tokenstore)
+		.SDKConfig(user1Config)
+		.resourcePath(resourcePath)
+		.logger(loggerInstance)
+		.initialize();
+    	
+		MultiThread multiThread = new MultiThread(user1, environment, token1, "Students", user1Config, null);
 		
 		multiThread.start();
 		
-		Environment environment = EUDataCenter.PRODUCTION;
+		Environment environment1 = USDataCenter.PRODUCTION;
 		
 		UserSignature user2 = new UserSignature("xyz@zoho.com");
 		
-		Token token2 = new OAuthToken("clientId2", "clientSecret2", "REFRESH/GRANT token", TokenType.REFRESH/GRANT);
+		Token token2 = new OAuthToken.Builder()
+        .clientId("clientId")
+        .clientSecret("clientSecret")
+        .grantToken("grantToken")
+        .redirectURL("redirectURL")
+        .build();
 		
-		RequestProxy user2Proxy = new RequestProxy("proxyHost", 80, "proxyUser", "password", "userDomain");
+		RequestProxy user2Proxy = new RequestProxy.Builder()
+				.host("proxyHost")
+				.port(80)
+				.user("proxyUser")
+				.password("password")
+				.userDomain("userDomain")
+				.build();
 		
-		SDKConfig user2Config = new SDKConfig.Builder().setAutoRefreshFields(true).setPickListValidation(false).build();
+		SDKConfig user2Config = new SDKConfig.Builder()
+		.autoRefreshFields(true)
+		.pickListValidation(false)
+		.build();
 		
-		multiThread = new MultiThread(user2, environment, token2, "Leads", user2Config, user2Proxy);
+		multiThread = new MultiThread(user2, environment1, token2, "Leads", user2Config, user2Proxy);
 		
 		multiThread.start();
 		

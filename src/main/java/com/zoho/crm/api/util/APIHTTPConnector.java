@@ -246,9 +246,9 @@ public class APIHTTPConnector
 		RequestProxy requestProxy = Initializer.getInitializer().getRequestProxy();
 		
 		RequestConfig config = RequestConfig.custom()
-				.setConnectTimeout(Initializer.getInitializer().getSDKConfig().connectionTimeout())
-				.setConnectionRequestTimeout(Initializer.getInitializer().getSDKConfig().requestTimeout())
-				.setSocketTimeout(Initializer.getInitializer().getSDKConfig().socketTimeout()).build();
+				.setConnectTimeout(Initializer.getInitializer().getSDKConfig().getConnectionTimeout())
+				.setConnectionRequestTimeout(Initializer.getInitializer().getSDKConfig().getRequestTimeout())
+				.setSocketTimeout(Initializer.getInitializer().getSDKConfig().getSocketTimeout()).build();
 		
 		httpClientBuilder.setDefaultRequestConfig(config);
 		
@@ -311,7 +311,7 @@ public class APIHTTPConnector
 	
 	private void setContentTypeHeader()
 	{
-		for(String contentType : Constants.SET_TO_CONTENT_TYPE)
+		for(String contentType : Constants.SET_CONTENT_TYPE_HEADER)
 		{
 			if(this.url.contains(contentType))
 			{
@@ -330,23 +330,39 @@ public class APIHTTPConnector
 		
 		reqHeaders.put(Constants.AUTHORIZATION, Constants.CANT_DISCLOSE);
 		
-		return this.requestMethod.concat(" - ").concat(Constants.URL.concat(" = ").concat(uriBuilder.toString()).concat(" , ").concat(Constants.HEADERS).concat(" = ").concat(reqHeaders.toString()).concat(" , ").concat(Constants.PARAMS).concat(" = ").concat(this.parameters.toString()).concat("."));
+		StringBuilder requestStringBuilder = new StringBuilder();
+		
+		requestStringBuilder.append(this.requestMethod).append(" - ");
+		
+		requestStringBuilder.append(Constants.URL).append(" = ").append(uriBuilder.toString()).append(" , ");
+		
+		requestStringBuilder.append(Constants.HEADERS).append(" = ").append(reqHeaders.toString()).append(" , ");
+		
+		requestStringBuilder.append(Constants.PARAMS).append(" = ").append(this.parameters.toString()).append(".");
+		
+		return requestStringBuilder.toString();
 	}
 	
 	private String proxyLog(RequestProxy requestProxy)
 	{
-		String proxyDetails = Constants.PROXY_SETTINGS + Constants.PROXY_HOST + requestProxy.getHost() + " , " + Constants.PROXY_PORT + requestProxy.getPort().toString();
+		StringBuilder proxyStringBuilder = new StringBuilder();
+		
+		proxyStringBuilder.append(Constants.PROXY_SETTINGS);
+		
+		proxyStringBuilder.append(Constants.PROXY_HOST).append(requestProxy.getHost()).append(" , ");
+		
+		proxyStringBuilder.append(Constants.PROXY_PORT).append(requestProxy.getPort().toString());
 		
 		if(requestProxy.getUser() != null)
 		{
-			proxyDetails += " , " + Constants.PROXY_USER + requestProxy.getUser();
+			proxyStringBuilder.append(" , ").append(Constants.PROXY_USER).append(requestProxy.getUser());
 		}
 		
 		if(requestProxy.getUserDomain() != null)
 		{
-			proxyDetails += " , " + Constants.PROXY_DOMAIN + requestProxy.getUserDomain();
+			proxyStringBuilder.append(" , ").append(Constants.PROXY_DOMAIN).append(requestProxy.getUserDomain());
 		}
 		
-		return proxyDetails;
+		return proxyStringBuilder.toString();
 	}
 }

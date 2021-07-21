@@ -115,9 +115,10 @@ import com.zoho.crm.api.record.SuccessResponse;
 import com.zoho.crm.api.record.SuccessfulConvert;
 
 import com.zoho.crm.api.tags.Tag;
-
+import com.zoho.crm.api.record.RecordOperations.CreateRecordsHeader;
+import com.zoho.crm.api.record.RecordOperations.DeleteRecordHeader;
 import com.zoho.crm.api.record.RecordOperations.DeleteRecordParam;
-
+import com.zoho.crm.api.record.RecordOperations.DeleteRecordsHeader;
 import com.zoho.crm.api.record.RecordOperations.DeleteRecordsParam;
 
 import com.zoho.crm.api.record.RecordOperations.GetDeletedRecordsHeader;
@@ -133,9 +134,11 @@ import com.zoho.crm.api.record.RecordOperations.GetRecordParam;
 import com.zoho.crm.api.record.RecordOperations.GetRecordsHeader;
 
 import com.zoho.crm.api.record.RecordOperations.GetRecordsParam;
-
+import com.zoho.crm.api.record.RecordOperations.SearchRecordsHeader;
 import com.zoho.crm.api.record.RecordOperations.SearchRecordsParam;
-
+import com.zoho.crm.api.record.RecordOperations.UpdateRecordHeader;
+import com.zoho.crm.api.record.RecordOperations.UpdateRecordsHeader;
+import com.zoho.crm.api.record.RecordOperations.UpsertRecordsHeader;
 import com.zoho.crm.api.users.User;
 
 import com.zoho.crm.api.util.APIResponse;
@@ -196,6 +199,8 @@ public class Record
 		OffsetDateTime ifmodifiedsince = OffsetDateTime.of(2019, 01, 02, 10, 00, 00, 00, ZoneOffset.of("+05:30"));
 		
 		headerInstance.add(GetRecordHeader.IF_MODIFIED_SINCE, ifmodifiedsince);
+		
+//		headerInstance.add(GetRecordHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call getRecord method that takes recordID, moduleAPIName, paramInstance, and headerInstance  as parameter
 		APIResponse<ResponseHandler> response = recordOperations.getRecord(recordId, moduleAPIName, paramInstance, headerInstance);
@@ -856,34 +861,34 @@ public class Record
 		 * 1 -> Call Field "." and choose the module from the displayed list and press "." and choose the field name from the displayed list.
 		 * 2 -> Value
 		 */
-//		record1.addFieldValue(Field.Leads.CITY, "City");
-//		
-//		record1.addFieldValue(Field.Leads.LAST_NAME, "Last Name");
-//		
-//		record1.addFieldValue(Field.Leads.FIRST_NAME, "First Name");
-//		
-//		record1.addFieldValue(Field.Leads.LAST_NAME, "Last Name");
-//		
-//		record1.addFieldValue(Field.Leads.COMPANY, "KKRNP");
+		record1.addFieldValue(Field.Leads.CITY, "City");
+		
+		record1.addFieldValue(Field.Leads.LAST_NAME, "Last Name");
+		
+		record1.addFieldValue(Field.Leads.FIRST_NAME, "First Name");
+		
+		record1.addFieldValue(Field.Leads.LAST_NAME, "Last Name");
+		
+		record1.addFieldValue(Field.Leads.COMPANY, "KKRNP");
 		
 		/*
 		 * Call addKeyValue method that takes two arguments
 		 * 1 -> A string that is the Field's API Name
 		 * 2 -> Value
 		 */
-//		record1.addKeyValue("Custom_field", "Value");
-//		
-//		record1.addKeyValue("Custom_field_2", "value");
+		record1.addKeyValue("Custom_field", "Value");
 		
-//		record1.addKeyValue("Date_Time_2", OffsetDateTime.of(2019, 11, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30")));
-//		
-//		record1.addKeyValue("Date_1", LocalDate.of(2017, 1, 13));
+		record1.addKeyValue("Custom_field_2", "value");
+		
+		record1.addKeyValue("Date_Time_2", OffsetDateTime.of(2019, 11, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30")));
+		
+		record1.addKeyValue("Date_1", LocalDate.of(2017, 1, 13));
 		
 		List<FileDetails> fileDetails = new ArrayList<FileDetails>();
 		
 		FileDetails fileDetail1 = new FileDetails();
 		
-		fileDetail1.setAttachmentId("34770617410016");
+		fileDetail1.setAttachmentId("347706110817022");
 		
 		fileDetail1.setDelete(null);
 		
@@ -916,85 +921,85 @@ public class Record
 		
 		record1.addKeyValue("Data_Processing_Basis_Details", dataConsent);
 		
-//		List<com.zoho.crm.api.record.Record> subformList = new ArrayList<com.zoho.crm.api.record.Record>();
-//		
-//		com.zoho.crm.api.record.Record subform = new com.zoho.crm.api.record.Record();
-//		
-//		subform.addKeyValue("Subform FieldAPIName", "FieldValue");
-//		
-//		subformList.add(subform);
-//		
-//		record1.addKeyValue("Subform Name", subformList);
+		List<com.zoho.crm.api.record.Record> subformList = new ArrayList<com.zoho.crm.api.record.Record>();
+		
+		com.zoho.crm.api.record.Record subform = new com.zoho.crm.api.record.Record();
+		
+		subform.addKeyValue("Subform FieldAPIName", "FieldValue");
+		
+		subformList.add(subform);
+		
+		record1.addKeyValue("Subform Name", subformList);
 		
 		/** Following methods are being used only by Inventory modules */
 		
-//		com.zoho.crm.api.record.Record dealName = new com.zoho.crm.api.record.Record();
-//		
-//		dealName.addFieldValue(Field.Deals.ID, 34770614995070);
-//		
-//		record1.addFieldValue(Field.Sales_Orders.DEAL_NAME, dealName);
-//		
-//		com.zoho.crm.api.record.Record contactName = new com.zoho.crm.api.record.Record();
-//		
-//		contactName.addFieldValue(Field.Contacts.ID, 34770614977055);
-//		
-//		record1.addFieldValue(Field.Purchase_Orders.CONTACT_NAME, contactName);
-//		
-//		com.zoho.crm.api.record.Record accountName = new com.zoho.crm.api.record.Record();
-//		
-//		accountName.addKeyValue("name", "automatedAccount");
-//		
-//		record1.addFieldValue(Field.Quotes.ACCOUNT_NAME, accountName);
-//		
-//		i
-//		
-//		List<InventoryLineItems> inventoryLineItemList = new ArrayList<InventoryLineItems>();
-//		
-//		InventoryLineItems inventoryLineItem = new InventoryLineItems();
-//		
-//		LineItemProduct lineItemProduct = new LineItemProduct();
-//		
-//		lineItemProduct.setId(34770615356009);
-//		
-//		inventoryLineItem.setProduct(lineItemProduct);
-//		
-//		inventoryLineItem.setQuantity(1.5);
-//		
-//		inventoryLineItem.setProductDescription("productDescription");
-//		
-//		inventoryLineItem.setListPrice(10.0);
-//		
-//		inventoryLineItem.setDiscount("5.0");
-//		
-//		inventoryLineItem.setDiscount("5.25%");
-//		
-//		List<LineTax> productLineTaxes = new ArrayList<LineTax>();
-//		
-//		LineTax productLineTax = new LineTax();
-//		
-//		productLineTax.setName("Sales Tax");
-//		
-//		productLineTax.setPercentage(20.0);
-//		
-//		productLineTaxes.add(productLineTax);
-//		
-//		inventoryLineItem.setLineTax(productLineTaxes);
-//		
-//		inventoryLineItemList.add(inventoryLineItem);
-//
-//		record1.addKeyValue("Product_Details", inventoryLineItemList);
-//		
-//		List<LineTax> lineTaxes = new ArrayList<LineTax>();
-//		
-//		LineTax lineTax = new LineTax();
-//		
-//		lineTax.setName("Sales Tax");
-//		
-//		lineTax.setPercentage(20.0);
-//		
-//		lineTaxes.add(lineTax);
-//		
-//		record1.addKeyValue("$line_tax", lineTaxes);
+		com.zoho.crm.api.record.Record dealName = new com.zoho.crm.api.record.Record();
+		
+		dealName.addFieldValue(Field.Deals.ID, 34770614995070l);
+		
+		record1.addFieldValue(Field.Sales_Orders.DEAL_NAME, dealName);
+		
+		com.zoho.crm.api.record.Record contactName = new com.zoho.crm.api.record.Record();
+		
+		contactName.addFieldValue(Field.Contacts.ID, 34770614977055l);
+		
+		record1.addFieldValue(Field.Purchase_Orders.CONTACT_NAME, contactName);
+		
+		com.zoho.crm.api.record.Record accountName = new com.zoho.crm.api.record.Record();
+		
+		accountName.addKeyValue("name", "automatedAccount");
+		
+		record1.addFieldValue(Field.Quotes.ACCOUNT_NAME, accountName);
+		
+//		inventory
+		
+		List<InventoryLineItems> inventoryLineItemList = new ArrayList<InventoryLineItems>();
+		
+		InventoryLineItems inventoryLineItem = new InventoryLineItems();
+		
+		LineItemProduct lineItemProduct = new LineItemProduct();
+		
+		lineItemProduct.setId(34770615356009l);
+		
+		inventoryLineItem.setProduct(lineItemProduct);
+		
+		inventoryLineItem.setQuantity(1.5);
+		
+		inventoryLineItem.setProductDescription("productDescription");
+		
+		inventoryLineItem.setListPrice(10.0);
+		
+		inventoryLineItem.setDiscount("5.0");
+		
+		inventoryLineItem.setDiscount("5.25%");
+		
+		List<LineTax> productLineTaxes = new ArrayList<LineTax>();
+		
+		LineTax productLineTax = new LineTax();
+		
+		productLineTax.setName("Sales Tax");
+		
+		productLineTax.setPercentage(20.0);
+		
+		productLineTaxes.add(productLineTax);
+		
+		inventoryLineItem.setLineTax(productLineTaxes);
+		
+		inventoryLineItemList.add(inventoryLineItem);
+
+		record1.addKeyValue("Product_Details", inventoryLineItemList);
+		
+		List<LineTax> lineTaxes = new ArrayList<LineTax>();
+		
+		LineTax lineTax = new LineTax();
+		
+		lineTax.setName("Sales Tax");
+		
+		lineTax.setPercentage(20.0);
+		
+		lineTaxes.add(lineTax);
+		
+		record1.addKeyValue("$line_tax", lineTaxes);
 		
 		 /** End Inventory **/
 		
@@ -1025,6 +1030,8 @@ public class Record
 		request.setTrigger(trigger);
 		
 		HeaderMap headerInstance = new HeaderMap();
+		
+//		headerInstance.add(UpdateRecordHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call updateRecord method that takes recordId, ModuleAPIName and BodyWrapper instance as parameter.
 		APIResponse<ActionHandler> response = recordOperations.updateRecord(recordId, moduleAPIName, request, headerInstance);
@@ -1165,12 +1172,1161 @@ public class Record
 		//Get instance of ParameterMap Class
 		ParameterMap paramInstance = new ParameterMap();
 		
-		paramInstance.add(DeleteRecordParam.WF_TRIGGER, "false");
+		paramInstance.add(DeleteRecordParam.WF_TRIGGER, false);
 		
 		HeaderMap headerInstance = new HeaderMap();
 		
+//		headerInstance.add(DeleteRecordHeader.X_EXTERNAL, "Leads.External");
+		
 		//Call deleteRecord method that takes ModuleAPIName, recordId and paramInstance as parameter.
 		APIResponse<ActionHandler> response = recordOperations.deleteRecord(recordId, moduleAPIName, paramInstance, headerInstance);
+		
+		if(response != null)
+		{
+			//Get the status code from response
+			System.out.println("Status Code: " + response.getStatusCode());
+			
+			//Check if expected response is received
+			if(response.isExpected())
+			{
+				//Get object from response
+				ActionHandler actionHandler = response.getObject();
+				
+				if(actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ActionWrapper instance
+					ActionWrapper actionWrapper = (ActionWrapper) actionHandler;
+					
+					//Get the list of obtained ActionResponse instances
+					List<ActionResponse> actionResponses = actionWrapper.getData();
+					
+					for(ActionResponse actionResponse : actionResponses)
+					{
+						//Check if the request is successful
+						if(actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							SuccessResponse successResponse = (SuccessResponse)actionResponse;
+							
+							//Get the Status
+							System.out.println("Status: " + successResponse.getStatus().getValue());
+							
+							//Get the Code
+							System.out.println("Code: " + successResponse.getCode().getValue());
+							
+							System.out.println("Details: " );
+							
+							//Get the details map
+							for(Map.Entry<String, Object> entry : successResponse.getDetails().entrySet())
+							{
+								//Get each value in the map
+								System.out.println(entry.getKey() + ": " + entry.getValue());
+							}
+							
+							//Get the Message
+							System.out.println("Message: " + successResponse.getMessage().getValue());
+						}
+						//Check if the request returned an exception
+						else if(actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							APIException exception = (APIException) actionResponse;
+							
+							//Get the Status
+							System.out.println("Status: " + exception.getStatus().getValue());
+							
+							//Get the Code
+							System.out.println("Code: " + exception.getCode().getValue());
+							
+							System.out.println("Details: " );
+							
+							//Get the details map
+							for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+							{
+								//Get each value in the map
+								System.out.println(entry.getKey() + ": " + entry.getValue());
+							}
+							
+							//Get the Message
+							System.out.println("Message: " + exception.getMessage().getValue());
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if(actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					APIException exception = (APIException) actionHandler;
+					
+					//Get the Status
+					System.out.println("Status: " + exception.getStatus().getValue());
+					
+					//Get the Code
+					System.out.println("Code: " + exception.getCode().getValue());
+					
+					System.out.println("Details: " );
+					
+					//Get the details map
+					for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+					{
+						//Get each value in the map
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+					}
+					
+					//Get the Message
+					System.out.println("Message: " + exception.getMessage().getValue());
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				//Get model object from response
+				Model responseObject = response.getModel();
+				
+				//Get the response object's class
+				Class<? extends Model> clas = responseObject.getClass();
+				
+				//Get all declared fields of the response class
+				java.lang.reflect.Field[] fields = clas.getDeclaredFields();
+				
+				for(java.lang.reflect.Field field : fields)
+				{
+					//Get each value
+					System.out.println(field.getName() + ":" + field.get(responseObject));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * <h3> Get Record Using External Id </h3>
+	 * This method is used to get a single record of a module with ID and print the response.
+	 * @param moduleAPIName - The API Name of the record's module.
+	 * @param externalFieldValue - 
+	 * @param destinationFolder - The absolute path of the destination folder to store the file.
+	 * @throws Exception
+	 */
+	public static void getRecordUsingExternalId(String moduleAPIName, String externalFieldValue, String destinationFolder) throws Exception
+	{
+		//example
+		//String moduleAPIName = "Leads";
+		//String externalFieldValue = "34770616603276";
+		
+		//Get instance of RecordOperations Class
+		RecordOperations recordOperations = new RecordOperations();
+		
+		//Get instance of ParameterMap Class
+		ParameterMap paramInstance = new ParameterMap();
+		
+		paramInstance.add(GetRecordParam.APPROVED, "both");
+		
+		paramInstance.add(GetRecordParam.CONVERTED, "false");
+		
+		List<String> fieldNames = new ArrayList<String>(Arrays.asList("Company", "Email"));
+		
+		for(String fieldName : fieldNames)
+		{
+			paramInstance.add(GetRecordParam.FIELDS, fieldName);
+		}
+		
+		OffsetDateTime startdatetime = OffsetDateTime.of(2021, 07, 02, 11, 00, 01, 00, ZoneOffset.of("+05:30"));
+		
+		paramInstance.add(GetRecordParam.STARTDATETIME, startdatetime);
+		
+		OffsetDateTime enddatetime = OffsetDateTime.of(2021, 8, 02, 12, 00, 01, 00, ZoneOffset.of("+05:30"));
+		
+		paramInstance.add(GetRecordParam.ENDDATETIME, enddatetime);
+		
+		paramInstance.add(GetRecordParam.TERRITORY_ID, "34770613051357");
+		
+		 paramInstance.add(GetRecordParam.INCLUDE_CHILD, "true");
+		
+		HeaderMap headerInstance = new HeaderMap();
+		
+		OffsetDateTime ifmodifiedsince = OffsetDateTime.of(2019, 01, 02, 10, 00, 00, 00, ZoneOffset.of("+05:30"));
+		
+		headerInstance.add(GetRecordHeader.IF_MODIFIED_SINCE, ifmodifiedsince);
+		
+		headerInstance.add(GetRecordHeader.X_EXTERNAL, "Leads.External");
+		
+		//Call getRecordUsingExternalId method that takes externalFieldValue, moduleAPIName, paramInstance, and headerInstance  as parameter
+		APIResponse<ResponseHandler> response = recordOperations.getRecordUsingExternalId(externalFieldValue, moduleAPIName, paramInstance, headerInstance);
+		
+		if(response != null)
+		{
+			//Get the status code from response
+			System.out.println("Status Code: " + response.getStatusCode());
+			
+			if(Arrays.asList(204,304).contains(response.getStatusCode()))
+			{
+				System.out.println(response.getStatusCode() == 204? "No Content" : "Not Modified");
+				return;
+			}
+			
+			//Check if expected response is received
+			if(response.isExpected())
+			{
+				//Get object from response
+				ResponseHandler responseHandler = response.getObject();
+				
+				if(responseHandler instanceof ResponseWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					ResponseWrapper responseWrapper = (ResponseWrapper) responseHandler;
+					
+					//Get the list of obtained Record instances
+					List<com.zoho.crm.api.record.Record> records = responseWrapper.getData();
+					
+					for(com.zoho.crm.api.record.Record record : records)
+					{				
+						//Get the ID of each Record
+						System.out.println("Record ID: " + record.getId());
+						
+						//Get the createdBy User instance of each Record
+						com.zoho.crm.api.users.User createdBy = record.getCreatedBy();
+						
+						//Check if createdBy is not null
+						if(createdBy != null)
+						{
+							//Get the ID of the createdBy User
+							System.out.println("Record Created By User-ID: " + createdBy.getId());
+							
+							//Get the name of the createdBy User
+							System.out.println("Record Created By User-Name: " + createdBy.getName());
+							
+							//Get the Email of the createdBy User
+							System.out.println("Record Created By User-Email: " + createdBy.getEmail());
+						}
+						
+						//Get the CreatedTime of each Record
+						System.out.println("Record CreatedTime: " + record.getCreatedTime());
+						
+						//Get the modifiedBy User instance of each Record
+						com.zoho.crm.api.users.User modifiedBy = record.getModifiedBy();
+						
+						//Check if modifiedBy is not null
+						if(modifiedBy != null)
+						{
+							//Get the ID of the modifiedBy User
+							System.out.println("Record Modified By User-ID: " + modifiedBy.getId());
+							
+							//Get the name of the modifiedBy User
+							System.out.println("Record Modified By User-Name: " + modifiedBy.getName());
+							
+							//Get the Email of the modifiedBy User
+							System.out.println("Record Modified By User-Email: " + modifiedBy.getEmail());
+						}
+						
+						//Get the ModifiedTime of each Record
+						System.out.println("Record ModifiedTime: " + record.getModifiedTime());
+						
+						//Get the list of Tag instance each Record
+						List<Tag> tags = record.getTag();
+						
+						//Check if tags is not null
+						if(tags != null)
+						{
+							for(Tag tag : tags)
+							{
+								//Get the Name of each Tag
+								System.out.println("Record Tag Name: " + tag.getName());
+								
+								//Get the Id of each Tag
+								System.out.println("Record Tag ID: " + tag.getId());
+							}
+						}
+						
+						//To get particular field value 
+						System.out.println("Record Field Value: " + record.getKeyValue("Last_Name"));// FieldApiName
+						
+						System.out.println("Record KeyValues: " );
+						
+						//Get the KeyValue map
+						for(Map.Entry<String, Object> entry : record.getKeyValues().entrySet())
+						{
+							String keyName = entry.getKey();
+							
+							Object value = entry.getValue();
+							
+							if(value instanceof List)
+							{
+								List<?> dataList = (List<?>) value;
+								
+								if(dataList.size() > 0)
+								{
+									if(dataList.get(0) instanceof FileDetails)
+									{
+										@SuppressWarnings("unchecked")
+										List<FileDetails> fileDetails = (List<FileDetails>) value;
+										
+										for(FileDetails fileDetail : fileDetails)
+										{
+											//Get the Extn of each FileDetails
+											System.out.println("Record FileDetails Extn: " + fileDetail.getExtn());
+											
+											//Get the IsPreviewAvailable of each FileDetails
+											System.out.println("Record FileDetails IsPreviewAvailable: " + fileDetail.getIsPreviewAvailable());
+											
+											//Get the DownloadUrl of each FileDetails
+											System.out.println("Record FileDetails DownloadUrl: " + fileDetail.getDownloadUrl());
+											
+											//Get the DeleteUrl of each FileDetails
+											System.out.println("Record FileDetails DeleteUrl: " + fileDetail.getDeleteUrl());
+											
+											//Get the EntityId of each FileDetails
+											System.out.println("Record FileDetails EntityId: " + fileDetail.getEntityId());
+											
+											//Get the Mode of each FileDetails
+											System.out.println("Record FileDetails Mode: " + fileDetail.getMode());
+											
+											//Get the OriginalSizeByte of each FileDetails
+											System.out.println("Record FileDetails OriginalSizeByte: " + fileDetail.getOriginalSizeByte());
+											
+											//Get the PreviewUrl of each FileDetails
+											System.out.println("Record FileDetails PreviewUrl: " + fileDetail.getPreviewUrl());
+											
+											//Get the FileName of each FileDetails
+											System.out.println("Record FileDetails FileName: " + fileDetail.getFileName());
+											
+											//Get the FileId of each FileDetails
+											System.out.println("Record FileDetails FileId: " + fileDetail.getFileId());
+											
+											//Get the AttachmentId of each FileDetails
+											System.out.println("Record FileDetails AttachmentId: " + fileDetail.getAttachmentId());
+											
+											//Get the FileSize of each FileDetails
+											System.out.println("Record FileDetails FileSize: " + fileDetail.getFileSize());
+											
+											//Get the CreatorId of each FileDetails
+											System.out.println("Record FileDetails CreatorId: " + fileDetail.getCreatorId());
+											
+											//Get the LinkDocs of each FileDetails
+											System.out.println("Record FileDetails LinkDocs: " + fileDetail.getLinkDocs());
+										}
+									}
+									else if(dataList.get(0) instanceof Choice<?>)
+									{
+										@SuppressWarnings("unchecked")
+										List<Choice<?>> choiceList = (List<Choice<?>>) dataList;
+										
+										System.out.println(keyName);
+										
+										System.out.println("values");
+										
+										for(Choice<?> choice : choiceList)
+										{
+											System.out.println(choice.getValue());
+										}
+									}
+									else if(dataList.get(0) instanceof InventoryLineItems)
+									{
+										@SuppressWarnings("unchecked")
+										List<InventoryLineItems> productDetails = (List<InventoryLineItems>) value;
+										
+										for(InventoryLineItems productDetail : productDetails)
+										{
+											LineItemProduct lineItemProduct = productDetail.getProduct();
+											
+											if(lineItemProduct != null)
+											{
+												System.out.println("Record ProductDetails LineItemProduct ProductCode: " + lineItemProduct.getProductCode());
+												
+												System.out.println("Record ProductDetails LineItemProduct Currency: " + lineItemProduct.getCurrency());
+												
+												System.out.println("Record ProductDetails LineItemProduct Name: " + lineItemProduct.getName());
+												
+												System.out.println("Record ProductDetails LineItemProduct Id: " + lineItemProduct.getId());
+											}
+											
+											System.out.println("Record ProductDetails Quantity: " + productDetail.getQuantity().toString());
+											
+											System.out.println("Record ProductDetails Discount: " + productDetail.getDiscount());
+											
+											System.out.println("Record ProductDetails TotalAfterDiscount: " + productDetail.getTotalAfterDiscount().toString());
+											
+											System.out.println("Record ProductDetails NetTotal: " + productDetail.getNetTotal().toString());
+											
+											if(productDetail.getBook() != null)
+											{
+												System.out.println("Record ProductDetails Book: " + productDetail.getBook().toString());
+											}
+											
+											System.out.println("Record ProductDetails Tax: " + productDetail.getTax().toString());
+											
+											System.out.println("Record ProductDetails ListPrice: " + productDetail.getListPrice().toString());
+											
+											System.out.println("Record ProductDetails UnitPrice: " + productDetail.getUnitPrice());
+											
+											System.out.println("Record ProductDetails QuantityInStock: " + productDetail.getQuantityInStock().toString());
+											
+											System.out.println("Record ProductDetails Total: " + productDetail.getTotal().toString());
+											
+											System.out.println("Record ProductDetails ID: " + productDetail.getId());
+											
+											System.out.println("Record ProductDetails ProductDescription: " + productDetail.getProductDescription());
+											
+											List<LineTax> lineTaxes = productDetail.getLineTax();
+											
+											for(LineTax lineTax : lineTaxes)
+											{
+												System.out.println("Record ProductDetails LineTax Percentage: " + lineTax.getPercentage().toString());
+												
+												System.out.println("Record ProductDetails LineTax Name: " + lineTax.getName());
+												
+												System.out.println("Record ProductDetails LineTax Id: " + lineTax.getId());
+												
+												System.out.println("Record ProductDetails LineTax Value: " + lineTax.getValue().toString());
+											}
+										}
+									}
+									else if(dataList.get(0) instanceof Tag)
+									{
+										@SuppressWarnings("unchecked")
+										List<Tag> tagList = (List<Tag>) value;
+										
+										for(Tag tag : tagList)
+										{
+											//Get the Name of each Tag
+											System.out.println("Record Tag Name: " + tag.getName());
+											
+											//Get the Id of each Tag
+											System.out.println("Record Tag ID: " + tag.getId());
+										}
+									}
+									else if(dataList.get(0) instanceof PricingDetails)
+									{
+										@SuppressWarnings("unchecked")
+										List<PricingDetails> pricingDetails = (List<PricingDetails>) value;
+										
+										for(PricingDetails pricingDetail : pricingDetails)
+										{
+											System.out.println("Record PricingDetails ToRange: " + pricingDetail.getToRange().toString());
+											
+											System.out.println("Record PricingDetails Discount: " + pricingDetail.getDiscount().toString());
+											
+											System.out.println("Record PricingDetails ID: " + pricingDetail.getId());
+											
+											System.out.println("Record PricingDetails FromRange: " + pricingDetail.getFromRange().toString());
+										}
+									}
+									else if(dataList.get(0) instanceof com.zoho.crm.api.record.Record)
+									{
+										@SuppressWarnings("unchecked")
+										List<com.zoho.crm.api.record.Record> recordList = (List<com.zoho.crm.api.record.Record>) dataList;
+										
+										for(com.zoho.crm.api.record.Record record1 : recordList)
+										{
+											//Get the details map
+											for(Map.Entry<String, Object> entry1 : record1.getKeyValues().entrySet())
+											{
+												//Get each value in the map
+												System.out.println(entry1.getKey() + ": " + entry1.getValue());
+											}
+										}
+									}
+									else if(dataList.get(0) instanceof LineTax)
+									{
+										@SuppressWarnings("unchecked")
+										List<LineTax> lineTaxes = (List<LineTax>) dataList;
+										
+										for(LineTax lineTax : lineTaxes)
+										{
+											System.out.println("Record ProductDetails LineTax Percentage: " + lineTax.getPercentage().toString());
+											
+											System.out.println("Record ProductDetails LineTax Name: " + lineTax.getName());
+											
+											System.out.println("Record ProductDetails LineTax Id: " + lineTax.getId());
+											
+											System.out.println("Record ProductDetails LineTax Value: " + lineTax.getValue().toString());
+										}
+									}
+									else if(dataList.get(0) instanceof Comment)
+									{
+										@SuppressWarnings("unchecked")
+										List<Comment> comments = (List<Comment>) dataList;
+										
+										for(Comment comment : comments)
+										{
+											System.out.println("Record Comment CommentedBy: " + comment.getCommentedBy());
+											
+											System.out.println("Record Comment CommentedTime: " + comment.getCommentedTime().toString());
+											
+											System.out.println("Record Comment CommentContent: " + comment.getCommentContent());
+											
+											System.out.println("Record Comment Id: " + comment.getId());
+										}
+									}
+									else if(dataList.get(0) instanceof Attachment)
+									{
+										//Get the list of obtained Attachment instances
+										@SuppressWarnings("unchecked")
+										List<com.zoho.crm.api.attachments.Attachment> attachments = (List<Attachment>) dataList;;
+									
+										for(com.zoho.crm.api.attachments.Attachment attachment : attachments)
+										{
+											//Get the owner User instance of each attachment
+											com.zoho.crm.api.users.User owner = attachment.getOwner();
+											
+											//Check if owner is not null
+											if(owner != null)
+											{
+												//Get the Name of the Owner
+												System.out.println("Record Attachment Owner User-Name: " + owner.getName());
+												
+												//Get the ID of the Owner
+												System.out.println("Record Attachment Owner User-ID: " + owner.getId());
+												
+												//Get the Email of the Owner
+												System.out.println("Record Attachment Owner User-Email: " + owner.getEmail());
+											}
+											
+											//Get the modified time of each attachment
+											System.out.println("Record Attachment Modified Time: " + attachment.getModifiedTime().toString());
+											
+											//Get the name of the File
+											System.out.println("Record Attachment File Name: " + attachment.getFileName());
+											
+											//Get the created time of each attachment
+											System.out.println("Record Attachment Created Time: " + attachment.getCreatedTime().toString());
+											
+											//Get the Attachment file size
+											System.out.println("Record Attachment File Size: " + attachment.getSize().toString());
+											
+											//Get the parentId Record instance of each attachment
+											com.zoho.crm.api.record.Record parentId = attachment.getParentId();
+											
+											//Check if parentId is not null
+											if(parentId != null)
+											{	
+												//Get the parent record Name of each attachment
+												System.out.println("Record Attachment parent record Name: " + parentId.getKeyValue("name"));
+												
+												//Get the parent record ID of each attachment
+												System.out.println("Record Attachment parent record ID: " + parentId.getId());
+											}
+											
+											//Get the attachment is Editable
+											System.out.println("Record Attachment is Editable: " + attachment.getEditable().toString());
+											
+											//Get the file ID of each attachment
+											System.out.println("Record Attachment File ID: " + attachment.getFileId());
+											
+											//Get the type of each attachment
+											System.out.println("Record Attachment File Type: " + attachment.getType());
+											
+											//Get the seModule of each attachment
+											System.out.println("Record Attachment seModule: " + attachment.getSeModule());
+											
+											//Get the modifiedBy User instance of each attachment
+											modifiedBy = attachment.getModifiedBy();
+											
+											//Check if modifiedBy is not null
+											if(modifiedBy != null)
+											{
+												//Get the Name of the modifiedBy User
+												System.out.println("Record Attachment Modified By User-Name: " + modifiedBy.getName());
+												
+												//Get the ID of the modifiedBy User
+												System.out.println("Record Attachment Modified By User-ID: " + modifiedBy.getId());
+												
+												//Get the Email of the modifiedBy User
+												System.out.println("Record Attachment Modified By User-Email: " + modifiedBy.getEmail());
+											}
+											
+											//Get the state of each attachment
+											System.out.println("Record Attachment State: " + attachment.getState());
+											
+											//Get the ID of each attachment
+											System.out.println("Record Attachment ID: " + attachment.getId());
+											
+											//Get the createdBy User instance of each attachment
+											createdBy = attachment.getCreatedBy();
+											
+											//Check if createdBy is not null
+											if(createdBy != null)
+											{
+												//Get the name of the createdBy User
+												System.out.println("Record Attachment Created By User-Name: " + createdBy.getName());
+												
+												//Get the ID of the createdBy User
+												System.out.println("Record Attachment Created By User-ID: " + createdBy.getId());
+												
+												//Get the Email of the createdBy User
+												System.out.println("Record Attachment Created By User-Email: " + createdBy.getEmail());
+											}
+											
+											//Get the linkUrl of each attachment
+											System.out.println("Record Attachment LinkUrl: " + attachment.getLinkUrl());
+										}
+									}
+									else
+									{
+										System.out.println(keyName + ": " + value);
+									}
+								}
+							}
+							else if( value instanceof com.zoho.crm.api.record.Record)
+							{
+								com.zoho.crm.api.record.Record recordValue = (com.zoho.crm.api.record.Record) value;
+								
+								System.out.println("Record " + keyName + " ID: " + recordValue.getId());
+								
+								System.out.println("Record " + keyName + " Name: " + recordValue.getKeyValue("name"));
+							}
+							else if(value instanceof Layout)
+							{
+								com.zoho.crm.api.layouts.Layout layout = (Layout) value;
+								
+								if(layout != null)
+								{
+									System.out.println("Record " + keyName + " ID: " + layout.getId());
+									
+									System.out.println("Record " + keyName + " Name: " + layout.getName());
+								}
+							}
+							else if(value instanceof User)
+							{
+								com.zoho.crm.api.users.User user = (User) value;
+								
+								if(user != null)
+								{
+									System.out.println("Record " + keyName + " User-ID: " + user.getId());
+									
+									System.out.println("Record " + keyName + " User-Name: " + user.getName());
+									
+									System.out.println("Record " + keyName + " User-Email: " + user.getEmail());
+								}
+							}
+							else if(value instanceof Choice<?>)
+							{
+								System.out.println(keyName + ": " + ((Choice<?>)value).getValue());
+							}
+							else if(value instanceof RemindAt)
+							{
+								System.out.println(keyName + ": " + ((RemindAt)value).getAlarm());
+							}
+							else if(value instanceof RecurringActivity)
+							{
+								System.out.println(keyName);
+								
+								System.out.println("RRULE" + ": " + ((RecurringActivity)value).getRrule());
+							}
+							else if(value instanceof Consent)
+							{
+								Consent consent = (Consent)value;
+								
+								System.out.println("Record Consent ID: " + consent.getId());
+								
+                                //Get the Owner User instance of each attachment
+                                User owner = consent.getOwner();
+                                
+                                //Check if owner is not null
+                                if(owner != null)
+                                {
+                                    //Get the name of the owner User
+                                    System.out.println("Record Consent Owner Name: " + owner.getName());
+                                    
+                                    //Get the ID of the owner User
+                                    System.out.println("Record Consent Owner ID: " + owner.getId());
+                                    
+                                    //Get the Email of the owner User
+                                    System.out.println("Record Consent Owner Email: " + owner.getEmail());
+                                }
+                                
+                                User consentCreatedBy = consent.getCreatedBy();
+                                
+                                //Check if createdBy is not null
+                                if(consentCreatedBy != null)
+                                {
+                                    //Get the name of the CreatedBy User
+                                    System.out.println("Record Consent CreatedBy Name: " + consentCreatedBy.getName());
+                                    
+                                    //Get the ID of the CreatedBy User
+                                    System.out.println("Record Consent CreatedBy ID: " + consentCreatedBy.getId());
+                                    
+                                    //Get the Email of the CreatedBy User
+                                    System.out.println("Record Consent CreatedBy Email: " + consentCreatedBy.getEmail());
+                                }
+                                
+                                User consentModifiedBy = consent.getModifiedBy();
+                                
+                                //Check if createdBy is not null
+                                if(consentModifiedBy != null)
+                                {
+                                    //Get the name of the ModifiedBy User
+                                    System.out.println("Record Consent ModifiedBy Name: " + consentModifiedBy.getName());
+                                    
+                                    //Get the ID of the ModifiedBy User
+                                    System.out.println("Record Consent ModifiedBy ID: " + consentModifiedBy.getId());
+                                    
+                                    //Get the Email of the ModifiedBy User
+                                    System.out.println("Record Consent ModifiedBy Email: " + consentModifiedBy.getEmail());
+                                }
+                                
+                                System.out.println("Record Consent CreatedTime: " + consent.getCreatedTime());
+                                
+                                System.out.println("Record Consent ModifiedTime: " + consent.getModifiedTime());
+
+                                System.out.println("Record Consent ContactThroughEmail: " + consent.getContactThroughEmail());
+                                
+                                System.out.println("Record Consent ContactThroughSocial: " + consent.getContactThroughSocial());
+                                
+                                System.out.println("Record Consent ContactThroughSurvey: " + consent.getContactThroughSurvey());
+                                
+                                System.out.println("Record Consent ContactThroughPhone: " + consent.getContactThroughPhone());
+
+                                System.out.println("Record Consent MailSentTime: " + consent.getMailSentTime().toString());
+
+                                System.out.println("Record Consent ConsentDate: " + consent.getConsentDate().toString());
+
+                                System.out.println("Record Consent ConsentRemarks: " + consent.getConsentRemarks());
+
+                                System.out.println("Record Consent ConsentThrough: " + consent.getConsentThrough());
+
+                                System.out.println("Record Consent DataProcessingBasis: " + consent.getDataProcessingBasis());
+                                
+                                //To get custom values
+                                System.out.println("Record Consent Lawful Reason: " + consent.getKeyValue("Lawful_Reason"));
+							}
+							else
+							{
+								//Get each value in the map
+								System.out.println(keyName + ": " + value);
+							}
+						}
+					}
+				}
+				else if(responseHandler instanceof FileBodyWrapper)
+				{
+					//Get object from response
+					FileBodyWrapper fileBodyWrapper = (FileBodyWrapper)responseHandler;
+					
+					//Get StreamWrapper instance from the returned FileBodyWrapper instance
+					StreamWrapper streamWrapper = fileBodyWrapper.getFile();
+					
+					//Create a file instance with the absolute_file_path
+					File file = new File(destinationFolder + File.separatorChar + streamWrapper.getName());
+					
+					//Get InputStream from the response
+					InputStream is = streamWrapper.getStream();
+					
+					//Create an OutputStream for the destination file
+					OutputStream os = new FileOutputStream(file);
+					
+					byte[] buffer = new byte[1024];
+					
+			        int bytesRead;
+			        
+			        //read the InputStream till the end
+			        while((bytesRead = is.read(buffer)) != -1)
+			        {
+			        	//write data to OutputStream
+			        	os.write(buffer, 0, bytesRead);
+			        }
+			        
+			        //Close the InputStream
+			        is.close();
+			        
+			        //Flush and close the OutputStream
+			        os.flush();
+			        
+			        os.close();
+				}
+				//Check if the request returned an exception
+				else if(responseHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					APIException exception = (APIException) responseHandler;
+					
+					//Get the Status
+					System.out.println("Status: " + exception.getStatus().getValue());
+					
+					//Get the Code
+					System.out.println("Code: " + exception.getCode().getValue());
+					
+					System.out.println("Details: " );
+					
+					//Get the details map
+					for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+					{
+						//Get each value in the map
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+					}
+					
+					//Get the Message
+					System.out.println("Message: " + exception.getMessage().getValue());
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				//Get model object from response
+				Model responseObject = response.getModel();
+				
+				//Get the response object's class
+				Class<? extends Model> clas = responseObject.getClass();
+				
+				//Get all declared fields of the response class
+				java.lang.reflect.Field[] fields = clas.getDeclaredFields();
+				
+				for(java.lang.reflect.Field field : fields)
+				{
+					//Get each value
+					System.out.println(field.getName() + ":" + field.get(responseObject));
+				}
+			}
+		}
+	}
+
+	/**
+	 * <h3> Update Record Using External Id</h3>
+	 * This method is used to update a single record of a module with ID and print the response.
+	 * @param moduleAPIName - The API Name of the record's module.
+	 * @param recordId - The ID of the record to be updated.
+	 * @throws Exception
+	 */
+	public static void updateRecordUsingExternalId(String moduleAPIName, String externalFieldValue) throws Exception
+	{
+		//API Name of the module 
+		//String moduleAPIName = "Leads";
+		//String externalFieldValue = "34770615177002";
+		
+		//Get instance of RecordOperations Class
+		RecordOperations recordOperations = new RecordOperations();
+		
+		//Get instance of BodyWrapper Class that will contain the request body
+		BodyWrapper request = new BodyWrapper();
+		
+		//List of Record instances
+		List<com.zoho.crm.api.record.Record> records = new ArrayList<com.zoho.crm.api.record.Record>();
+		
+		//Get instance of Record Class
+		com.zoho.crm.api.record.Record record1 = new com.zoho.crm.api.record.Record();
+		
+		/*
+		 * Call addFieldValue method that takes two arguments
+		 * 1 -> Call Field "." and choose the module from the displayed list and press "." and choose the field name from the displayed list.
+		 * 2 -> Value
+		 */
+		record1.addFieldValue(Field.Leads.CITY, "City");
+		
+		record1.addFieldValue(Field.Leads.LAST_NAME, "Last Name");
+		
+		record1.addFieldValue(Field.Leads.FIRST_NAME, "First Name");
+		
+		record1.addFieldValue(Field.Leads.LAST_NAME, "Last Name");
+		
+		record1.addFieldValue(Field.Leads.COMPANY, "KKRNP");
+		
+		/*
+		 * Call addKeyValue method that takes two arguments
+		 * 1 -> A string that is the Field's API Name
+		 * 2 -> Value
+		 */
+		record1.addKeyValue("Custom_field", "Value");
+		
+		record1.addKeyValue("Custom_field_2", "value");
+		
+		record1.addKeyValue("Date_Time_2", OffsetDateTime.of(2019, 11, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30")));
+		
+		record1.addKeyValue("Date_1", LocalDate.of(2017, 1, 13));
+		
+//		List<FileDetails> fileDetails = new ArrayList<FileDetails>();
+//		
+//		FileDetails fileDetail1 = new FileDetails();
+//		
+//		fileDetail1.setAttachmentId("347706110817022");
+//		
+//		fileDetail1.setDelete(null);
+//		
+//		fileDetails.add(fileDetail1);
+//		
+//		FileDetails fileDetail2 = new FileDetails();
+//		
+//		fileDetail2.setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c326ef21accd646c01e85c34b1b2e7fe45c");
+//		
+//		fileDetails.add(fileDetail2);
+//		
+//		FileDetails fileDetail3 = new FileDetails();
+//
+//		fileDetail3.setFileId("ae9c7cefa418aec1d6a5cc2d9ab35c3256b4b32b984bad140a629d9f4d4fc8e2");
+//		
+//		fileDetails.add(fileDetail3);
+//		
+//		record1.addKeyValue("File_Upload", fileDetails);
+//		
+//		//Used when GDPR is enabled
+//		Consent dataConsent = new Consent();
+//		
+//		dataConsent.setConsentRemarks("Approved.");
+//		
+//		dataConsent.setConsentThrough("Email");
+//		
+//		dataConsent.setContactThroughEmail(true);
+//		
+//		dataConsent.setContactThroughSocial(false);
+//		
+//		record1.addKeyValue("Data_Processing_Basis_Details", dataConsent);
+//		
+//		List<com.zoho.crm.api.record.Record> subformList = new ArrayList<com.zoho.crm.api.record.Record>();
+//		
+//		com.zoho.crm.api.record.Record subform = new com.zoho.crm.api.record.Record();
+//		
+//		subform.addKeyValue("Subform FieldAPIName", "FieldValue");
+//		
+//		subformList.add(subform);
+//		
+//		record1.addKeyValue("Subform Name", subformList);
+//		
+//		/** Following methods are being used only by Inventory modules */
+//		
+//		com.zoho.crm.api.record.Record dealName = new com.zoho.crm.api.record.Record();
+//		
+//		dealName.addFieldValue(Field.Deals.ID, 34770614995070l);
+//		
+//		record1.addFieldValue(Field.Sales_Orders.DEAL_NAME, dealName);
+//		
+//		com.zoho.crm.api.record.Record contactName = new com.zoho.crm.api.record.Record();
+//		
+//		contactName.addFieldValue(Field.Contacts.ID, 34770614977055l);
+//		
+//		record1.addFieldValue(Field.Purchase_Orders.CONTACT_NAME, contactName);
+//		
+//		com.zoho.crm.api.record.Record accountName = new com.zoho.crm.api.record.Record();
+//		
+//		accountName.addKeyValue("name", "automatedAccount");
+//		
+//		record1.addFieldValue(Field.Quotes.ACCOUNT_NAME, accountName);
+//		
+////		inventory
+//		
+//		List<InventoryLineItems> inventoryLineItemList = new ArrayList<InventoryLineItems>();
+//		
+//		InventoryLineItems inventoryLineItem = new InventoryLineItems();
+//		
+//		LineItemProduct lineItemProduct = new LineItemProduct();
+//		
+//		lineItemProduct.setId(34770615356009l);
+//		
+//		inventoryLineItem.setProduct(lineItemProduct);
+//		
+//		inventoryLineItem.setQuantity(1.5);
+//		
+//		inventoryLineItem.setProductDescription("productDescription");
+//		
+//		inventoryLineItem.setListPrice(10.0);
+//		
+//		inventoryLineItem.setDiscount("5.0");
+//		
+//		inventoryLineItem.setDiscount("5.25%");
+//		
+//		List<LineTax> productLineTaxes = new ArrayList<LineTax>();
+//		
+//		LineTax productLineTax = new LineTax();
+//		
+//		productLineTax.setName("Sales Tax");
+//		
+//		productLineTax.setPercentage(20.0);
+//		
+//		productLineTaxes.add(productLineTax);
+//		
+//		inventoryLineItem.setLineTax(productLineTaxes);
+//		
+//		inventoryLineItemList.add(inventoryLineItem);
+//
+//		record1.addKeyValue("Product_Details", inventoryLineItemList);
+//		
+//		List<LineTax> lineTaxes = new ArrayList<LineTax>();
+//		
+//		LineTax lineTax = new LineTax();
+//		
+//		lineTax.setName("Sales Tax");
+//		
+//		lineTax.setPercentage(20.0);
+//		
+//		lineTaxes.add(lineTax);
+//		
+//		record1.addKeyValue("$line_tax", lineTaxes);
+		
+		 /** End Inventory **/
+		
+		List<Tag> tagList = new ArrayList<Tag>();
+		
+		Tag tag = new Tag();
+		
+		tag.setName("Testtask1");
+		
+		tagList.add(tag);
+		
+		record1.setTag(tagList);
+		
+		//Add Record instance to the list
+		records.add(record1);
+		
+		//Set the list to Records in BodyWrapper instance
+		request.setData(records);
+		
+		List<String> trigger = new ArrayList<String>();
+		
+		trigger.add("approval");
+		
+		trigger.add("workflow");
+		
+		trigger.add("blueprint");
+		
+		request.setTrigger(trigger);
+		
+		HeaderMap headerInstance = new HeaderMap();
+		
+		headerInstance.add(UpdateRecordHeader.X_EXTERNAL, "Leads.External");
+		
+		//Call updateRecordUsingExternalId method that takes externalFieldValue, ModuleAPIName and BodyWrapper instance as parameter.
+		APIResponse<ActionHandler> response = recordOperations.updateRecordUsingExternalId(externalFieldValue, moduleAPIName, request, headerInstance);
+		
+		if(response != null)
+		{
+			//Get the status code from response
+			System.out.println("Status Code: " + response.getStatusCode());
+			
+			//Check if expected response is received
+			if(response.isExpected())
+			{
+				//Get object from response
+				ActionHandler actionHandler = response.getObject();
+				
+				if(actionHandler instanceof ActionWrapper)
+				{
+					//Get the received ResponseWrapper instance
+					ActionWrapper actionWrapper = (ActionWrapper) actionHandler;
+					
+					//Get the list of obtained ActionResponse instances
+					List<ActionResponse> actionResponses = actionWrapper.getData();
+					
+					for(ActionResponse actionResponse : actionResponses)
+					{
+						//Check if the request is successful
+						if(actionResponse instanceof SuccessResponse)
+						{
+							//Get the received SuccessResponse instance
+							SuccessResponse successResponse = (SuccessResponse)actionResponse;
+							
+							//Get the Status
+							System.out.println("Status: " + successResponse.getStatus().getValue());
+							
+							//Get the Code
+							System.out.println("Code: " + successResponse.getCode().getValue());
+							
+							System.out.println("Details: " );
+							
+							//Get the details map
+							for(Map.Entry<String, Object> entry : successResponse.getDetails().entrySet())
+							{
+								//Get each value in the map
+								System.out.println(entry.getKey() + ": " + entry.getValue());
+							}
+							
+							//Get the Message
+							System.out.println("Message: " + successResponse.getMessage().getValue());
+						}
+						//Check if the request returned an exception
+						else if(actionResponse instanceof APIException)
+						{
+							//Get the received APIException instance
+							APIException exception = (APIException) actionResponse;
+							
+							//Get the Status
+							System.out.println("Status: " + exception.getStatus().getValue());
+							
+							//Get the Code
+							System.out.println("Code: " + exception.getCode().getValue());
+							
+							System.out.println("Details: " );
+							
+							//Get the details map
+							for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+							{
+								//Get each value in the map
+								System.out.println(entry.getKey() + ": " + entry.getValue());
+							}
+							
+							//Get the Message
+							System.out.println("Message: " + exception.getMessage().getValue());
+						}
+					}
+				}
+				//Check if the request returned an exception
+				else if(actionHandler instanceof APIException)
+				{
+					//Get the received APIException instance
+					APIException exception = (APIException) actionHandler;
+					
+					//Get the Status
+					System.out.println("Status: " + exception.getStatus().getValue());
+					
+					//Get the Code
+					System.out.println("Code: " + exception.getCode().getValue());
+					
+					System.out.println("Details: " );
+					
+					//Get the details map
+					for(Map.Entry<String, Object> entry : exception.getDetails().entrySet())
+					{
+						//Get each value in the map
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+					}
+					
+					//Get the Message
+					System.out.println("Message: " + exception.getMessage().getValue());
+				}
+			}
+			else
+			{//If response is not as expected
+				
+				//Get model object from response
+				Model responseObject = response.getModel();
+				
+				//Get the response object's class
+				Class<? extends Model> clas = responseObject.getClass();
+				
+				//Get all declared fields of the response class
+				java.lang.reflect.Field[] fields = clas.getDeclaredFields();
+				
+				for(java.lang.reflect.Field field : fields)
+				{
+					//Get each value
+					System.out.println(field.getName() + ":" + field.get(responseObject));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * <h3> Delete Record Using External Id </h3>
+	 * This method is used to delete a single record of a module with ID and print the response.
+	 * @param moduleAPIName - The API Name of the record's module.
+	 * @param externalFieldValue - 
+	 * @throws Exception
+	 */
+	public static void deleteRecordUsingExternalId(String moduleAPIName, String externalFieldValue) throws Exception
+	{
+		//API Name of the module to delete record
+		//String moduleAPIName = "Leads";
+		//String externalFieldValue = "34770615177002";
+		
+		//Get instance of RecordOperations Class
+		RecordOperations recordOperations = new RecordOperations();
+		
+		//Get instance of ParameterMap Class
+		ParameterMap paramInstance = new ParameterMap();
+		
+		paramInstance.add(DeleteRecordParam.WF_TRIGGER, false);
+		
+		HeaderMap headerInstance = new HeaderMap();
+		
+		headerInstance.add(DeleteRecordHeader.X_EXTERNAL, "Leads.External");
+		
+		//Call deleteRecord method that takes externalFieldValue, moduleAPIName, paramInstance and headerInstance as parameter.
+		APIResponse<ActionHandler> response = recordOperations.deleteRecordUsingExternalId(externalFieldValue, moduleAPIName, paramInstance, headerInstance);
 		
 		if(response != null)
 		{
@@ -1304,16 +2460,16 @@ public class Record
 		RecordOperations recordOperations = new RecordOperations();
 		
 		ParameterMap paramInstance = new ParameterMap();
-		
-		paramInstance.add(GetRecordsParam.APPROVED, "both");
+//		
+//		paramInstance.add(GetRecordsParam.APPROVED, "both");
 //		
 //		paramInstance.add(GetRecordsParam.CONVERTED, "both");
-		
-//		paramInstance.add(GetRecordsParam.CVID, "34770610087501");
-		
-//		List<long> ids = new ArrayList<long>(Arrays.asList(34770615623115, 34770614352001));
 //		
-//		for(long id : ids)
+//		paramInstance.add(GetRecordsParam.CVID, "34770610087501");
+//		
+//		List<String> ids = new ArrayList<String>(Arrays.asList("TestExternalLead12", "34770614352001"));
+//		
+//		for(String id : ids)
 //		{
 //			paramInstance.add(GetRecordsParam.IDS, id);
 //		}
@@ -1334,7 +2490,7 @@ public class Record
 //		paramInstance.add(GetRecordsParam.PAGE, 1);
 //		
 //		paramInstance.add(GetRecordsParam.PER_PAGE, 1);
-		
+//		
 //		OffsetDateTime startdatetime = OffsetDateTime.of(2019, 11, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30"));
 //		
 //		paramInstance.add(GetRecordsParam.STARTDATETIME, startdatetime);
@@ -1352,6 +2508,8 @@ public class Record
 		OffsetDateTime ifmodifiedsince = OffsetDateTime.of(2019, 05, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30"));
 		
 		headerInstance.add(GetRecordsHeader.IF_MODIFIED_SINCE, ifmodifiedsince);
+		
+//		headerInstance.add(GetRecordsHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call getRecords method that takes paramInstance, headerInstance and moduleAPIName as parameter.
 		APIResponse<ResponseHandler> response = recordOperations.getRecords(moduleAPIName, paramInstance, headerInstance);
@@ -2039,13 +3197,17 @@ public class Record
 		 * 1 -> A string that is the Field's API Name
 		 * 2 -> Value
 		 */
-//		record1.addKeyValue("Custom_field", "Value");
-//		
-//		record1.addKeyValue("Date_Time_2", OffsetDateTime.of(2019, 11, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30")));
-//		
-//		record1.addKeyValue("Date_1", LocalDate.of(2021, 1, 13));
-//		
-//		record1.addKeyValue("Subject", "AutomatedSDK");
+		record1.addKeyValue("External", "Value");
+		
+		record1.addKeyValue("Date_Time_2", OffsetDateTime.of(2019, 11, 20, 10, 00, 01, 00, ZoneOffset.of("+05:30")));
+		
+		record1.addKeyValue("Date_1", LocalDate.of(2021, 1, 13));
+		
+		ArrayList<Choice<String>> taxName = new ArrayList<Choice<String>>(Arrays.asList(new Choice<String>("Vat"), new Choice<String>("Sales Tax")));
+
+		record1.addKeyValue("Tax", taxName);
+
+		record1.addKeyValue("Product_Name", "AutomatedSDK");
 		
 		List<FileDetails> fileDetails = new ArrayList<FileDetails>();
 		
@@ -2067,7 +3229,7 @@ public class Record
 		
 		fileDetails.add(fileDetail3);
 		
-//		record1.addKeyValue("File_Upload", fileDetails);
+		record1.addKeyValue("File_Upload", fileDetails);
 		
 		List<com.zoho.crm.api.record.Record> subformList = new ArrayList<com.zoho.crm.api.record.Record>();
 		
@@ -2079,7 +3241,7 @@ public class Record
 		
 		subformList.add(subform);
 		
-//		record1.addKeyValue("Subform_1", subformList);
+		record1.addKeyValue("Subform_1", subformList);
 		
 		//Used when GDPR is enabled
 		Consent dataConsent = new Consent();
@@ -2096,207 +3258,211 @@ public class Record
 		
 		/** Following methods are being used only by Inventory modules */
 		
-//		com.zoho.crm.api.record.Record dealName = new com.zoho.crm.api.record.Record();
-//		
-//		dealName.addFieldValue(Field.Deals.ID, 34770614995070);
-//		
-//		record1.addFieldValue(Field.Sales_Orders.DEAL_NAME, dealName);
-//		
-//		com.zoho.crm.api.record.Record contactName = new com.zoho.crm.api.record.Record();
-//		
-//		contactName.addFieldValue(Field.Contacts.ID, 34770614977055);
-//		
-//		record1.addFieldValue(Field.Purchase_Orders.CONTACT_NAME, contactName);
-//		
-//		com.zoho.crm.api.record.Record accountName = new com.zoho.crm.api.record.Record();
-//		
-//		accountName.addKeyValue("name", "automatedAccount");
-//		
-//		record1.addFieldValue(Field.Quotes.ACCOUNT_NAME, accountName);
-//		
-//		i
-//		
-//		List<InventoryLineItems> inventoryLineItemList = new ArrayList<InventoryLineItems>();
-//		
-//		InventoryLineItems inventoryLineItem = new InventoryLineItems();
-//		
-//		LineItemProduct lineItemProduct = new LineItemProduct();
-//		
-//		lineItemProduct.setId(34770615356009);
-//		
-//		inventoryLineItem.setProduct(lineItemProduct);
-//		
-//		inventoryLineItem.setQuantity(1.5);
-//		
-//		inventoryLineItem.setProductDescription("productDescription");
-//		
-//		inventoryLineItem.setListPrice(10.0);
-//		
-//		inventoryLineItem.setDiscount("5.0");
-//		
-//		inventoryLineItem.setDiscount("5.25%");
-//		
-//		List<LineTax> productLineTaxes = new ArrayList<LineTax>();
-//		
-//		LineTax productLineTax = new LineTax();
-//		
-//		productLineTax.setName("Tax1");
-//		
-//		productLineTax.setPercentage(20.0);
-//		
-//		productLineTaxes.add(productLineTax);
-//		
-//		inventoryLineItem.setLineTax(productLineTaxes);
-//		
-//		inventoryLineItemList.add(inventoryLineItem);
-//
-//		record1.addKeyValue("Product_Details", inventoryLineItemList);
-//		
-//		List<LineTax> lineTaxes = new ArrayList<LineTax>();
-//		
-//		LineTax lineTax = new LineTax();
-//		
-//		lineTax.setName("Tax1");
-//		
-//		lineTax.setPercentage(20.0);
-//		
-//		lineTaxes.add(lineTax);
-//		
-//		record1.addKeyValue("$line_tax", lineTaxes);
-//		
+		record1.addKeyValue("Subject", "AutomatedSDK");
+		
+		com.zoho.crm.api.record.Record dealName = new com.zoho.crm.api.record.Record();
+		
+		dealName.addFieldValue(Field.Deals.ID, 34770610207275l);
+		
+		record1.addFieldValue(Field.Sales_Orders.DEAL_NAME, dealName);
+		
+		com.zoho.crm.api.record.Record contactName = new com.zoho.crm.api.record.Record();
+		
+		contactName.addFieldValue(Field.Contacts.ID, 34770614977055l);
+		
+		record1.addFieldValue(Field.Purchase_Orders.CONTACT_NAME, contactName);
+		
+		com.zoho.crm.api.record.Record accountName = new com.zoho.crm.api.record.Record();
+		
+		accountName.addKeyValue("name", "automatedAccount");
+		
+		record1.addFieldValue(Field.Quotes.ACCOUNT_NAME, accountName);
+		
+		//inventory
+		
+		List<InventoryLineItems> inventoryLineItemList = new ArrayList<InventoryLineItems>();
+		
+		InventoryLineItems inventoryLineItem = new InventoryLineItems();
+		
+		LineItemProduct lineItemProduct = new LineItemProduct();
+		
+		lineItemProduct.setId(347706110816003l);
+		
+		inventoryLineItem.setProduct(lineItemProduct);
+		
+		inventoryLineItem.setQuantity(1.5);
+		
+		inventoryLineItem.setProductDescription("productDescription");
+		
+		inventoryLineItem.setListPrice(10.0);
+		
+		inventoryLineItem.setDiscount("5.0");
+		
+		inventoryLineItem.setDiscount("5.25%");
+		
+		List<LineTax> productLineTaxes = new ArrayList<LineTax>();
+		
+		LineTax productLineTax = new LineTax();
+		
+		productLineTax.setName("MyTax1134");
+		
+		productLineTax.setPercentage(20.0);
+		
+		productLineTaxes.add(productLineTax);
+		
+		inventoryLineItem.setLineTax(productLineTaxes);
+		
+		inventoryLineItem.addKeyValue("Custom_Field", "Custom_Field_Value");
+		
+		inventoryLineItemList.add(inventoryLineItem);
+
+		record1.addKeyValue("Product_Details", inventoryLineItemList);
+		
+		List<LineTax> lineTaxes = new ArrayList<LineTax>();
+		
+		LineTax lineTax = new LineTax();
+		
+		lineTax.setName("MyTax1134");
+		
+		lineTax.setPercentage(20.0);
+		
+		lineTaxes.add(lineTax);
+		
+		record1.addKeyValue("$line_tax", lineTaxes);
+		
 		 /** End Inventory **/
-//		
+		
 		/** Following methods are being used only by Activity modules */
-//		
-//		Tasks
-//		record1.addFieldValue(Field.Tasks.DESCRIPTION, "Test Task");
-//		
-//		record1.addKeyValue("Currency", new Choice<String>("INR"));
-//		
-//		RemindAt remindAt = new RemindAt();
-//		
-//		remindAt.setAlarm("FREQ=NONE;ACTION=EMAILANDPOPUP;TRIGGER=DATE-TIME:2020-07-03T12:30:00+05:30");
-//		
-//		record1.addFieldValue(Field.Tasks.REMIND_AT, remindAt);
-//		
-//		com.zoho.crm.api.record.Record whoId = new com.zoho.crm.api.record.Record();
-//		
-//		whoId.setId(34770614977055);
-//		
-//		record1.addFieldValue(Field.Tasks.WHO_ID, whoId);
-//		
-//		record1.addFieldValue(Field.Tasks.STATUS, new Choice<String>("Waiting on someone else"));
-//		
-//		record1.addFieldValue(Field.Tasks.DUE_DATE, LocalDate.of(2021, 1, 13));
-//		
-//		record1.addFieldValue(Field.Tasks.PRIORITY, new Choice<String>("High"));
-//		
-//		record1.addFieldValue(Field.Tasks.SUBJECT, "Email1");
-//		
-//		record1.addKeyValue("$se_module", "Accounts");
-//		
-//		com.zoho.crm.api.record.Record whatId = new com.zoho.crm.api.record.Record();
-//		
-//		whatId.setId(34770610207118);
-//		
-//		record1.addFieldValue(Field.Tasks.WHAT_ID, whatId);
-//		
+		
+		//Tasks
+		record1.addFieldValue(Field.Tasks.DESCRIPTION, "Test Task");
+		
+		record1.addKeyValue("Currency", new Choice<String>("INR"));
+		
+		RemindAt remindAt = new RemindAt();
+		
+		remindAt.setAlarm("FREQ=NONE;ACTION=EMAILANDPOPUP;TRIGGER=DATE-TIME:2020-07-03T12:30:00+05:30");
+		
+		record1.addFieldValue(Field.Tasks.REMIND_AT, remindAt);
+		
+		com.zoho.crm.api.record.Record whoId = new com.zoho.crm.api.record.Record();
+		
+		whoId.setId(34770614977055l);
+		
+		record1.addFieldValue(Field.Tasks.WHO_ID, whoId);
+		
+		record1.addFieldValue(Field.Tasks.STATUS, new Choice<String>("Waiting on someone else"));
+		
+		record1.addFieldValue(Field.Tasks.DUE_DATE, LocalDate.of(2021, 1, 13));
+		
+		record1.addFieldValue(Field.Tasks.PRIORITY, new Choice<String>("High"));
+		
+		record1.addFieldValue(Field.Tasks.SUBJECT, "Email1");
+		
+		record1.addKeyValue("$se_module", "Accounts");
+		
+		com.zoho.crm.api.record.Record whatId = new com.zoho.crm.api.record.Record();
+		
+		whatId.setId(34770610207118l);
+		
+		record1.addFieldValue(Field.Tasks.WHAT_ID, whatId);
+		
 		/** Recurring Activity can be provided in any activity module*/
-//		
-//		RecurringActivity recurringActivity = new RecurringActivity();
-//		
-//		recurringActivity.setRrule("FREQ=DAILY;INTERVAL=10;UNTIL=2020-08-14;DTSTART=2020-07-03");
-//		
-//		record1.addFieldValue(Field.Events.RECURRING_ACTIVITY, recurringActivity);
-//		
-//		Events
-//		record1.addFieldValue(Field.Events.DESCRIPTION, "Test Events");
-//		
-//		OffsetDateTime startDateTime = OffsetDateTime.of(2020, 01, 02, 10, 00, 00, 00, ZoneOffset.of("+05:30")); 
-//		
-//		record1.addFieldValue(Field.Events.START_DATETIME, startDateTime);
-//		
-//		List<Participants> participants = new ArrayList<Participants>();
-//		
-//		Participants participant1 = new Participants();
-//		
-//		participant1.setParticipant("abc@gmail.com");
-//		
-//		participant1.setType("email");
-//		
-//		participant1.setId(34770615902017);
-//		
-//		participants.add(participant1);
-//		
-//		Participants participant2 = new Participants();
-//		
-//		participant2.addKeyValue("participant", "34770617420005");
-//		
-//		participant2.addKeyValue("type", "lead");
-//		
-//		participants.add(participant2);
-//		
-//		record1.addFieldValue(Field.Events.PARTICIPANTS, participants);
-//		
-//		record1.addKeyValue("$send_notification", true);
-//		
-//		record1.addFieldValue(Field.Events.EVENT_TITLE, "New Automated Event");
-//		
-//		OffsetDateTime enddatetime = OffsetDateTime.of(2020, 05, 02, 10, 00, 00, 00, ZoneOffset.of("+05:30")); 
-//		
-//		record1.addFieldValue(Field.Events.END_DATETIME, enddatetime);
-//		
-//		OffsetDateTime remindAt = OffsetDateTime.of(2020, 05, 02, 05, 00, 00, 00, ZoneOffset.of("+05:30"));
-//		
-//		record1.addFieldValue(Field.Events.REMIND_AT, remindAt);
-//		
-//		record1.addFieldValue(Field.Events.CHECK_IN_STATUS, "PLANNED");
-//		
-//		record1.addKeyValue("$se_module", "Leads");
-//		
-//		com.zoho.crm.api.record.Record whatId = new com.zoho.crm.api.record.Record();
-//		
-//		whatId.setId(34770614381002);
-//		
-//		record1.addFieldValue(Field.Events.WHAT_ID, whatId);
-//		
-//		record1.addKeyValue("Currency", new Choice<String>("USD"));
-//		
+		
+		RecurringActivity recurringActivity = new RecurringActivity();
+		
+		recurringActivity.setRrule("FREQ=DAILY;INTERVAL=10;UNTIL=2020-08-14;DTSTART=2020-07-03");
+		
+		record1.addFieldValue(Field.Events.RECURRING_ACTIVITY, recurringActivity);
+		
+		//Events
+		record1.addFieldValue(Field.Events.DESCRIPTION, "Test Events");
+		
+		OffsetDateTime startDateTime = OffsetDateTime.of(2020, 01, 02, 10, 00, 00, 00, ZoneOffset.of("+05:30")); 
+		
+		record1.addFieldValue(Field.Events.START_DATETIME, startDateTime);
+		
+		List<Participants> participants = new ArrayList<Participants>();
+		
+		Participants participant1 = new Participants();
+		
+		participant1.setParticipant("abc@zoho.com");
+		
+		participant1.setType("email");
+		
+		participant1.setId(34770615902017l);
+		
+		participants.add(participant1);
+		
+		Participants participant2 = new Participants();
+		
+		participant2.addKeyValue("participant", "34770617425");
+		
+		participant2.addKeyValue("type", "lead");
+		
+		participants.add(participant2);
+		
+		record1.addFieldValue(Field.Events.PARTICIPANTS, participants);
+		
+		record1.addKeyValue("$send_notification", true);
+		
+		record1.addFieldValue(Field.Events.EVENT_TITLE, "New Automated Event");
+		
+		OffsetDateTime enddatetime = OffsetDateTime.of(2020, 05, 02, 10, 00, 00, 00, ZoneOffset.of("+05:30")); 
+		
+		record1.addFieldValue(Field.Events.END_DATETIME, enddatetime);
+		
+		OffsetDateTime remindAt1 = OffsetDateTime.of(2020, 05, 02, 05, 00, 00, 00, ZoneOffset.of("+05:30"));
+		
+		record1.addFieldValue(Field.Events.REMIND_AT, remindAt1);
+		
+		record1.addFieldValue(Field.Events.CHECK_IN_STATUS, "PLANNED");
+		
+		record1.addKeyValue("$se_module", "Leads");
+		
+		com.zoho.crm.api.record.Record whatId1 = new com.zoho.crm.api.record.Record();
+		
+		whatId1.setId(34770614381002l);
+		
+		record1.addFieldValue(Field.Events.WHAT_ID, whatId1);
+		
+		record1.addKeyValue("Currency", new Choice<String>("USD"));
+		
 		/** End Activity **/
-//		
+		
 		/** Following methods are being used only by Price_Books modules */
 		
-//		List<PricingDetails> pricingDetails = new ArrayList<PricingDetails>();
-//		
-//		PricingDetails pricingDetail1 = new PricingDetails();
-//		
-//		pricingDetail1.setFromRange(1.0);
-//		
-//		pricingDetail1.setToRange(5.0);
-//		
-//		pricingDetail1.setDiscount(2.0);
-//		
-//		pricingDetails.add(pricingDetail1);
-//		
-//		PricingDetails pricingDetail2 = new PricingDetails();
-//		
-//		pricingDetail2.addKeyValue("from_range", 6.0);
-//		
-//		pricingDetail2.addKeyValue("to_range", 11.0);
-//		
-//		pricingDetail2.addKeyValue("discount", 3.0);
-//		
-//		pricingDetails.add(pricingDetail2);
-//		
-//		record1.addFieldValue(Field.Price_Books.PRICING_DETAILS, pricingDetails);
-//		
-//		record1.addKeyValue("Email", "abc24@zoho.com");
-//		
-//		record1.addFieldValue(Field.Price_Books.DESCRIPTION, "TEST");
-//		
-//		record1.addFieldValue(Field.Price_Books.PRICE_BOOK_NAME, "book_name");
-//		
-//		record1.addFieldValue(Field.Price_Books.PRICING_MODEL, new Choice<String>("Flat"));
+		List<PricingDetails> pricingDetails = new ArrayList<PricingDetails>();
+		
+		PricingDetails pricingDetail1 = new PricingDetails();
+		
+		pricingDetail1.setFromRange(1.0);
+		
+		pricingDetail1.setToRange(5.0);
+		
+		pricingDetail1.setDiscount(2.0);
+		
+		pricingDetails.add(pricingDetail1);
+		
+		PricingDetails pricingDetail2 = new PricingDetails();
+		
+		pricingDetail2.addKeyValue("from_range", 6.0);
+		
+		pricingDetail2.addKeyValue("to_range", 11.0);
+		
+		pricingDetail2.addKeyValue("discount", 3.0);
+		
+		pricingDetails.add(pricingDetail2);
+		
+		record1.addFieldValue(Field.Price_Books.PRICING_DETAILS, pricingDetails);
+		
+		record1.addKeyValue("Email", "test24@zoho.com");
+		
+		record1.addFieldValue(Field.Price_Books.DESCRIPTION, "TEST");
+		
+		record1.addFieldValue(Field.Price_Books.PRICE_BOOK_NAME, "book_name");
+		
+		record1.addFieldValue(Field.Price_Books.PRICING_MODEL, new Choice<String>("Flat"));
 		
 		List<Tag> tagList = new ArrayList<Tag>();
 		
@@ -2324,10 +3490,14 @@ public class Record
 		
 		bodyWrapper.setTrigger(trigger);
 		
-		//bodyWrapper.setLarId("34770610087515");
+		bodyWrapper.setLarId("34770610087515");
 		
-		//Call createRecords method that takes moduleAPIName and BodyWrapper instance as parameter.
-		APIResponse<ActionHandler> response = recordOperations.createRecords(moduleAPIName, bodyWrapper);
+		HeaderMap headerInstance = new HeaderMap();
+		
+//		headerInstance.add(CreateRecordsHeader.X_EXTERNAL, "Leads.External");
+		
+		//Call createRecords method that takes moduleAPIName, BodyWrapper instance and headerInstance as parameter.
+		APIResponse<ActionHandler> response = recordOperations.createRecords(moduleAPIName, bodyWrapper, headerInstance);
 		
 		if(response != null)
 		{
@@ -2484,6 +3654,8 @@ public class Record
 		
 		record1.addFieldValue(Field.Leads.COMPANY, "KKRNP");
 		
+		record1.addKeyValue("External", "Value");
+		
 		/*
 		 * Call addKeyValue method that takes two arguments
 		 * 1 -> A string that is the Field's API Name
@@ -2553,6 +3725,8 @@ public class Record
 		request.setTrigger(trigger);
 		
 		HeaderMap headerInstance = new HeaderMap();
+		
+//		headerInstance.add(UpdateRecordsHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call updateRecords method that takes moduleAPIName and BodyWrapper instance as parameter.
 		APIResponse<ActionHandler> response = recordOperations.updateRecords(moduleAPIName, request, headerInstance);
@@ -2681,11 +3855,11 @@ public class Record
 	 * @param recordIds - The List of the record IDs to be deleted.
 	 * @throws Exception
 	 */
-	public static void deleteRecords(String moduleAPIName, List<Long> recordIds) throws Exception
+	public static void deleteRecords(String moduleAPIName, List<String> recordIds) throws Exception
 	{
 		//API Name of the module 
 		//String moduleAPIName = "Leads";
-		//List<Long> recordIds = new ArrayList<Long>(Arrays.asList(34770615908033l,34770615908017l));
+		//List<String> recordIds = new ArrayList<String>(Arrays.asList("34770615908033", "34770615908017"));
 		
 		//Get instance of RecordOperations Class
 		RecordOperations recordOperations = new RecordOperations();
@@ -2693,14 +3867,16 @@ public class Record
 		//Get instance of ParameterMap Class
 		ParameterMap paramInstance = new ParameterMap();
 		
-		for(Long id : recordIds)
+		for(String id : recordIds)
 		{
 			paramInstance.add(DeleteRecordsParam.IDS, id);
 		}
 		
-		paramInstance.add(DeleteRecordsParam.WF_TRIGGER, "false");
+		paramInstance.add(DeleteRecordsParam.WF_TRIGGER, false);
 		
 		HeaderMap headerInstance = new HeaderMap();
+		
+//		headerInstance.add(DeleteRecordsHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call deleteRecords method that takes moduleAPIName and paramInstance as parameter.
 		APIResponse<ActionHandler> response = recordOperations.deleteRecords(moduleAPIName, paramInstance, headerInstance);
@@ -2867,6 +4043,8 @@ public class Record
 		
 		record1.addKeyValue("Custom_field_2", "value");
 		
+		record1.addKeyValue("External", "TestExternal221");
+		
 		//Add Record instance to the list
 		records.add(record1);
 		
@@ -2895,6 +4073,8 @@ public class Record
 		
 		record2.addKeyValue("Custom_field_2", "value");
 		
+		record2.addKeyValue("External", "TestExternal222");
+		
 		//Add Record instance to the list
 		records.add(record2);
 		
@@ -2906,6 +4086,8 @@ public class Record
 		request.setData(records);
 		
 		HeaderMap headerInstance = new HeaderMap();
+		
+//		headerInstance.add(UpsertRecordsHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call upsertRecords method that takes moduleAPIName and BodyWrapper instance as parameter.
 		APIResponse<ActionHandler> response = recordOperations.upsertRecords(moduleAPIName, request, headerInstance);
@@ -3219,7 +4401,9 @@ public class Record
 		
 		paramInstance.add(SearchRecordsParam.CRITERIA, "((Last_Name:starts_with:Last Name) and (Company:starts_with:fasf\\(123\\) K))");
 		
-		paramInstance.add(SearchRecordsParam.EMAIL, "abc1@gmail.com");
+		paramInstance.add(SearchRecordsParam.CRITERIA, "(External:in:TestExternal221)");
+		
+		paramInstance.add(SearchRecordsParam.EMAIL, "abc@zoho.com");
 		
 		paramInstance.add(SearchRecordsParam.PHONE, "234567890");
 		
@@ -3233,7 +4417,11 @@ public class Record
 		
 		paramInstance.add(SearchRecordsParam.PER_PAGE, 2);
 		
+		paramInstance.add(SearchRecordsParam.FIELDS, "External,Email");
+		
 		HeaderMap headerInstance = new HeaderMap();
+		
+//		headerInstance.add(SearchRecordsHeader.X_EXTERNAL, "Leads.External");
 		
 		//Call searchRecords method that takes moduleAPIName and ParameterMap Instance as parameter
 		APIResponse<ResponseHandler>response = recordOperations.searchRecords(moduleAPIName, paramInstance, headerInstance);
@@ -4084,7 +5272,7 @@ public class Record
 					StreamWrapper streamWrapper = fileBodyWrapper.getFile();
 					
 					//Create a file instance with the absolute_file_path
-					File file = new File(destinationFolder + File.separatorChar + streamWrapper.getName());
+					java.io.File file = new java.io.File(destinationFolder + java.io.File.separatorChar + streamWrapper.getName());
 					
 					//Get InputStream from the response
 					InputStream is = streamWrapper.getStream();
@@ -4405,7 +5593,7 @@ public class Record
 		
 		request.setCvid("34770610087501");
 		
-		List<Long> ids = new ArrayList<Long>(Arrays.asList(34770615922192l));
+		List<String> ids = new ArrayList<String>(Arrays.asList("34770615922192"));
 		
 		request.setIds(ids);
 		
