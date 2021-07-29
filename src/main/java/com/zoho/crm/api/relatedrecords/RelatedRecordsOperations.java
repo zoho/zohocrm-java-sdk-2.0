@@ -117,8 +117,6 @@ public class RelatedRecordsOperations
 
 		handlerInstance.addHeader(new Header<String>("X-EXTERNAL", "com.zoho.crm.api.RelatedRecords.UpdateRelatedRecordsHeader"),  this.xExternal);
 
-		handlerInstance.addHeader(new Header<String>("X-EXTERNAL", "com.zoho.crm.api.RelatedRecords.UpdateRelatedRecordsHeader"),  this.xExternal);
-
 		Utility.getRelatedLists( this.relatedListAPIName,  this.moduleAPIName, handlerInstance);
 
 		return handlerInstance.apiCall(ActionHandler.class, "application/json");
