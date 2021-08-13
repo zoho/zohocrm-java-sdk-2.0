@@ -200,8 +200,6 @@ public class RecordOperations
 
 		handlerInstance.setRequest(request);
 
-		handlerInstance.setMandatoryChecker(true);
-
 		handlerInstance.setHeader(headerInstance);
 
 		handlerInstance.setModuleAPIName(moduleAPIName);
