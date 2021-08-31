@@ -355,7 +355,7 @@ public class OAuthToken implements Token
 		{
 			parseResponse(response);
 
-			if(this.id != null)
+			if(this.id == null)
 			{
 				this.generateId();
 			}
