@@ -34,11 +34,11 @@ Since Zoho CRM APIs are authenticated with OAuth2 standards, you should register
 
 - Click `ADD CLIENT`.
 
-- Choose a `Client Type`.
+- Choose the `Client Type`.
 
 - Enter **Client Name**, **Client Domain** or **Homepage URL** and **Authorized Redirect URIs**. Click `CREATE`.
 
-- Your Client app will be created and displayed.
+- Your Client app will be created.
 
 - Select the created OAuth client.
 
@@ -67,7 +67,7 @@ Java SDK is available through Maven distribution. You can include the SDK to you
         <dependency>
             <groupId>com.zoho.crm</groupId>
             <artifactId>zohocrmsdk-2-0</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.0</version>
         </dependency>
     </dependencies>
     ```
@@ -79,7 +79,7 @@ Java SDK is available through Maven distribution. You can include the SDK to you
         maven { url "https://maven.zohodl.com" }
     }
     dependencies{
-        implementation 'com.zoho.crm:zohocrmsdk-2-0:3.0.0'
+        implementation 'com.zoho.crm:zohocrmsdk-2-0:4.0.0'
     }
      ```
 
@@ -120,7 +120,7 @@ Follow the below steps to use the Java SDK for Zoho CRM through Maven.
         <dependency>
             <groupId>com.zoho.crm</groupId>
             <artifactId>zohocrmsdk-2-0</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.0</version>
         </dependency>
     </dependencies>
     ```
@@ -160,7 +160,7 @@ The persistence is achieved by writing an implementation of the inbuilt **TokenS
 
 - **deleteTokens()** - The method to delete all the stored tokens.
 
-- **getTokenById(String id, Token token)** - This method is used to retrieve the user token details based on unique ID.
+- **getTokenById(String id, Token token)** - The method to retrieve the user's token details based on unique ID.
 
 ### DataBase Persistence
 
@@ -187,6 +187,9 @@ In case the user prefers to use the default DataBase persistence, **MySQL** can 
   - expiry_time varchar(20)
 
   - redirect_url varchar(255)
+
+Note:
+- Custom database name and table name can be set in DBStore instance.
 
 #### MySQL Query
 
@@ -262,7 +265,7 @@ TokenStore tokenstore = new FileStore("/Users/user_name/Documents/java_sdk_token
 
 ### Custom Persistence
 
-To use Custom Persistence, the user must implement **TokenStore interface**(**com.zoho.api.authenticator.store.TokenStore**) and override the methods.
+To use Custom Persistence, you must implement **TokenStore interface**(**com.zoho.api.authenticator.store.TokenStore**) and override the methods.
 
 ```java
 package store;
@@ -343,19 +346,14 @@ public class CustomStore implements TokenStore
 
 Before you get started with creating your Java application, you need to register your client and authenticate the app with Zoho.
 
-- Create an instance of **Logger** Class to log exception and API information.
-
-    ```java
-    /*
-    * Create an instance of Logger Class that takes two parameters
-    * level -> Level of the log messages to be logged. Can be configured by typing Levels "." and choose any level from the list displayed.
-    * filePath -> Absolute file path, where messages need to be logged.
-    */
-    Logger logger = new Logger.Builder()
-    .level(Levels.INFO)
-    .filePath("/Users/user_name/Documents/java_sdk_log.log")
-    .build();
-    ```
+| Mandatory Keys    | Optional Keys |
+| :---------------- | :------------ |
+| user              | logger        |
+| environment       | store         |
+| token             | SDKConfig     |
+|                   | requestProxy  |
+|                   | resourcePath  |
+----
 
 - Create an instance of **UserSignature** that identifies the current user.
 
@@ -364,7 +362,7 @@ Before you get started with creating your Java application, you need to register
     UserSignature user = new UserSignature("abc@zoho.com");
     ```
 
-- Configure API environment which decides the domain and the URL to make API calls.
+- Configure the API environment which decides the domain and the URL to make API calls.
 
     ```java
     /*
@@ -376,7 +374,7 @@ Before you get started with creating your Java application, you need to register
     Environment environment = USDataCenter.PRODUCTION;
     ```
 
-- Create an instance of **[OAuthToken](resources/token/OAuthToken.md#oauthtoken)** with the information  that you get after registering your Zoho client.
+- Create an instance of **OAuthToken** with the information that you get after registering your Zoho client.
 
     ```java
     /*
@@ -384,6 +382,7 @@ Before you get started with creating your Java application, you need to register
     * clientId -> OAuth client id.
     * clientSecret -> OAuth client secret.
     * refreshToken -> REFRESH token.
+    * accessToken -> Access token.
     * grantToken -> GRANT token.
     * id -> User unique id.
     * redirectURL -> OAuth redirect URL.
@@ -410,9 +409,28 @@ Before you get started with creating your Java application, you need to register
     .refreshToken("refreshToken")
     .redirectURL("redirectURL")
     .build();
+
+    // if access token is available
+    Token token = new OAuthToken.Builder()
+    .accessToken("accessToken")
+    .build();
     ```
 
-- Create an instance of **TokenStore** to persist tokens, used for authenticating all the requests.
+- Create an instance of **Logger** Class to log exception and API information. By default, the SDK constructs a Logger instance with level - INFO and file_path - (sdk_logs.log parallel to bin/(Debug or Release) folder )
+
+    ```java
+    /*
+    * Create an instance of Logger Class that takes two parameters
+    * level -> Level of the log messages to be logged. Can be configured by typing Levels "." and choose any level from the list displayed.
+    * filePath -> Absolute file path, where messages need to be logged.
+    */
+    Logger logger = new Logger.Builder()
+    .level(Levels.INFO)
+    .filePath("/Users/user_name/Documents/java_sdk_log.log")
+    .build();
+    ```
+
+- Create an instance of **TokenStore** to persist tokens, used for authenticating all the requests. By default, the SDK creates the sdk_tokens.txt file (parallel to to bin/(Debug or Release) folder) to persist the tokens.
 
     ```java
     /*
@@ -444,11 +462,12 @@ Before you get started with creating your Java application, you need to register
 
     ```java
     /*
-    * autoRefreshFields
+    * By default, the SDK creates the SDKConfig instance
+    * autoRefreshFields (default - false)
     * if true - all the modules' fields will be auto-refreshed in the background, every hour.
     * if false - the fields will not be auto-refreshed in the background. The user can manually delete the file(s) or refresh the fields using methods from ModuleFieldsHandler(com.zoho.crm.api.util.ModuleFieldsHandler)
     *
-    * pickListValidation
+    * pickListValidation (default - true)
     * A boolean field that validates user input for a pick list field and allows or disallows the addition of a new value to the list.
     * true - the SDK validates the input. If the value does not exist in the pick list, the SDK throws an error.
     * false - the SDK does not validate the input and makes the API request with the user’s input to the pick list
@@ -459,7 +478,7 @@ Before you get started with creating your Java application, you need to register
     .build();
     ```
 
-- The path containing the absolute directory path to store user-specific files containing module fields information.
+- The path containing the absolute directory path to store user-specific files containing module fields information. By default, the SDK stores the user-specific files in a folder parallel to bin/(Debug or Release)
 
     ```java
     String resourcePath = "/Users/user_name/Documents/javasdk-application";

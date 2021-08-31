@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import com.zoho.api.authenticator.Token;
 
+import com.zoho.api.authenticator.store.FileStore;
+
 import com.zoho.api.authenticator.store.TokenStore;
 
 import com.zoho.api.logger.SDKLogger;
@@ -332,23 +334,32 @@ public class Initializer
 			}
 		}
 		
-		public void initialize() throws SDKException
+		public void initialize() throws Exception
 		{
 			Utility.assertNotNull(user, errorMessage, Constants.USER_SIGNATURE_ERROR_MESSAGE);
 			
 			Utility.assertNotNull(environment, errorMessage, Constants.ENVIRONMENT_ERROR_MESSAGE);
 			
 			Utility.assertNotNull(token, errorMessage, Constants.TOKEN_ERROR_MESSAGE);
-			
-			Utility.assertNotNull(store, errorMessage, Constants.STORE_ERROR_MESSAGE);
-			
-			Utility.assertNotNull(sdkConfig, errorMessage, Constants.SDK_CONFIG_ERROR_MESSAGE);
-			
-			Utility.assertNotNull(resourcePath, errorMessage, Constants.RESOURCE_PATH_ERROR_MESSAGE);
-			
+
+			if(store == null)
+			{
+				store = new FileStore(System.getProperty("user.dir") + File.separator + Constants.TOKEN_FILE);
+			}
+
+			if(sdkConfig == null)
+			{
+				sdkConfig = new SDKConfig.Builder().build();
+			}
+
+			if(resourcePath == null)
+			{
+				resourcePath = System.getProperty("user.dir");
+			}
+
 			if(logger == null)
 			{
-				logger = new com.zoho.api.logger.Logger.Builder().level(Levels.INFO).filePath(System.getProperty("user.dir") + File.separator + Constants.LOGFILE_NAME).build();
+				logger = new com.zoho.api.logger.Logger.Builder().level(Levels.INFO).filePath(System.getProperty("user.dir") + File.separator + Constants.LOG_FILE_NAME).build();
 			}
 			
 			Initializer.initialize(user, environment, token, store, sdkConfig, resourcePath, logger, requestProxy);
@@ -357,15 +368,7 @@ public class Initializer
 		public void switchUser() throws SDKException
 		{
 			Utility.assertNotNull(Initializer.initializer, Constants.SDK_UNINITIALIZATION_ERROR, Constants.SDK_UNINITIALIZATION_MESSAGE);
-			
-			Utility.assertNotNull(user, errorMessage, Constants.USER_SIGNATURE_ERROR_MESSAGE);
-			
-			Utility.assertNotNull(environment, errorMessage, Constants.ENVIRONMENT_ERROR_MESSAGE);
-			
-			Utility.assertNotNull(token, errorMessage, Constants.TOKEN_ERROR_MESSAGE);
-						
-			Utility.assertNotNull(sdkConfig, errorMessage, Constants.SDK_CONFIG_ERROR_MESSAGE);
-						
+
 			Initializer.switchUser(user, environment, token, sdkConfig, requestProxy);
 		}
 		
@@ -387,8 +390,6 @@ public class Initializer
 		
 		public Builder SDKConfig(SDKConfig sdkConfig) throws SDKException
 		{
-			Utility.assertNotNull(sdkConfig, errorMessage, Constants.SDK_CONFIG_ERROR_MESSAGE);
-			
 			this.sdkConfig = sdkConfig;
 			
 			return this;
@@ -403,11 +404,6 @@ public class Initializer
 		
 		public Builder resourcePath(String resourcePath) throws SDKException
 		{
-			if(resourcePath == null || resourcePath.isEmpty())
-			{
-				throw new SDKException(errorMessage, Constants.RESOURCE_PATH_ERROR_MESSAGE);
-			}
-			
 			if(!new File(resourcePath).isDirectory())
 			{
 				throw new SDKException(errorMessage, Constants.RESOURCE_PATH_INVALID_ERROR_MESSAGE);
@@ -429,8 +425,6 @@ public class Initializer
 		
 		public Builder store(TokenStore store) throws SDKException
 		{
-			Utility.assertNotNull(store, errorMessage, Constants.STORE_ERROR_MESSAGE);
-			
 			this.store = store;
 			
 			return this;

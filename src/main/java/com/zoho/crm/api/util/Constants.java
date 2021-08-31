@@ -106,7 +106,7 @@ public class Constants
 
 	public static final String CLIENT_SECRET = "client_secret";
 
-	public static final String REDIRECT_URL = "redirect_uri";
+	public static final String REDIRECT_URL = "redirect_url";
 
 	public static final String OAUTH_HEADER_PREFIX = "Zoho-oauthtoken ";
 
@@ -114,11 +114,13 @@ public class Constants
 
 	public static final String CODE = "code";
 
-	public static final String LOGFILE_NAME = "SDKLogs.log";
+	public static final String LOG_FILE_NAME = "sdk_logs.log";
+
+	public static final String TOKEN_FILE = "sdk_tokens.txt";
 
 	public static final String ZOHO_SDK = "X-ZOHO-SDK";
 
-	public static final String SDK_VERSION = "3.0.0";
+	public static final String SDK_VERSION = "4.0.0";
 
 	public static final String TOKEN_STORE = "TOKEN_STORE";
 
@@ -402,8 +404,6 @@ public class Constants
 	
 	public static final ArrayList<String> KEYS_TO_SKIP = new ArrayList<String>(Arrays.asList("Created_Time", "Modified_Time", "Created_By", "Modified_By", "Tag"));
 	
-	public static final ArrayList<String> SET_TO_CONTENT_TYPE = new ArrayList<String>(Arrays.asList("/crm/bulk/v2/read", "/crm/bulk/v2/write"));
-	
 	public static final String LINE_TAX = "$line_tax";
 	
 	public static final String LAYOUT = "Layout";
@@ -621,4 +621,8 @@ public class Constants
 	public static final ArrayList<String> SET_CONTENT_TYPE_HEADER = new ArrayList<String>(Arrays.asList("/crm/bulk/v2/read", "/crm/bulk/v2/write"));
 	
 	public static final ArrayList<String> GENERATE_REQUEST_BODY = new ArrayList<String>(Arrays.asList(Constants.REQUEST_METHOD_PATCH, Constants.REQUEST_METHOD_POST, Constants.REQUEST_METHOD_PUT));
+
+	public static final String JAVA = "java_";
+
+	public static final ArrayList<String> OAUTH_MANDATORY_KEYS = new ArrayList<String>(Arrays.asList("grantToken", "refreshToken", "id", "accessToken" ));
 }

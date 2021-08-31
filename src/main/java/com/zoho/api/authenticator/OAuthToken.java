@@ -252,23 +252,30 @@ public class OAuthToken implements Token
 		UserSignature user = initializer.getUser();
 
 		OAuthToken oauthToken;
-		
-		if(this.id != null)
-		{
-			oauthToken = (OAuthToken) store.getTokenById(this.id, this);
+
+		if (this.accessToken == null)
+        {
+            if(this.id != null)
+			{
+				oauthToken = (OAuthToken) store.getTokenById(this.id, this);
+			}
+			else
+			{
+				oauthToken = (OAuthToken) store.getToken(initializer.getUser(), this);
+			}
 		}
 		else
 		{
-			oauthToken = (OAuthToken) store.getToken(initializer.getUser(), this);
+			oauthToken = this;
 		}
-
+		
 		String token = "";
 
 		if (oauthToken == null)	
 		{
 			token = this.refreshToken != null ? refreshAccessToken(user, store).getAccessToken() : generateAccessToken(user, store).getAccessToken();
 		}
-		else if ((Long.valueOf(oauthToken.getExpiresIn()) - System.currentTimeMillis()) < 5000)
+		else if (oauthToken.getExpiresIn() != null && (Long.valueOf(oauthToken.getExpiresIn()) - System.currentTimeMillis()) < 5000)//access token will expire in next 5 seconds or less
 		{
 			LOGGER.log(Level.INFO, Constants.REFRESH_TOKEN_MESSAGE);
 			
@@ -338,11 +345,6 @@ public class OAuthToken implements Token
 		
 		requestParams.put(Constants.CLIENT_SECRET, this.clientSecret);
 		
-		if(this.redirectURL != null)
-		{
-			requestParams.put(Constants.REDIRECT_URI, this.redirectURL);
-		}
-		
 		requestParams.put(Constants.GRANT_TYPE, Constants.REFRESH_TOKEN);
 		
 		requestParams.put(Constants.REFRESH_TOKEN, this.refreshToken);
@@ -352,9 +354,12 @@ public class OAuthToken implements Token
 		try
 		{
 			parseResponse(response);
-			
-			this.generateId();
-			
+
+			if(this.id != null)
+			{
+				this.generateId();
+			}
+
 			store.saveToken(user, this);
 		}
 		catch (SDKException ex)
@@ -462,7 +467,7 @@ public class OAuthToken implements Token
 	 * @param type An enum containing the given token type.
 	 * @param redirectURL A String containing the OAuth redirect URL.
 	 */
-	private OAuthToken(String clientID, String clientSecret, String grantToken, String refreshToken, String redirectURL, String id)
+	private OAuthToken(String clientID, String clientSecret, String grantToken, String refreshToken, String redirectURL, String id, String accessToken)
 	{
 		this.clientID = clientID;
 		
@@ -473,6 +478,8 @@ public class OAuthToken implements Token
 		this.refreshToken = refreshToken;
 		
 		this.redirectURL = redirectURL;
+
+		this.accessToken = accessToken;
 		
 		this.id = id;
 	}
@@ -483,7 +490,7 @@ public class OAuthToken implements Token
 		
 		String email = Initializer.getInitializer().getUser().getEmail();
 		
-		builder.append("java_").append(email.substring(0, email.indexOf("@"))).append("_");
+		builder.append(Constants.JAVA).append(email.substring(0, email.indexOf("@"))).append("_");
 		
 		builder.append(Initializer.getInitializer().getEnvironment().getName()).append("_");
 		
@@ -499,10 +506,12 @@ public class OAuthToken implements Token
 		private String clientSecret;
 		
 		private String redirectURL;
+
+		private String refreshToken;
 		
 		private String grantToken;
 		
-		private String refreshToken;
+		private String accessToken;
 		
 		private String id;
 		
@@ -551,15 +560,22 @@ public class OAuthToken implements Token
 			
 			return this;
 		}
+
+		public Builder accessToken(String accessToken)
+		{
+			this.accessToken = accessToken;
+			
+			return this;
+		}
 		
 		public OAuthToken build() throws SDKException
 		{
-			if (this.grantToken == null && this.refreshToken == null)
+			if (this.grantToken == null && this.refreshToken == null && this.id == null && this.accessToken == null)
 			{
-				throw new SDKException(Constants.NULL_ERROR, Constants.EXPECTED_TOKEN_TYPES);
+				throw new SDKException(Constants.MANDATORY_VALUE_ERROR, Constants.MANDATORY_KEY_ERROR + "-" + Constants.OAUTH_MANDATORY_KEYS);
 			}
 			
-			return new OAuthToken(this.clientID, this.clientSecret, this.grantToken, this.refreshToken, this.redirectURL, this.id);
+			return new OAuthToken(this.clientID, this.clientSecret, this.grantToken, this.refreshToken, this.redirectURL, this.id, this.accessToken);
 		}
 	}
 
