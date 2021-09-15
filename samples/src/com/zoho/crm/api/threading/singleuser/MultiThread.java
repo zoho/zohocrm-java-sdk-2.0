@@ -68,7 +68,7 @@ public class MultiThread extends Thread
 		TokenStore tokenstore = new FileStore("/Users/user_name/Documents/java_sdk_tokens.txt");
 		
 		Token token = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")

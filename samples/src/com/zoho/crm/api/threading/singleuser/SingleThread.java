@@ -80,7 +80,7 @@ public class SingleThread extends Thread
         .build();
 		
 		Token token = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")

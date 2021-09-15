@@ -108,7 +108,7 @@ public class MultiThread extends Thread
         .build();
 		
 		Token token1 = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")
@@ -140,7 +140,7 @@ public class MultiThread extends Thread
 		UserSignature user2 = new UserSignature("xyz@zoho.com");
 		
 		Token token2 = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")

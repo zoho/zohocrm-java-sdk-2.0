@@ -396,7 +396,7 @@ Before you get started with creating your Java application, you need to register
 
     // if grant token is available
     Token token = new OAuthToken.Builder()
-    .clientId("clientId")
+    .clientID("clientId")
     .clientSecret("clientSecret")
     .grantToken("grantToken")
     .redirectURL("redirectURL")
@@ -404,7 +404,7 @@ Before you get started with creating your Java application, you need to register
 
     // if ID (obtained from persistence) is available
     Token token = new OAuthToken.Builder()
-    .clientId("clientId")
+    .clientID("clientId")
     .clientSecret("clientSecret")
     .refreshToken("refreshToken")
     .redirectURL("redirectURL")
@@ -478,7 +478,7 @@ Before you get started with creating your Java application, you need to register
     .build();
     ```
 
-- The path containing the absolute directory path to store user-specific files containing module fields information. BBy default, the SDK stores the user-specific files within a folder in the current working directory.
+- The path containing the absolute directory path to store user-specific files containing module fields information. By default, the SDK stores the user-specific files within a folder in the current working directory.
 
     ```java
     String resourcePath = "/Users/user_name/Documents/javasdk-application";
@@ -578,7 +578,7 @@ public class Initialize
         */
         // if grant token is available
         Token token = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")

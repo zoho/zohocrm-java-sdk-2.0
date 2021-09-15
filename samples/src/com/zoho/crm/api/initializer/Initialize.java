@@ -62,7 +62,7 @@ public class Initialize
         */
         // if grant token is available
         Token token = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")

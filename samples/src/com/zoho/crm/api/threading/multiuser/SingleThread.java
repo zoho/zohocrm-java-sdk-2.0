@@ -102,7 +102,7 @@ public class SingleThread
         .build();
 		
 		Token token1 = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")
@@ -134,7 +134,7 @@ public class SingleThread
 		UserSignature user2 = new UserSignature("xyz@zoho.com");
 		
 		Token token2 = new OAuthToken.Builder()
-        .clientId("clientId")
+        .clientID("clientId")
         .clientSecret("clientSecret")
         .grantToken("grantToken")
         .redirectURL("redirectURL")
