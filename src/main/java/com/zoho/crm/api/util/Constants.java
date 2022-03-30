@@ -120,7 +120,7 @@ public class Constants
 
 	public static final String ZOHO_SDK = "X-ZOHO-SDK";
 
-	public static final String SDK_VERSION = "5.0.0";
+	public static final String SDK_VERSION = "5.0.1";
 
 	public static final String TOKEN_STORE = "TOKEN_STORE";
 
@@ -178,7 +178,7 @@ public class Constants
 
 	public static final String REQUIRED = "required";
 	
-	public static final String REQUIRED_IN_UPDATE = "required_in_update";
+	public static final String REQUIRED_IN_UPDATE = "required-in-update";
 	
 	public static final String PRIMARY = "primary";
 
@@ -508,7 +508,7 @@ public class Constants
 
 	public static final String HASHMAP_NAMESPACE = "java.util.HashMap";
 
-	public static final String SKIP_MANDATORY = "skip_mandatory";
+	public static final String SKIP_MANDATORY = "skip-mandatory";
 	
 	public static final String DELETE = "delete";
 	
