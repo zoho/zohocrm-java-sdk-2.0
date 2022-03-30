@@ -18,6 +18,8 @@ public class Param<T>
 	public Param(String name, String className)
 	{
 		this.name = name;
+
+		this.className = className;
 	}
 	
 	/**

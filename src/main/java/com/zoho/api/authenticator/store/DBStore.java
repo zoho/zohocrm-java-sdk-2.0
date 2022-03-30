@@ -140,7 +140,6 @@ public class DBStore implements TokenStore
 			{
 				if(token instanceof OAuthToken)
 				{
-					
 					try(Statement statement = connection.createStatement();)
 					{
 						OAuthToken oauthToken = (OAuthToken) token;

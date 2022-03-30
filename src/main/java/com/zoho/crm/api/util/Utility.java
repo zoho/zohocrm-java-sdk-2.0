@@ -759,7 +759,7 @@ public class Utility
 						fieldsDetails.put(field.getAPIName(), fieldDetail);
 					}
 
-					if (Constants.INVENTORY_MODULES.contains(moduleAPIName))
+					if (Constants.INVENTORY_MODULES.contains(moduleAPIName.toLowerCase()))
 					{
 						JSONObject fieldDetail = new JSONObject();
 
@@ -1148,7 +1148,7 @@ public class Utility
 			fieldDetail.put(Constants.LOOKUP, true);
 		}
 		
-		if(apiType.toLowerCase().equalsIgnoreCase(Constants.CONSENT_LOOKUP))
+		if(apiType.toLowerCase().equalsIgnoreCase(Constants.CONSENT_LOOKUP) || apiType.toLowerCase().equalsIgnoreCase(Constants.OWNER_LOOKUP))
 		{
 			fieldDetail.put(Constants.SKIP_MANDATORY, true);
 		}
