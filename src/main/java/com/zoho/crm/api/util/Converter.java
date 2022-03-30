@@ -218,7 +218,7 @@ public abstract class Converter
 
 			List<String> pickListValue = IntStream.range(0, valuesJA.length()).mapToObj(valuesJA::get).map(Object::toString).collect(Collectors.toList());
 			
-			if (!pickListValue.contains(value))
+			if (!pickListValue.contains(value.toString()))
 			{
 				detailsJO.put(Constants.FIELD, memberName);
 				
