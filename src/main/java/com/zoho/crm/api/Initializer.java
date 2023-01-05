@@ -137,53 +137,23 @@ public class Initializer
 	 */
 	private static JSONObject getJSONDetails() throws IOException, SDKException
 	{
-		InputStream is = null;
-		
-		InputStreamReader isr = null;
-		
-	    BufferedReader br = null;
-	    
-	    String line, fileContent = "";
-	    
-		try
+		String line, fileContent = "";
+
+		try (InputStream is = Initializer.class.getResourceAsStream(Constants.JSON_DETAILS_FILE_PATH);InputStreamReader isr = new InputStreamReader(is); BufferedReader br = new BufferedReader(isr);)
 		{
-			is = Initializer.class.getResourceAsStream(Constants.JSON_DETAILS_FILE_PATH);
-			
-			isr = new InputStreamReader(is);
-			
-			br = new BufferedReader(isr);
-			
-			while ((line = br.readLine()) != null) 
-		    {
-		    	fileContent += line;
-		    }
-			
+			while ((line = br.readLine()) != null)
+			{
+				fileContent += line;
+			}
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			throw new SDKException(Constants.EXCEPTION_JSONDETAILS, e);
 		}
-		finally
-		{
-			if(br != null)
-			{
-				br.close();
-			}
-			
-			if(isr != null)
-			{
-				isr.close();
-			}
-			
-			if(is != null)
-			{
-				is.close();
-			}
-			
-		}
-		
+
 		return new JSONObject(fileContent);
 	}
+
 	
 	/**
 	 * The method to switch the different user in SDK environment.

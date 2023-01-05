@@ -2,25 +2,24 @@
 
 ## Table Of Contents
 
-* [Overview](#overview)
-* [Registering a Zoho Client](#registering-a-zoho-client)
-* [Environmental Setup](#environmental-setup)
-* [Including the SDK in your project](#including-the-sdk-in-your-project)
-* [Using the Java SDK for Zoho CRM through Maven
-](#using-the-java-sdk-for-zoho-crm-through-maven
-)
-* [Persistence](#token-persistence)
-  * [DataBase Persistence](#database-persistence)
-  * [File Persistence](#file-persistence)
-  * [Custom Persistence](#custom-persistence)
-* [Configuration](#configuration)
-* [Initialization](#initializing-the-application)
-* [Class Hierarchy](#class-hierarchy)
-* [Responses And Exceptions](#responses-and-exceptions)
-* [Threading](#threading-in-the-java-sdk)
-  * [Multithreading in a Multi-User App](#multithreading-in-a-multi-user-app)
-  * [Multi-threading in a Single User App](#multi-threading-in-a-single-user-app)
-* [Sample Code](#sdk-sample-code)
+- [Overview](#overview)
+- [Registering a Zoho Client](#registering-a-zoho-client)
+- [Environmental Setup](#environmental-setup)
+- [Including the SDK in your project](#including-the-sdk-in-your-project)
+- [Using the Java SDK for Zoho CRM through Maven
+  ](#using-the-java-sdk-for-zoho-crm-through-maven)
+- [Persistence](#token-persistence)
+  - [DataBase Persistence](#database-persistence)
+  - [File Persistence](#file-persistence)
+  - [Custom Persistence](#custom-persistence)
+- [Configuration](#configuration)
+- [Initialization](#initializing-the-application)
+- [Class Hierarchy](#class-hierarchy)
+- [Responses And Exceptions](#responses-and-exceptions)
+- [Threading](#threading-in-the-java-sdk)
+  - [Multithreading in a Multi-User App](#multithreading-in-a-multi-user-app)
+  - [Multi-threading in a Single User App](#multi-threading-in-a-single-user-app)
+- [Sample Code](#sdk-sample-code)
 
 ## Overview
 
@@ -54,34 +53,34 @@ Java SDK is available through Maven distribution. You can include the SDK to you
 
 1. Maven
 
-    - pom.xml file.
+   - pom.xml file.
 
-    ```xml
-    <repositories>
-        <repository>
-            <id>zohocrmsdk-2-0</id>
-            <url>https://maven.zohodl.com</url>
-        </repository>
-    </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>com.zoho.crm</groupId>
-            <artifactId>zohocrmsdk-2-0</artifactId>
-            <version>5.0.1</version>
-        </dependency>
-    </dependencies>
-    ```
+   ```xml
+   <repositories>
+       <repository>
+           <id>zohocrmsdk-2-0</id>
+           <url>https://maven.zohodl.com</url>
+       </repository>
+   </repositories>
+   <dependencies>
+       <dependency>
+           <groupId>com.zoho.crm</groupId>
+           <artifactId>zohocrmsdk-2-0</artifactId>
+           <version>5.1.0</version>
+       </dependency>
+   </dependencies>
+   ```
 
 2. Gradle
 
-    ```gradle
-    repositories{
-        maven { url "https://maven.zohodl.com" }
-    }
-    dependencies{
-        implementation 'com.zoho.crm:zohocrmsdk-2-0:5.0.1'
-    }
-     ```
+   ```gradle
+   repositories{
+       maven { url "https://maven.zohodl.com" }
+   }
+   dependencies{
+       implementation 'com.zoho.crm:zohocrmsdk-2-0:5.1.0'
+   }
+   ```
 
 ### Dependency JARs
 
@@ -109,23 +108,24 @@ Follow the below steps to use the Java SDK for Zoho CRM through Maven.
 
 - Place the below code in your pom.xml file of your Maven project.
 
-    ```xml
-    <repositories>
-        <repository>
-            <id>zohocrmsdk-2-0</id>
-            <url>https://maven.zohodl.com</url>
-        </repository>
-    </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>com.zoho.crm</groupId>
-            <artifactId>zohocrmsdk-2-0</artifactId>
-            <version>5.0.1</version>
-        </dependency>
-    </dependencies>
-    ```
+  ```xml
+  <repositories>
+      <repository>
+          <id>zohocrmsdk-2-0</id>
+          <url>https://maven.zohodl.com</url>
+      </repository>
+  </repositories>
+  <dependencies>
+      <dependency>
+          <groupId>com.zoho.crm</groupId>
+          <artifactId>zohocrmsdk-2-0</artifactId>
+          <version>5.1.0</version>
+      </dependency>
+  </dependencies>
+  ```
 
 - Update the maven project.
+
   - Under project explorer, right-click the project name, select **Maven** > **Update Project**. The jar will be downloaded in the maven dependencies.
 
 - Inside your source code, import the appropriate files from the SDK.
@@ -189,6 +189,7 @@ In case the user prefers to use the default DataBase persistence, **MySQL** can 
   - redirect_url varchar(255)
 
 Note:
+
 - Custom database name and table name can be set in DBStore instance.
 
 #### MySQL Query
@@ -221,7 +222,7 @@ CREATE TABLE oauthtoken (
 * portNumber -> DataBase port number. Default "3306"
 */
 //TokenStore tokenstore = new DBStore.Builder().build();
-		
+
 TokenStore tokenstore = new DBStore.Builder()
 .host("hostName")
 .databaseName("databaseName")
@@ -346,163 +347,164 @@ public class CustomStore implements TokenStore
 
 Before you get started with creating your Java application, you need to register your client and authenticate the app with Zoho.
 
-| Mandatory Keys    | Optional Keys |
-| :---------------- | :------------ |
-| user              | logger        |
-| environment       | store         |
-| token             | SDKConfig     |
-|                   | requestProxy  |
-|                   | resourcePath  |
-----
+| Mandatory Keys | Optional Keys |
+| :------------- | :------------ |
+| user           | logger        |
+| environment    | store         |
+| token          | SDKConfig     |
+|                | requestProxy  |
+|                | resourcePath  |
+
+---
 
 - Create an instance of **UserSignature** that identifies the current user.
 
-    ```java
-    //Create an UserSignature instance that takes user Email as parameter
-    UserSignature user = new UserSignature("abc@zoho.com");
-    ```
+  ```java
+  //Create an UserSignature instance that takes user Email as parameter
+  UserSignature user = new UserSignature("abc@zoho.com");
+  ```
 
 - Configure the API environment which decides the domain and the URL to make API calls.
 
-    ```java
-    /*
-        * Configure the environment
-        * which is of the pattern Domain.Environment
-        * Available Domains: USDataCenter, EUDataCenter, INDataCenter, CNDataCenter, AUDataCenter
-        * Available Environments: PRODUCTION, DEVELOPER, SANDBOX
-    */
-    Environment environment = USDataCenter.PRODUCTION;
-    ```
+  ```java
+  /*
+      * Configure the environment
+      * which is of the pattern Domain.Environment
+      * Available Domains: USDataCenter, EUDataCenter, INDataCenter, CNDataCenter, AUDataCenter
+      * Available Environments: PRODUCTION, DEVELOPER, SANDBOX
+  */
+  Environment environment = USDataCenter.PRODUCTION;
+  ```
 
 - Create an instance of **OAuthToken** with the information that you get after registering your Zoho client.
 
-    ```java
-    /*
-    * Create a Token instance that requires the following
-    * clientId -> OAuth client id.
-    * clientSecret -> OAuth client secret.
-    * refreshToken -> REFRESH token.
-    * accessToken -> Access token.
-    * grantToken -> GRANT token.
-    * id -> User unique id.
-    * redirectURL -> OAuth redirect URL.
-    */
-    //Create a Token instance
-    // if refresh token is available
-    // The SDK throws an exception, if the given id is invalid.
-    Token token = new OAuthToken.Builder()
-    .id("id")
-    .build();
+  ```java
+  /*
+  * Create a Token instance that requires the following
+  * clientId -> OAuth client id.
+  * clientSecret -> OAuth client secret.
+  * refreshToken -> REFRESH token.
+  * accessToken -> Access token.
+  * grantToken -> GRANT token.
+  * id -> User unique id.
+  * redirectURL -> OAuth redirect URL.
+  */
+  //Create a Token instance
+  // if refresh token is available
+  // The SDK throws an exception, if the given id is invalid.
+  Token token = new OAuthToken.Builder()
+  .id("id")
+  .build();
 
-    // if grant token is available
-    Token token = new OAuthToken.Builder()
-    .clientID("clientId")
-    .clientSecret("clientSecret")
-    .grantToken("grantToken")
-    .redirectURL("redirectURL")
-    .build();
+  // if grant token is available
+  Token token = new OAuthToken.Builder()
+  .clientID("clientId")
+  .clientSecret("clientSecret")
+  .grantToken("grantToken")
+  .redirectURL("redirectURL")
+  .build();
 
-    // if ID (obtained from persistence) is available
-    Token token = new OAuthToken.Builder()
-    .clientID("clientId")
-    .clientSecret("clientSecret")
-    .refreshToken("refreshToken")
-    .redirectURL("redirectURL")
-    .build();
+  // if ID (obtained from persistence) is available
+  Token token = new OAuthToken.Builder()
+  .clientID("clientId")
+  .clientSecret("clientSecret")
+  .refreshToken("refreshToken")
+  .redirectURL("redirectURL")
+  .build();
 
-    // if access token is available
-    Token token = new OAuthToken.Builder()
-    .accessToken("accessToken")
-    .build();
-    ```
+  // if access token is available
+  Token token = new OAuthToken.Builder()
+  .accessToken("accessToken")
+  .build();
+  ```
 
 - Create an instance of **Logger** Class to log exception and API information. By default, the SDK constructs a Logger instance with level - INFO and file_path - (sdk_logs.log, created in the current working directory)
 
-    ```java
-    /*
-    * Create an instance of Logger Class that takes two parameters
-    * level -> Level of the log messages to be logged. Can be configured by typing Levels "." and choose any level from the list displayed.
-    * filePath -> Absolute file path, where messages need to be logged.
-    */
-    Logger logger = new Logger.Builder()
-    .level(Levels.INFO)
-    .filePath("/Users/user_name/Documents/java_sdk_log.log")
-    .build();
-    ```
+  ```java
+  /*
+  * Create an instance of Logger Class that takes two parameters
+  * level -> Level of the log messages to be logged. Can be configured by typing Levels "." and choose any level from the list displayed.
+  * filePath -> Absolute file path, where messages need to be logged.
+  */
+  Logger logger = new Logger.Builder()
+  .level(Levels.INFO)
+  .filePath("/Users/user_name/Documents/java_sdk_log.log")
+  .build();
+  ```
 
 - Create an instance of **TokenStore** to persist tokens, used for authenticating all the requests. By default, the SDK creates the sdk_tokens.txt created in the current working directory) to persist the tokens.
 
-    ```java
-    /*
-    * Create an instance of DBStore that requires the following
-    * host -> DataBase host name. Default value "localhost"
-    * databaseName -> DataBase name. Default  value "zohooauth"
-    * userName -> DataBase user name. Default value "root"
-    * password -> DataBase password. Default value ""
-    * portNumber -> DataBase port number. Default value "3306"
-    * tabletName -> DataBase table name. Default value "oauthtoken"
-    */
-    //TokenStore tokenstore = new DBStore.Builder().build();
+  ```java
+  /*
+  * Create an instance of DBStore that requires the following
+  * host -> DataBase host name. Default value "localhost"
+  * databaseName -> DataBase name. Default  value "zohooauth"
+  * userName -> DataBase user name. Default value "root"
+  * password -> DataBase password. Default value ""
+  * portNumber -> DataBase port number. Default value "3306"
+  * tabletName -> DataBase table name. Default value "oauthtoken"
+  */
+  //TokenStore tokenstore = new DBStore.Builder().build();
 
-    TokenStore tokenstore = new DBStore.Builder()
-    .host("hostName")
-    .databaseName("databaseName")
-    .tableName("tableName")
-    .userName("userName")
-    .password("password")
-    .portNumber("portNumber")
-    .build();
+  TokenStore tokenstore = new DBStore.Builder()
+  .host("hostName")
+  .databaseName("databaseName")
+  .tableName("tableName")
+  .userName("userName")
+  .password("password")
+  .portNumber("portNumber")
+  .build();
 
-    //TokenStore tokenstore = new FileStore("/Users/user_name/Documents/java_sdk_token.txt");
+  //TokenStore tokenstore = new FileStore("/Users/user_name/Documents/java_sdk_token.txt");
 
-    //TokenStore tokenStore = new CustomStore();
-    ```
+  //TokenStore tokenStore = new CustomStore();
+  ```
 
 - Create an instance of **SDKConfig** containing SDK configurations.
 
-    ```java
-    /*
-    * By default, the SDK creates the SDKConfig instance
-    * autoRefreshFields (default - false)
-    * if true - all the modules' fields will be auto-refreshed in the background, every hour.
-    * if false - the fields will not be auto-refreshed in the background. The user can manually delete the file(s) or refresh the fields using methods from ModuleFieldsHandler(com.zoho.crm.api.util.ModuleFieldsHandler)
-    *
-    * pickListValidation (default - true)
-    * A boolean field that validates user input for a pick list field and allows or disallows the addition of a new value to the list.
-    * true - the SDK validates the input. If the value does not exist in the pick list, the SDK throws an error.
-    * false - the SDK does not validate the input and makes the API request with the user’s input to the pick list
-    */
-    SDKConfig sdkConfig = new SDKConfig.Builder()
-    .autoRefreshFields(false)
-    .pickListValidation(true)
-    .build();
-    ```
+  ```java
+  /*
+  * By default, the SDK creates the SDKConfig instance
+  * autoRefreshFields (default - false)
+  * if true - all the modules' fields will be auto-refreshed in the background, every hour.
+  * if false - the fields will not be auto-refreshed in the background. The user can manually delete the file(s) or refresh the fields using methods from ModuleFieldsHandler(com.zoho.crm.api.util.ModuleFieldsHandler)
+  *
+  * pickListValidation (default - true)
+  * A boolean field that validates user input for a pick list field and allows or disallows the addition of a new value to the list.
+  * true - the SDK validates the input. If the value does not exist in the pick list, the SDK throws an error.
+  * false - the SDK does not validate the input and makes the API request with the user’s input to the pick list
+  */
+  SDKConfig sdkConfig = new SDKConfig.Builder()
+  .autoRefreshFields(false)
+  .pickListValidation(true)
+  .build();
+  ```
 
 - The path containing the absolute directory path to store user-specific files containing module fields information. By default, the SDK stores the user-specific files within a folder in the current working directory.
 
-    ```java
-    String resourcePath = "/Users/user_name/Documents/javasdk-application";
-    ```
+  ```java
+  String resourcePath = "/Users/user_name/Documents/javasdk-application";
+  ```
 
 - Create an instance of **RequestProxy** containing the proxy properties of the user.
 
-    ```java
-    /*
-    * Create an instance of RequestProxy
-    * host -> proxyHost
-    * port -> proxyPort
-    * user -> proxyUser
-    * password -> password
-    * userDomain -> userDomain
-    */
-    RequestProxy requestProxy = new RequestProxy.Builder()
-    .host("host")
-    .port(proxyPort)
-    .user("userName")
-    .password("password")
-    .userDomain("userDomain")
-    .build();
-    ```
+  ```java
+  /*
+  * Create an instance of RequestProxy
+  * host -> proxyHost
+  * port -> proxyPort
+  * user -> proxyUser
+  * password -> password
+  * userDomain -> userDomain
+  */
+  RequestProxy requestProxy = new RequestProxy.Builder()
+  .host("host")
+  .port(proxyPort)
+  .user("userName")
+  .password("password")
+  .userDomain("userDomain")
+  .build();
+  ```
 
 ## Initializing the Application
 
@@ -682,10 +684,11 @@ Whenever the API returns an error response, the response will be an instance of 
 All other exceptions such as SDK anomalies and other unexpected behaviours are thrown under the **SDKException** class.
 
 - For operations involving records in Tags
+
   - **APIResponse&lt;RecordActionHandler&gt;**
 
 - For getting Record Count for a specific Tag operation
-  
+
   - **APIResponse&lt;CountHandler&gt;**
 
 - For operations involving BaseCurrency
@@ -700,7 +703,7 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
 
   - **APIResponse&lt;DeletedRecordsHandler&gt;**
 
-- For  Record image download operation
+- For Record image download operation
 
   - **APIResponse&lt;DownloadHandler&gt;**
 
@@ -715,19 +718,23 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
 - The **getObject()** of the returned APIResponse instance returns the response handler interface.
 
 - The **ResponseHandler interface** interface encompasses the following
+
   - **ResponseWrapper class** (for **application/json** responses)
   - **FileBodyWrapper class** (for File download responses)
   - **APIException class**
 
 - The **CountHandler interface** encompasses the following
+
   - **CountWrapper class** (for **application/json** responses)
   - **APIException class**
 
 - The **DeletedRecordsHandler interface** encompasses the following
+
   - **DeletedRecordsWrapper class** (for **application/json** responses)
   - **APIException class**
 
 - The **DownloadHandler interface** encompasses the following
+
   - **FileBodyWrapper class** (for File download responses)
   - **APIException class**
 
@@ -740,28 +747,34 @@ All other exceptions such as SDK anomalies and other unexpected behaviours are t
 - The **getObject()** of the returned APIResponse instance returns the action handler interface.
 
 - The **ActionHandler interface** encompasses the following
+
   - **ActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
 - The **ActionWrapper class** contains **Property/Properties** that may contain one/list of **ActionResponse interfaces**.
 
 - The **ActionResponse interface** encompasses the following
+
   - **SuccessResponse class** (for **application/json** responses)
   - **APIException class**
 
 - The **ActionHandler interface** encompasses the following
+
   - **ActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
 - The **RecordActionHandler interface** encompasses the following
+
   - **RecordActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
 - The **BaseCurrencyActionHandler interface** encompasses the following
+
   - **BaseCurrencyActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
 - The **MassUpdateActionHandler interface** encompasses the following
+
   - **MassUpdateActionWrapper class** (for **application/json** responses)
   - **APIException class**
 
@@ -824,36 +837,36 @@ import com.zoho.crm.api.util.APIResponse;
 public class MultiThread extends Thread
 {
 	Environment environment;
-	
+
 	UserSignature user;
-	
+
 	Token token;
-	
+
 	String moduleAPIName;
-	
+
 	RequestProxy userProxy;
-	
+
 	SDKConfig sdkConfig;
-	
+
 	public MultiThread(UserSignature user, Environment environment, Token token, String moduleAPIName, SDKConfig config, RequestProxy proxy)
 	{
 		this.environment= environment;
-		
+
 		this.user = user;
-		
+
 		this.token = token;
-		
+
 		this.moduleAPIName = moduleAPIName;
-		
+
 		this.sdkConfig = config;
-		
+
 		this.userProxy = proxy;
 	}
-	
-	public void run() 
-    { 
+
+	public void run()
+    {
         try
-        { 
+        {
         	new Initializer.Builder()
         	.user(user)
         	.environment(environment)
@@ -861,36 +874,36 @@ public class MultiThread extends Thread
         	.SDKConfig(sdkConfig)
         	.requestProxy(userProxy)
         	.switchUser();
-        	
+
         	System.out.println(Initializer.getInitializer().getUser().getEmail());
-        	
+
         	RecordOperations cro = new RecordOperations();
-        	
+
     		@SuppressWarnings("rawtypes")
 			APIResponse getResponse = cro.getRecords(this.moduleAPIName, null, null);
-  
+
     		System.out.println(getResponse.getObject());
-    		
-        } 
-        catch (Exception e) 
-        { 
+
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
-        } 
-    } 
-	
-	
+        }
+    }
+
+
 	public static void main(String[] args) throws SDKException
 	{
-		
+
 		Logger loggerInstance = new Logger.Builder()
         .level(Logger.Levels.ALL)
         .filePath("/Users/user_name/Documents/java-sdk-logs.log")
         .build();
-		
+
 		Environment environment = USDataCenter.PRODUCTION;
-		
+
 		UserSignature user1 = new UserSignature("user1@zoho.com");
-		
+
 		TokenStore tokenstore = new DBStore.Builder()
         .host("hostName")
         .databaseName("databaseName")
@@ -899,21 +912,21 @@ public class MultiThread extends Thread
         .password("password")
         .portNumber("portNumber")
         .build();
-		
+
 		Token token1 = new OAuthToken.Builder()
         .clientID("clientId1")
         .clientSecret("clientSecret1")
         .refreshToken("refreshToken")
         .redirectURL("redirectURL")
         .build();
-		
+
 		String resourcePath = "/Users/user_name/Documents";
-		
+
 		SDKConfig user1Config = new SDKConfig.Builder()
         .autoRefreshFields(false)
         .pickListValidation(true)
         .build();
-		
+
 		new Initializer.Builder()
 		.user(user1)
 		.environment(environment)
@@ -923,22 +936,22 @@ public class MultiThread extends Thread
 		.resourcePath(resourcePath)
 		.logger(loggerInstance)
 		.initialize();
-    	
+
 		MultiThread multiThread = new MultiThread(user1, environment, token1, "Students", user1Config, null);
-		
+
 		multiThread.start();
-		
+
 		Environment environment1 = USDataCenter.PRODUCTION;
-		
+
 		UserSignature user2 = new UserSignature("user2@zoho.com");
-		
+
 		Token token2 = new OAuthToken.Builder()
         .clientID("clientId1")
         .clientSecret("clientSecret1")
         .refreshToken("refreshToken")
         .redirectURL("redirectURL")
         .build();
-		
+
 		RequestProxy user2Proxy = new RequestProxy.Builder()
         .host("proxyHost")
         .port(80)
@@ -946,15 +959,15 @@ public class MultiThread extends Thread
         .password("password")
         .userDomain("userDomain")
         .build();
-		
+
 		SDKConfig user2Config = new SDKConfig.Builder()
         .autoRefreshFields(true)
         .pickListValidation(false)
         .build();
-		
+
 		multiThread = new MultiThread(user2, environment1, token2, "Leads", user2Config, user2Proxy);
-		
-		multiThread.start();	
+
+		multiThread.start();
 	}
 }
 ```
@@ -967,9 +980,9 @@ public class MultiThread extends Thread
 
 - For each user, an instance of **MultiThread class** is created.
 
-- When **start()** is called which in-turn invokes the **run()**,  the details of user1 are passed to the **switchUser** function through the **MultiThread object**. Therefore, this creates a thread for user1.
+- When **start()** is called which in-turn invokes the **run()**, the details of user1 are passed to the **switchUser** function through the **MultiThread object**. Therefore, this creates a thread for user1.
 
-- Similarly, When the **start()** is invoked again,  the details of user2 are passed to the switchUser function through the **MultiThread object**. Therefore, this creates a thread for user2.
+- Similarly, When the **start()** is invoked again, the details of user2 are passed to the switchUser function through the **MultiThread object**. Therefore, this creates a thread for user2.
 
 ### Multi-threading in a Single User App
 
@@ -1075,11 +1088,11 @@ public class MultiThread extends Thread
 
 - The program execution starts from **main()** where the SDK is initialized with the details of user and an instance of **MultiThread class** is created .
 
-- When the **start()** is called which in-turn invokes the **run()**,  the moduleAPIName is switched through the **MultiThread** object. Therefore, this creates a thread for the particular **MultiThread** instance.
+- When the **start()** is called which in-turn invokes the **run()**, the moduleAPIName is switched through the **MultiThread** object. Therefore, this creates a thread for the particular **MultiThread** instance.
 
 - The **MultiThread** object is reinitialized with a different moduleAPIName.
 
-- Similarly, When the **start()** is invoked again,  the moduleAPIName is switched through the **MultiThread** object. Therefore, this creates a thread for the particular **MultiThread** instance.
+- Similarly, When the **start()** is invoked again, the moduleAPIName is switched through the **MultiThread** object. Therefore, this creates a thread for the particular **MultiThread** instance.
 
 ## SDK Sample code
 
@@ -1188,7 +1201,7 @@ public class Record
 		 * portNumber -> DataBase port number. Default "3306"
 		 */
 //		TokenStore tokenstore = new DBStore.Builder().build();
-		
+
 		TokenStore tokenstore = new DBStore.Builder()
         .host("hostName")
         .databaseName("databaseName")
@@ -1197,9 +1210,9 @@ public class Record
         .password("password")
         .portNumber("portNumber")
         .build();
-		
+
 //		TokenStore tokenstore = new FileStore("absolute_file_path");
-		
+
 		/*
 		* autoRefreshFields (default value is false)
 		* true - all the modules' fields will be auto-refreshed in the background, every hour.
@@ -1214,7 +1227,7 @@ public class Record
         .autoRefreshFields(true)
         .pickListValidation(false)
         .build();
-		
+
         String resourcePath = "/Users/user_name/Documents/javasdk-application";
 
         /*
