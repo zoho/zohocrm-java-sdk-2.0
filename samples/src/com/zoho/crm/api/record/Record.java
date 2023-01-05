@@ -3173,6 +3173,10 @@ public class Record
 		//Get instance of BodyWrapper Class that will contain the request body
 		BodyWrapper bodyWrapper = new BodyWrapper();
 		
+		com.zoho.crm.api.record.ApplyFeatureExecution applyFeatureExecution=new com.zoho.crm.api.record.ApplyFeatureExecution();
+		
+		List<com.zoho.crm.api.record.ApplyFeatureExecution> featureExecution = new ArrayList<>();
+		
 		//List of Record instances
 		List<com.zoho.crm.api.record.Record> records = new ArrayList<com.zoho.crm.api.record.Record>();
 		
@@ -3191,6 +3195,16 @@ public class Record
 		record1.addFieldValue(Field.Leads.FIRST_NAME, "First Name");
 		
 		record1.addFieldValue(Field.Leads.COMPANY, "KKRNP");
+		
+		record1.addFieldValue(Field.Leads.ANNUAL_REVENUE, 1011.0);
+		
+		applyFeatureExecution.setName("layout_rules");
+		
+		//add applyFeatureExecution instance to List
+		featureExecution.add(applyFeatureExecution);
+		
+		//set the List to Records in BodyWrapper instance
+		bodyWrapper.setApplyFeatureExecution(featureExecution);
 		
 		/*
 		 * Call addKeyValue method that takes two arguments
@@ -3639,6 +3653,10 @@ public class Record
 		//Get instance of Record Class
 		com.zoho.crm.api.record.Record record1 = new com.zoho.crm.api.record.Record();
 		
+		com.zoho.crm.api.record.ApplyFeatureExecution applyFeatureExecution=new com.zoho.crm.api.record.ApplyFeatureExecution();
+		
+		List<com.zoho.crm.api.record.ApplyFeatureExecution> featureExecution = new ArrayList<>();
+		
 		record1.setId(34770615844006l);
 		
 		/*
@@ -3653,6 +3671,16 @@ public class Record
 		record1.addFieldValue(Field.Leads.FIRST_NAME, "First Name");
 		
 		record1.addFieldValue(Field.Leads.COMPANY, "KKRNP");
+		
+		record1.addFieldValue(Field.Leads.ANNUAL_REVENUE, 1011.0);
+		
+		applyFeatureExecution.setName("layout_rules");
+		
+		//add applyFeatureExecution instance to List
+		featureExecution.add(applyFeatureExecution);
+		
+		//set the List to Records in BodyWrapper instance
+		request.setApplyFeatureExecution(featureExecution);
 		
 		record1.addKeyValue("External", "Value");
 		
@@ -4021,6 +4049,10 @@ public class Record
 		//Get instance of Record Class
 		com.zoho.crm.api.record.Record record1 = new com.zoho.crm.api.record.Record();
 		
+		com.zoho.crm.api.record.ApplyFeatureExecution applyFeatureExecution=new com.zoho.crm.api.record.ApplyFeatureExecution();
+		
+		List<com.zoho.crm.api.record.ApplyFeatureExecution> featureExecution = new ArrayList<>();
+		
 		/*
 		 * Call addFieldValue method that takes two arguments
 		 * 1 -> Call Field "." and choose the module from the displayed list and press "." and choose the field name from the displayed list.
@@ -4033,6 +4065,17 @@ public class Record
 		record1.addFieldValue(Field.Leads.FIRST_NAME, "First Name");
 		
 		record1.addFieldValue(Field.Leads.COMPANY, "Company1");
+		 
+		record1.addFieldValue(Field.Leads.ANNUAL_REVENUE, 1011.0);
+		
+		applyFeatureExecution.setName("layout_rules");
+		
+		//add applyFeatureExecution instance to List
+		featureExecution.add(applyFeatureExecution);
+		
+		//set the List to Records in BodyWrapper instance
+		request.setApplyFeatureExecution(featureExecution);
+		
 		
 		/*
 		 * Call addKeyValue method that takes two arguments

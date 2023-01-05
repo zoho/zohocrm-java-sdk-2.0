@@ -8,6 +8,8 @@ public class BodyWrapper implements Model
 {
 	private List<Record> data;
 
+	private List<ApplyFeatureExecution> applyFeatureExecution;
+
 	private List<String> trigger;
 
 	private List<String> process;
@@ -40,6 +42,28 @@ public class BodyWrapper implements Model
 		 this.data = data;
 
 		 this.keyModified.put("data", 1);
+
+	}
+
+	/**
+	 * The method to get the value of applyFeatureExecution
+	 * @return An instance of List<ApplyFeatureExecution>
+	 */
+	public List<ApplyFeatureExecution> getApplyFeatureExecution()
+	{
+		return  this.applyFeatureExecution;
+
+	}
+
+	/**
+	 * The method to set the value to applyFeatureExecution
+	 * @param applyFeatureExecution An instance of List<ApplyFeatureExecution>
+	 */
+	public void setApplyFeatureExecution(List<ApplyFeatureExecution> applyFeatureExecution)
+	{
+		 this.applyFeatureExecution = applyFeatureExecution;
+
+		 this.keyModified.put("apply_feature_execution", 1);
 
 	}
 
