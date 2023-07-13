@@ -66,7 +66,7 @@ Java SDK is available through Maven distribution. You can include the SDK to you
        <dependency>
            <groupId>com.zoho.crm</groupId>
            <artifactId>zohocrmsdk-2-0</artifactId>
-           <version>5.1.0</version>
+           <version>6.0.0</version>
        </dependency>
    </dependencies>
    ```
@@ -78,9 +78,10 @@ Java SDK is available through Maven distribution. You can include the SDK to you
        maven { url "https://maven.zohodl.com" }
    }
    dependencies{
-       implementation 'com.zoho.crm:zohocrmsdk-2-0:5.1.0'
+       implementation 'com.zoho.crm:zohocrmsdk-2-0:6.0.0'
    }
    ```
+3. [Download SDK](https://maven.zohodl.com/com/zoho/crm/zohocrmsdk-2-0/6.0.0/zohocrmsdk-2-0-6.0.0.jar)
 
 ### Dependency JARs
 
@@ -119,7 +120,7 @@ Follow the below steps to use the Java SDK for Zoho CRM through Maven.
       <dependency>
           <groupId>com.zoho.crm</groupId>
           <artifactId>zohocrmsdk-2-0</artifactId>
-          <version>5.1.0</version>
+          <version>6.0.0</version>
       </dependency>
   </dependencies>
   ```
