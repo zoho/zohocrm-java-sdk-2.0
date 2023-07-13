@@ -1,53 +1,32 @@
 package com.zoho.crm.api.util;
 
 import java.io.File;
-
 import java.io.IOException;
-
 import java.lang.reflect.Constructor;
-
 import java.lang.reflect.Field;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.lang.reflect.Method;
-
 import java.lang.reflect.Modifier;
-
 import java.util.ArrayList;
-
 import java.util.Arrays;
-
 import java.util.HashMap;
-
 import java.util.List;
-
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.HttpEntity;
-
 import org.apache.http.HttpResponse;
-
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-
 import org.apache.http.entity.StringEntity;
-
 import org.apache.http.protocol.HTTP;
-
 import org.apache.http.util.EntityUtils;
-
 import org.json.JSONArray;
-
 import org.json.JSONException;
-
 import org.json.JSONObject;
 
 import com.zoho.crm.api.Initializer;
-
 import com.zoho.crm.api.exception.SDKException;
-
 import com.zoho.crm.api.record.FileDetails;
-
 import com.zoho.crm.api.record.Record;
 
 /**
@@ -70,7 +49,7 @@ public class JSONConverter extends Converter
 	}
 
 	@Override
-	public Object formRequest(Object requestInstance, String pack, Integer instanceNumber, JSONObject memberDetail) throws Exception// if structure
+	public Object formRequest(Object requestInstance, String pack, Integer instanceNumber, JSONObject memberDetail) throws Exception // if structure
 	{
 		JSONObject classDetail = (JSONObject) Initializer.jsonDetails.get(pack);
 
@@ -336,9 +315,9 @@ public class JSONConverter extends Converter
 		{
 			this.commonAPIHandler.setModuleAPIName(null);
 
-			JSONObject fullDetail = Utility.searchJSONDetails(moduleAPIName);// to get correct moduleapiname in proper format
+			JSONObject fullDetail = Utility.searchJSONDetails(moduleAPIName);// to get correct module api-name in proper format
 
-			if (fullDetail != null)// from Jsondetails
+			if (fullDetail != null) // from Json details
 			{
 				moduleDetail = fullDetail.getJSONObject(Constants.MODULEDETAILS);
 			}
@@ -432,6 +411,8 @@ public class JSONConverter extends Converter
 			Object jsonValue = null;
 
 			String memberName = buildName(keyName);
+			
+			Boolean customHandling = Boolean.FALSE;
 
 			if (moduleDetail.length() > 0 && (moduleDetail.has(keyName) || moduleDetail.has(memberName)))
 			{
@@ -448,6 +429,10 @@ public class JSONConverter extends Converter
 			{
 				keyDetail = classDetail.getJSONObject(memberName);
 			}
+			else 
+			{	
+				customHandling = Boolean.TRUE;
+			}
 
 			if (keyDetail.length() > 0)
 			{
@@ -463,9 +448,42 @@ public class JSONConverter extends Converter
 			}
 			else
 			{
-				jsonValue = redirectorForObjectToJSON(keyValue);
-			}
+				if(customHandling && !(keyValue instanceof List)  && !(keyValue instanceof Map) && !(keyValue instanceof Choice)) 
+				{
+					if(Constants.PRIMITIVE_TYPES.contains(keyValue.getClass().getSimpleName()))
+					{						
+						keyDetail.put(Constants.TYPE, keyValue.getClass().getCanonicalName());
 
+						jsonValue = setData(keyDetail, keyValue);
+					}
+					else if(Initializer.jsonDetails.has(keyValue.getClass().getCanonicalName()))
+					{												
+						keyDetail.put(Constants.STRUCTURE_NAME,keyValue.getClass().getCanonicalName()).put(Constants.NAME, keyName).put(Constants.TYPE,keyValue.getClass().getCanonicalName());
+
+						jsonValue = setData(keyDetail, keyValue);
+					}	
+				}
+				else 
+				{
+					if(customHandling && keyValue instanceof List)
+					{
+						if (Initializer.jsonDetails.has(((List<?>) keyValue).get(0).getClass().getCanonicalName())) 
+						{					
+							keyDetail.put(Constants.STRUCTURE_NAME, ((List<?>) keyValue).get(0).getClass().getCanonicalName()).put(Constants.NAME, keyName).put(Constants.TYPE, ((List<?>) keyValue).get(0).getClass().getCanonicalName());
+							
+							jsonValue = setJSONArray(keyValue, keyDetail);
+						}
+						else 
+						{
+							jsonValue = redirectorForObjectToJSON(keyValue);
+						}
+					}
+					else 
+					{
+						jsonValue = redirectorForObjectToJSON(keyValue);
+					}
+				}
+			}
 			if(keyValue != null)
 			{
 				requiredKeys.remove(keyName);
@@ -626,6 +644,10 @@ public class JSONConverter extends Converter
 		{
 			return setJSONObject(request, null);
 		}
+		else if (request.getClass().getCanonicalName().equals(Constants.CHOICE_NAMESPACE)) 
+		{
+			return (((Choice<?>) request).getValue());
+		}
 		else
 		{
 			return request;
@@ -648,13 +670,13 @@ public class JSONConverter extends Converter
 	}
 
 	@Override
-	public Object getResponse(Object response, String packageName) throws Exception// new structure comes here
+	public Object getResponse(Object response, String packageName) throws Exception // new structure comes here
 	{
 		JSONObject classDetail = Initializer.jsonDetails.getJSONObject(packageName);
 
 		String responseString = response.toString();
 
-		if (responseString == null || responseString.equals("null") || responseString.isEmpty() || responseString.trim().length() == 0)
+		if (responseString == null || responseString.equals("null") || responseString.isEmpty() || responseString.trim().length() == 0 || responseString.equals("{}"))
 		{
 			return null;
 		}
@@ -667,7 +689,7 @@ public class JSONConverter extends Converter
 		{
 			JSONArray classes = classDetail.getJSONArray(Constants.CLASSES);
 
-			instance = findMatch(classes, responseJson);// find match returns instance(calls getresponse() recursively)
+			instance = findMatch(classes, responseJson);// find match returns instance(calls getResponse() recursively)
 		}
 		else
 		{
@@ -722,10 +744,9 @@ public class JSONConverter extends Converter
 		return instance;
 	}
 
-	@SuppressWarnings("deprecation")
 	private Object isRecordResponse(JSONObject responseJson, JSONObject classDetail, String pack) throws JSONException, Exception
 	{
-		Object recordInstance = Class.forName(pack).newInstance();
+		Object recordInstance = Class.forName(pack).getDeclaredConstructor().newInstance();
 
 		String moduleAPIName = this.commonAPIHandler.getModuleAPIName();
 
@@ -735,13 +756,13 @@ public class JSONConverter extends Converter
 		{
 			this.commonAPIHandler.setModuleAPIName(null);
 
-			JSONObject fullDetail = Utility.searchJSONDetails(moduleAPIName);// to get correct moduleapiname in proper format
+			JSONObject fullDetail = Utility.searchJSONDetails(moduleAPIName);// to get correct moduleAPIName in proper format
 
-			if (fullDetail != null)// from Jsondetails
+			if (fullDetail != null)// from Json details
 			{
 				moduleDetail = fullDetail.getJSONObject(Constants.MODULEDETAILS);
 
-				recordInstance = Class.forName(fullDetail.getString(Constants.MODULEPACKAGENAME)).newInstance();
+				recordInstance = Class.forName(fullDetail.getString(Constants.MODULEPACKAGENAME)).getDeclaredConstructor().newInstance();
 			}
 			else// from user spec
 			{
@@ -859,7 +880,7 @@ public class JSONConverter extends Converter
 
 	private Map<String, Object> getMapData(JSONObject response, JSONObject memberDetail) throws Exception
 	{
-		Map<String, Object> mapInstance = new HashMap<>();
+		Map<String, Object> mapInstance = new HashMap<String, Object>();
 
 		if (response.length() > 0)
 		{
@@ -872,6 +893,8 @@ public class JSONConverter extends Converter
 			}
 			else// member must have keys
 			{
+				Set<String> responseKeys = response.keySet();
+				
 				if (memberDetail.has(Constants.KEYS))
 				{
 					JSONArray keysDetail = memberDetail.getJSONArray(Constants.KEYS);
@@ -889,8 +912,18 @@ public class JSONConverter extends Converter
 							keyValue = getData(response.get(keyName), keyDetail);
 
 							mapInstance.put(keyName, keyValue);
+							
+							responseKeys.remove(keyName);
 						}
 					}
+				}
+				
+				if(responseKeys.size() > 0)
+				{
+					responseKeys.forEach(name ->
+					{
+						mapInstance.put(name, response.get(name));
+					});
 				}
 			}
 		}
@@ -942,7 +975,7 @@ public class JSONConverter extends Converter
 		return values;
 	}
 
-	private JSONObject getModuleDetailFromUserSpecJSON(String module) throws IOException
+	private JSONObject getModuleDetailFromUserSpecJSON(String module) throws IOException, SDKException
 	{
 		JSONObject moduleDetail;
 
@@ -975,6 +1008,11 @@ public class JSONConverter extends Converter
 
 	private Object findMatch(JSONArray classes, JSONObject responseJson) throws Exception
 	{
+		if(classes.length() == 1)
+		{
+			return getResponse(responseJson, classes.getString(0));
+		}
+		
 		String pack = "";
 
 		float ratio = 0;
@@ -1042,6 +1080,10 @@ public class JSONConverter extends Converter
 					}
 
 					if (type.equals(memberDetail.get(Constants.TYPE)))
+					{
+						matches++;
+					}
+					else if(keyName.equalsIgnoreCase(Constants.COUNT) && type.equalsIgnoreCase(Constants.INTEGER_NAMESPACE))
 					{
 						matches++;
 					}

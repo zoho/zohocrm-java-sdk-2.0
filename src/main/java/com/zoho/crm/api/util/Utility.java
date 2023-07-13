@@ -1183,7 +1183,7 @@ public class Utility
 			fieldDetail.put(Constants.SUBFORM, true);
 		}
 
-		if (apiType.equalsIgnoreCase(Constants.LOOKUP))
+		if (apiType.equalsIgnoreCase(Constants.LOOKUP) && field.getLookup() != null)
 		{
 			module = field.getLookup().getModule();
 

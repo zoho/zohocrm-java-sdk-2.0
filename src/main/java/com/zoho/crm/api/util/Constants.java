@@ -120,7 +120,7 @@ public class Constants
 
 	public static final String ZOHO_SDK = "X-ZOHO-SDK";
 
-	public static final String SDK_VERSION = "5.1.0";
+	public static final String SDK_VERSION = "6.0.0";
 
 	public static final String TOKEN_STORE = "TOKEN_STORE";
 
@@ -627,4 +627,8 @@ public class Constants
 	public static final ArrayList<String> OAUTH_MANDATORY_KEYS = new ArrayList<String>(Arrays.asList("grantToken", "refreshToken", "id", "accessToken" ));
 
 	public static final String OWNER_LOOKUP = "ownerlookup";
+
+	public static final ArrayList<String> PRIMITIVE_TYPES = new ArrayList<String>(Arrays.asList("String", "Long", "Boolean", "LocalDate","OffsetDateTime","Integer","Double","Object","TimeZone"));
+
+	public static final String COUNT = "count";
 }
